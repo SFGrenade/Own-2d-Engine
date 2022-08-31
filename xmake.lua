@@ -26,9 +26,6 @@ if is_mode("debug") then
     set_symbols("debug")
 
     set_optimize("fastest")
-
-    add_cxflags("-fsanitize=address,undefined,integer -g -fno-omit-frame-pointer")
-    add_ldflags("-fsanitize=address,undefined,integer -g -fno-omit-frame-pointer")
 end
 
 if is_mode("release") then
@@ -50,3 +47,8 @@ target("Own-2d-Engine")
     add_packages("libsdl_image")
     add_packages("libsdl_mixer")
     add_packages("libsdl_ttf")
+
+    after_build(function (target)
+        import("core.project.config")
+        os.cp("Resources", path.join(config.buildir(), config.plat(), config.arch(), config.mode()))
+    end)
