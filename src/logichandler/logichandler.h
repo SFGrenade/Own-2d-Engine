@@ -10,13 +10,11 @@
 #include <vector>
 
 namespace SFG {
-    //typedef std::function<void(SDL_WindowEvent& window)> WindowEventCallback;
-
     class LogicHandler
     {
     private:
         static LogicHandler* instance;
-        std::vector<Timer> timers;
+        std::vector<Timer*> timers;
         bool* quitFlag;
         std::thread logicThread;
         LogicHandler(/* args */);
@@ -28,6 +26,7 @@ namespace SFG {
         void SetQuitFlag(bool* quitFlag);
         void StartLogic();
         void StopLogic();
+        void AddTimer(TimerCallback callback, std::chrono::nanoseconds interval);
         //void RegisterWindowEvent(WindowEventCallback callback);
     };
 }

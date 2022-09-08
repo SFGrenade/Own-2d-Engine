@@ -8,16 +8,18 @@
 #include <vector>
 
 namespace SFG {
-    //typedef std::function<void(SDL_WindowEvent& window)> WindowEventCallback;
+    typedef std::function<void()> TimerCallback;
 
     class Timer
     {
     private:
-        //std::vector<WindowEventCallback> windowEventCallbacks;
+        TimerCallback timerCallback;
+        std::chrono::nanoseconds timerInterval;
+        std::chrono::nanoseconds timerCurrent;
     public:
-        Timer(/* args */);
+        Timer(TimerCallback callback, std::chrono::nanoseconds interval);
         ~Timer();
 
-        void UpdateTimer();
+        void UpdateTimer(std::chrono::nanoseconds duration);
     };
 }

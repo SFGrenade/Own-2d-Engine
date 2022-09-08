@@ -13,6 +13,10 @@ namespace SFG {
     }
 
     LogicHandler::~LogicHandler() {
+        for (auto timer : timers) {
+            delete timer;
+        }
+        timers.clear();
     }
 
     LogicHandler* LogicHandler::GetInstance() {
@@ -21,11 +25,17 @@ namespace SFG {
     }
 
     void LogicHandler::UpdateLogic() {
+        std::chrono::time_point<std::chrono::high_resolution_clock> old = std::chrono::high_resolution_clock::now();
+        std::chrono::time_point<std::chrono::high_resolution_clock> now;
+        std::chrono::nanoseconds duration;
         while (!(*LogicHandler::instance->quitFlag)) {
+            now = std::chrono::high_resolution_clock::now();
+            duration = now - old;
             for (auto timer : LogicHandler::instance->timers) {
-                timer.UpdateTimer();
+                timer->UpdateTimer(duration);
             }
             Performance::AddLogicLoop();
+            old = now;
         }
     }
 
@@ -40,6 +50,11 @@ namespace SFG {
 
     void LogicHandler::StopLogic() {
         logicThread.join();
+    }
+
+    void LogicHandler::AddTimer(TimerCallback callback, std::chrono::nanoseconds interval) {
+        Timer* timer = new Timer(callback, interval);
+        timers.push_back(timer);
     }
 
     //void LogicHandler::RegisterWindowEvent(WindowEventCallback callback) {

@@ -10,6 +10,7 @@
 #include <SDL2/SDL_ttf.h>
 
 // library headers
+#include <chrono>
 #include <cstdint>
 #include <cstring>
 #include <functional>
@@ -17,6 +18,8 @@
 #include <thread>
 #include <fmt/core.h>
 #include "pugiXML/pugixml.hpp"
+
+using namespace std::chrono_literals;
 
 typedef struct {
     Uint8 r;
@@ -84,6 +87,10 @@ int main(/*int argc, char* argv[]*/) {
         quit |= key.keysym.sym == SDLK_ESCAPE;
     });
 
+    logicHandler->AddTimer([]() {
+        // 50 hz test timer
+        fmt::print("1");
+    }, std::chrono::duration_cast<std::chrono::nanoseconds>(1s / 20));
     logicHandler->SetQuitFlag(&quit);
 
     auto printFunc = [&quit, &performanceString, &makeNewPerformanceTexture]() {
