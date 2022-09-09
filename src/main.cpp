@@ -10,13 +10,13 @@
 #include <SDL2/SDL_ttf.h>
 
 // library headers
-#include <chrono>
 #include <cstdint>
 #include <cstring>
 #include <functional>
 #include <string>
 #include <thread>
 #include <fmt/core.h>
+#include <fmt/chrono.h>
 #include "pugiXML/pugixml.hpp"
 
 using namespace std::chrono_literals;
@@ -29,15 +29,16 @@ typedef struct {
 
 int main(/*int argc, char* argv[]*/) {
     bool quit = false;
+    bool* quitPtr = &quit;
 
-    SFG::FontHandler fontHandler = SFG::FontHandler::GetInstance();
-    SFG::InputHandler inputHandler = SFG::InputHandler::GetInstance();
+    SFG::FontHandler* fontHandler = SFG::FontHandler::GetInstance();
+    SFG::InputHandler* inputHandler = SFG::InputHandler::GetInstance();
     SFG::LogicHandler* logicHandler = SFG::LogicHandler::GetInstance();
-    SFG::Window window = SFG::Window::GetInstance();
-    window.InitializeSDL();
-    window.InitializeWindow();
-    window.ShowWindow();
-    SFG::GraphicsHandler* graphicsHandler = window.GetGraphicsHandler();
+    SFG::Window* window = SFG::Window::GetInstance();
+    window->InitializeSDL();
+    window->InitializeWindow();
+    window->ShowWindow();
+    SFG::GraphicsHandler* graphicsHandler = window->GetGraphicsHandler();
 
     std::string performanceString;
     bool makeNewPerformanceTexture = false;
@@ -59,9 +60,9 @@ int main(/*int argc, char* argv[]*/) {
             black.g = 0;
             black.b = 0;
             black.a = 0;
-            SDL_Surface* textSurface = TTF_RenderUTF8_Shaded_Wrapped(fontHandler.GetFont(SFG::FontType::Console), performanceString.c_str(), white, black, 0);
+            SDL_Surface* textSurface = TTF_RenderUTF8_Shaded_Wrapped(fontHandler->GetFont(SFG::FontType::Console), performanceString.c_str(), white, black, 0);
 
-            if (performanceTexture != nullptr) {
+            if (performanceTexture) {
                 SDL_DestroyTexture(performanceTexture);
             }
             performanceTexture = SDL_CreateTextureFromSurface(windowRenderer, textSurface);
@@ -71,27 +72,27 @@ int main(/*int argc, char* argv[]*/) {
             makeNewPerformanceTexture = false;
         }
 
-        if (performanceTexture != nullptr) {
+        if (performanceTexture) {
             SDL_RenderCopy(windowRenderer, performanceTexture, NULL, &performanceTextureRect);
         }
     });
-    graphicsHandler->SetQuitFlag(&quit);
+    graphicsHandler->SetQuitFlag(quitPtr);
 
-    inputHandler.RegisterQuitEvent([&quit]() {
+    inputHandler->RegisterQuitEvent([&quit]() {
         quit = true;
     });
-    inputHandler.RegisterWindowEvent([&quit](SDL_WindowEvent& window) {
+    inputHandler->RegisterWindowEvent([&quit](SDL_WindowEvent& window) {
         quit |= window.event == SDL_WINDOWEVENT_CLOSE;
     });
-    inputHandler.RegisterKeyDownEvent([&quit](SDL_KeyboardEvent& key) {
+    inputHandler->RegisterKeyDownEvent([&quit](SDL_KeyboardEvent& key) {
         quit |= key.keysym.sym == SDLK_ESCAPE;
     });
 
-    logicHandler->AddTimer([]() {
+    logicHandler->AddTimer([](std::optional<std::chrono::secondsLongDouble> interval) {
         // 50 hz test timer
-        fmt::print("1");
-    }, std::chrono::duration_cast<std::chrono::nanoseconds>(1s / 20));
-    logicHandler->SetQuitFlag(&quit);
+        fmt::print("Interval: {:.5f} seconds\n", interval.value().count());
+    }, std::chrono::duration_cast<std::chrono::nanoseconds>(1.0s / 50.0), true);
+    logicHandler->SetQuitFlag(quitPtr);
 
     auto printFunc = [&quit, &performanceString, &makeNewPerformanceTexture]() {
         using namespace std::chrono_literals;
@@ -113,13 +114,19 @@ R"(Performance (per second):
 
     // inputs have to be checked in the main thread
     while (!quit) {
-        inputHandler.CheckInputs();
+        inputHandler->CheckInputs();
         SFG::Performance::AddInputLoop();
     }
 
     logicHandler->StopLogic();
     graphicsHandler->StopDraw();
     printThread.join();
+
+    //delete graphicsHandler; // gets deleted by window
+    delete window;
+    delete logicHandler;
+    delete inputHandler;
+    delete fontHandler;
 
     return EXIT_SUCCESS;
 }

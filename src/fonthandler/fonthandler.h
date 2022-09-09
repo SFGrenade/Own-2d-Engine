@@ -24,7 +24,7 @@ namespace SFG {
         FontHandler();
     public:
         ~FontHandler();
-        static FontHandler& GetInstance();
+        static FontHandler* GetInstance();
         TTF_Font* GetFont(FontType type);
     };
 }

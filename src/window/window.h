@@ -22,7 +22,7 @@ namespace SFG {
         Window(/* args */);
     public:
         ~Window();
-        static Window& GetInstance();
+        static Window* GetInstance();
 
         bool InitializeSDL();
         bool InitializeWindow();

@@ -20,9 +20,9 @@ namespace SFG {
         TTF_Quit();
     }
 
-    FontHandler& FontHandler::GetInstance() {
+    FontHandler* FontHandler::GetInstance() {
         if (!FontHandler::instance) FontHandler::instance = new FontHandler();
-        return *FontHandler::instance;
+        return FontHandler::instance;
     }
 
     TTF_Font* FontHandler::GetFont(FontType type) {

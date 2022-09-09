@@ -20,9 +20,9 @@ namespace SFG {
     InputHandler::~InputHandler() {
     }
 
-    InputHandler& InputHandler::GetInstance() {
+    InputHandler* InputHandler::GetInstance() {
         if (!InputHandler::instance) InputHandler::instance = new InputHandler();
-        return *InputHandler::instance;
+        return InputHandler::instance;
     }
 
     void InputHandler::CheckInputs() {

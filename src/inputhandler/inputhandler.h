@@ -29,7 +29,7 @@ namespace SFG {
         InputHandler(/* args */);
     public:
         ~InputHandler();
-        static InputHandler& GetInstance();
+        static InputHandler* GetInstance();
 
         void CheckInputs();
         void RegisterKeyDownEvent(KeyCallback callback);

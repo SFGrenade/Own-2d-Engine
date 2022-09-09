@@ -9,5 +9,12 @@
 
 // library headers
 #include <cstdint>
+#include <chrono>
+using namespace std::chrono_literals;
+namespace std {
+    namespace chrono {
+        typedef duration<long double> secondsLongDouble;
+    }
+}
 
 static const uint16_t gridWidth = 32;

@@ -26,6 +26,7 @@ namespace SFG {
     }
 
     Window::~Window() {
+        if (graphicsHandler) delete graphicsHandler;
         if (window) SDL_DestroyWindow(window);
 
         Mix_Quit();
@@ -33,9 +34,9 @@ namespace SFG {
         SDL_Quit();
     }
 
-    Window& Window::GetInstance() {
+    Window* Window::GetInstance() {
         if (!Window::instance) Window::instance = new Window();
-        return *Window::instance;
+        return Window::instance;
     }
 
     bool Window::InitializeSDL() {

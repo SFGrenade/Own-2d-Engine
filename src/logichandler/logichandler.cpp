@@ -52,8 +52,8 @@ namespace SFG {
         logicThread.join();
     }
 
-    void LogicHandler::AddTimer(TimerCallback callback, std::chrono::nanoseconds interval) {
-        Timer* timer = new Timer(callback, interval);
+    void LogicHandler::AddTimer(TimerCallback callback, std::chrono::nanoseconds interval, bool returnInterval) {
+        Timer* timer = new Timer(callback, interval, returnInterval);
         timers.push_back(timer);
     }
 

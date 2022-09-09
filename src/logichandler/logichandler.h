@@ -26,7 +26,7 @@ namespace SFG {
         void SetQuitFlag(bool* quitFlag);
         void StartLogic();
         void StopLogic();
-        void AddTimer(TimerCallback callback, std::chrono::nanoseconds interval);
+        void AddTimer(TimerCallback callback, std::chrono::nanoseconds interval, bool returnInterval);
         //void RegisterWindowEvent(WindowEventCallback callback);
     };
 }
