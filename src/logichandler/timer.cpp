@@ -7,12 +7,17 @@ namespace SFG {
         , timerInterval(interval)
         , timerCurrent(interval)
         , timerReturnInterval(returnInterval) {
+        spdlog::trace("Timer::Timer()");
+        spdlog::trace("Timer::Timer()~");
     }
 
     Timer::~Timer() {
+        spdlog::trace("Timer::~Timer()");
+        spdlog::trace("Timer::~Timer()~");
     }
 
     void Timer::UpdateTimer(std::chrono::nanoseconds duration) {
+        //spdlog::trace("Timer::UpdateTimer(std::chrono::nanoseconds duration = {})", duration.count()); // todo too many log lines
         this->timerCurrent -= duration;
         if (this->timerCurrent <= 0ns) {
             if (timerReturnInterval) {
@@ -23,5 +28,6 @@ namespace SFG {
             }
             this->timerCurrent = this->timerInterval;
         }
+        //spdlog::trace("Timer::UpdateTimer()~"); // todo too many log lines
     }
 }

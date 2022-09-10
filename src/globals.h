@@ -7,6 +7,10 @@
 //#include <SDL2/SDL_image.h>
 //#include <SDL2/SDL_mixer.h>
 
+#define SPDLOG_FMT_EXTERNAL
+#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
+#include <spdlog/spdlog.h>
+
 // library headers
 #include <cstdint>
 #include <chrono>

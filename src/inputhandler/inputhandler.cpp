@@ -15,17 +15,24 @@ namespace SFG {
         , mouseWheelCallbacks()
         , quitEventCallbacks()
         , windowEventCallbacks() {
+        spdlog::trace("InputHandler::InputHandler()");
+        spdlog::trace("InputHandler::InputHandler()~");
     }
 
     InputHandler::~InputHandler() {
+        spdlog::trace("InputHandler::~InputHandler()");
+        spdlog::trace("InputHandler::~InputHandler()~");
     }
 
     InputHandler* InputHandler::GetInstance() {
+        spdlog::trace("InputHandler::GetInstance()");
         if (!InputHandler::instance) InputHandler::instance = new InputHandler();
+        spdlog::trace("InputHandler::GetInstance()~");
         return InputHandler::instance;
     }
 
     void InputHandler::CheckInputs() {
+        //spdlog::trace("InputHandler::CheckInputs()"); // todo too many log lines
         while (SDL_PollEvent(&sdlEvent) != 0) {
             if ( quitEventCallbacks.size() && sdlEvent.type == SDL_QUIT ) {
                 for ( auto callback : quitEventCallbacks ) callback();
@@ -49,40 +56,48 @@ namespace SFG {
                 for ( auto callback : mouseMotionCallbacks ) callback(sdlEvent.motion);
             }
         }
+        //spdlog::trace("InputHandler::CheckInputs()~"); // todo too many log lines
     }
 
     void InputHandler::RegisterKeyDownEvent(KeyCallback callback) {
-        if (callback == nullptr) return;
-        keyDownCallbacks.push_back(callback);
+        spdlog::trace("InputHandler::RegisterKeyDownEvent(KeyCallback callback)");
+        if (callback) keyDownCallbacks.push_back(callback);
+        spdlog::trace("InputHandler::RegisterKeyDownEvent()~");
     }
 
     void InputHandler::RegisterKeyUpEvent(KeyCallback callback) {
-        if (callback == nullptr) return;
-        keyUpCallbacks.push_back(callback);
+        spdlog::trace("InputHandler::RegisterKeyUpEvent(KeyCallback callback)");
+        if (callback) keyUpCallbacks.push_back(callback);
+        spdlog::trace("InputHandler::RegisterKeyUpEvent()~");
     }
 
     void InputHandler::RegisterMouseButtonEvent(MouseButtonCallback callback) {
-        if (callback == nullptr) return;
-        mouseButtonCallbacks.push_back(callback);
+        spdlog::trace("InputHandler::RegisterMouseButtonEvent(MouseButtonCallback callback)");
+        if (callback) mouseButtonCallbacks.push_back(callback);
+        spdlog::trace("InputHandler::RegisterMouseButtonEvent()~");
     }
 
     void InputHandler::RegisterMouseMotionEvent(MouseMotionCallback callback) {
-        if (callback == nullptr) return;
-        mouseMotionCallbacks.push_back(callback);
+        spdlog::trace("InputHandler::RegisterMouseMotionEvent(MouseMotionCallback callback)");
+        if (callback) mouseMotionCallbacks.push_back(callback);
+        spdlog::trace("InputHandler::RegisterMouseMotionEvent()~");
     }
 
     void InputHandler::RegisterMouseWheelEvent(MouseWheelCallback callback) {
-        if (callback == nullptr) return;
-        mouseWheelCallbacks.push_back(callback);
+        spdlog::trace("InputHandler::RegisterMouseWheelEvent(MouseWheelCallback callback)");
+        if (callback) mouseWheelCallbacks.push_back(callback);
+        spdlog::trace("InputHandler::RegisterMouseWheelEvent()~");
     }
 
     void InputHandler::RegisterQuitEvent(QuitEventCallback callback) {
-        if (callback == nullptr) return;
-        quitEventCallbacks.push_back(callback);
+        spdlog::trace("InputHandler::RegisterQuitEvent(QuitEventCallback callback)");
+        if (callback) quitEventCallbacks.push_back(callback);
+        spdlog::trace("InputHandler::RegisterQuitEvent()~");
     }
 
     void InputHandler::RegisterWindowEvent(WindowEventCallback callback) {
-        if (callback == nullptr) return;
-        windowEventCallbacks.push_back(callback);
+        spdlog::trace("InputHandler::RegisterWindowEvent(WindowEventCallback callback)");
+        if (callback) windowEventCallbacks.push_back(callback);
+        spdlog::trace("InputHandler::RegisterWindowEvent()~");
     }
 }

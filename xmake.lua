@@ -17,6 +17,7 @@ add_requires("libsdl")
 add_requires("libsdl_image")
 add_requires("libsdl_mixer")
 add_requires("libsdl_ttf")
+add_requires("spdlog")
 
 set_warnings("allextra")
 
@@ -47,6 +48,7 @@ target("Own-2d-Engine")
     add_packages("libsdl_image")
     add_packages("libsdl_mixer")
     add_packages("libsdl_ttf")
+    add_packages("spdlog")
 
     after_build(function (target)
         import("core.project.config")

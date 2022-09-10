@@ -1,5 +1,6 @@
 // Include our overall Objects
 #include "globals.h"
+#include <spdlog/sinks/basic_file_sink.h>
 
 #include "fonthandler/fonthandler.h"
 #include "inputhandler/inputhandler.h"
@@ -13,19 +14,29 @@
 #include <cstdint>
 #include <cstring>
 #include <functional>
+#include <fstream>
 #include <string>
 #include <thread>
+#include <vector>
 #include <fmt/core.h>
 #include <fmt/chrono.h>
 #include "pugiXML/pugixml.hpp"
 
-typedef struct {
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-} BetterColor;
+int main(int argc, char* argv[]) {
+    std::vector<std::string> argvVec;
+    for (int i = 0; i < argc; i++) {
+        argvVec.push_back(std::string(argv[i]));
+    }
 
-int main(/*int argc, char* argv[]*/) {
+    std::fstream logFileToEmptyContents;
+	logFileToEmptyContents.open("log.log", std::ios::out);
+    logFileToEmptyContents.close();
+    auto logfile = spdlog::basic_logger_mt("main", "log.log");
+    spdlog::set_default_logger(logfile);
+    spdlog::set_level(spdlog::level::trace);
+
+    spdlog::trace("main(int argc = {}, char* argv[] = {} {} {})", argc, "{", fmt::join(argvVec, ", "), "}");
+
     bool quit = false;
     bool* quitPtr = &quit;
 
@@ -86,25 +97,19 @@ int main(/*int argc, char* argv[]*/) {
         quit |= key.keysym.sym == SDLK_ESCAPE;
     });
 
-    logicHandler->AddTimer([](std::optional<std::chrono::secondsLongDouble> interval) {
+    logicHandler->AddTimer([](std::optional<std::chrono::secondsLongDouble> /*interval*/) {
         // 50 hz test timer
-        fmt::print("Interval: {:.9f} seconds\n", interval.value().count());
-    }, std::chrono::duration_cast<std::chrono::nanoseconds>(1.0s / 50.0), true);
-    logicHandler->SetQuitFlag(quitPtr);
-
-    auto printFunc = [&quit, &performanceString, &makeNewPerformanceTexture]() {
-        while (!quit) {
-            performanceString = fmt::format(
+        //fmt::print("Interval: {:.9f} seconds\n", interval.value().count());
+    }, std::chrono::duration_cast<std::chrono::nanoseconds>(1.0s / 50.0), false);
+    logicHandler->AddTimer([&performanceString, &makeNewPerformanceTexture](std::optional<std::chrono::secondsLongDouble> /*interval*/) {
+        performanceString = fmt::format(
 R"(Performance (per second):
 {:>9} Frames
 {:>9} Input checks
 {:>9} Logic loops)", SFG::Performance::GetGraphicsLoop(), SFG::Performance::GetInputLoop(), SFG::Performance::GetLogicLoop());
-            makeNewPerformanceTexture = true;
-
-            std::this_thread::sleep_for(1000ms);
-        }
-    };
-    std::thread printThread(printFunc);
+        makeNewPerformanceTexture = true;
+    }, std::chrono::duration_cast<std::chrono::nanoseconds>(1.0s), false);
+    logicHandler->SetQuitFlag(quitPtr);
 
     graphicsHandler->StartDraw();
     logicHandler->StartLogic();
@@ -120,7 +125,6 @@ R"(Performance (per second):
     if (performanceTexture) {
         SDL_DestroyTexture(performanceTexture);
     }
-    printThread.join();
 
     //delete graphicsHandler; // gets deleted by window
     delete window;
@@ -128,5 +132,6 @@ R"(Performance (per second):
     delete inputHandler;
     delete fontHandler;
 
+    spdlog::trace("main()~");
     return EXIT_SUCCESS;
 }
