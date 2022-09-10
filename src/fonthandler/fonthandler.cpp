@@ -1,7 +1,7 @@
 #include "fonthandler.h"
 
 namespace SFG {
-    FontHandler* FontHandler::instance;
+    FontHandler* FontHandler::instance = nullptr;
 
     FontHandler::FontHandler()
       : fonts() {

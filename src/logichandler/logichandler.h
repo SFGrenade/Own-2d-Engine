@@ -17,7 +17,7 @@ namespace SFG {
         std::vector<Timer*> timers;
         bool* quitFlag;
         std::thread logicThread;
-        LogicHandler(/* args */);
+        LogicHandler();
         static void UpdateLogic();
     public:
         ~LogicHandler();
@@ -27,6 +27,5 @@ namespace SFG {
         void StartLogic();
         void StopLogic();
         void AddTimer(TimerCallback callback, std::chrono::nanoseconds interval, bool returnInterval);
-        //void RegisterWindowEvent(WindowEventCallback callback);
     };
 }

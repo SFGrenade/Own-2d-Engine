@@ -19,8 +19,6 @@
 #include <fmt/chrono.h>
 #include "pugiXML/pugixml.hpp"
 
-using namespace std::chrono_literals;
-
 typedef struct {
     Uint8 r;
     Uint8 g;
@@ -90,12 +88,11 @@ int main(/*int argc, char* argv[]*/) {
 
     logicHandler->AddTimer([](std::optional<std::chrono::secondsLongDouble> interval) {
         // 50 hz test timer
-        fmt::print("Interval: {:.5f} seconds\n", interval.value().count());
+        fmt::print("Interval: {:.9f} seconds\n", interval.value().count());
     }, std::chrono::duration_cast<std::chrono::nanoseconds>(1.0s / 50.0), true);
     logicHandler->SetQuitFlag(quitPtr);
 
     auto printFunc = [&quit, &performanceString, &makeNewPerformanceTexture]() {
-        using namespace std::chrono_literals;
         while (!quit) {
             performanceString = fmt::format(
 R"(Performance (per second):
@@ -120,6 +117,9 @@ R"(Performance (per second):
 
     logicHandler->StopLogic();
     graphicsHandler->StopDraw();
+    if (performanceTexture) {
+        SDL_DestroyTexture(performanceTexture);
+    }
     printThread.join();
 
     //delete graphicsHandler; // gets deleted by window

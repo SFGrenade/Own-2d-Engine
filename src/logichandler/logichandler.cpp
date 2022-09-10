@@ -2,12 +2,10 @@
 
 #include "../performance/performance.h"
 
-using namespace std::chrono_literals;
-
 namespace SFG {
     LogicHandler* LogicHandler::instance = nullptr;
 
-    LogicHandler::LogicHandler(/* args */)
+    LogicHandler::LogicHandler()
         : timers()
         , quitFlag(nullptr) {
     }
@@ -56,7 +54,4 @@ namespace SFG {
         Timer* timer = new Timer(callback, interval, returnInterval);
         timers.push_back(timer);
     }
-
-    //void LogicHandler::RegisterWindowEvent(WindowEventCallback callback) {
-    //}
 }

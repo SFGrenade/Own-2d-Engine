@@ -19,7 +19,7 @@ namespace SFG {
         std::string windowTitle;
         SDL_Window* window;
         GraphicsHandler* graphicsHandler;
-        Window(/* args */);
+        Window();
     public:
         ~Window();
         static Window* GetInstance();

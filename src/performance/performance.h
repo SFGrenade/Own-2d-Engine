@@ -3,7 +3,7 @@
 // Include general stuff
 #include "../globals.h"
 
-#include <mutex>          // std::mutex
+#include <mutex>
 
 namespace SFG {
     class Performance

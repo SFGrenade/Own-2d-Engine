@@ -1,8 +1,6 @@
 #include "timer.h"
 #include <iostream>
 
-using namespace std::chrono_literals;
-
 namespace SFG {
     Timer::Timer(TimerCallback callback, std::chrono::nanoseconds interval, bool returnInterval)
         : timerCallback(callback)

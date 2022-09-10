@@ -26,7 +26,7 @@ namespace SFG {
         std::vector<MouseWheelCallback> mouseWheelCallbacks;
         std::vector<QuitEventCallback> quitEventCallbacks;
         std::vector<WindowEventCallback> windowEventCallbacks;
-        InputHandler(/* args */);
+        InputHandler();
     public:
         ~InputHandler();
         static InputHandler* GetInstance();

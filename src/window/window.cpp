@@ -15,7 +15,7 @@
 namespace SFG {
     Window* Window::instance = nullptr;
 
-    Window::Window(/* args */)
+    Window::Window()
         : xPos(SDL_WINDOWPOS_CENTERED)
         , yPos(SDL_WINDOWPOS_CENTERED)
         , width(25 * gridWidth)

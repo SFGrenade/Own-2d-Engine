@@ -6,7 +6,7 @@
 namespace SFG {
     InputHandler* InputHandler::instance = nullptr;
 
-    InputHandler::InputHandler(/* args */)
+    InputHandler::InputHandler()
         : sdlEvent()
         , keyDownCallbacks()
         , keyUpCallbacks()

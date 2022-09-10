@@ -17,4 +17,6 @@ namespace std {
     }
 }
 
+#include "utils/smartpointer.h"
+
 static const uint16_t gridWidth = 32;
