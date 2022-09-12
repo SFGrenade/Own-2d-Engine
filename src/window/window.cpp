@@ -13,36 +13,28 @@
 #define SDL_MIX_INIT_MP3_OGG (MIX_INIT_MP3 | MIX_INIT_OGG)
 
 namespace SFG {
-    Window* Window::instance = nullptr;
+    int Window::xPos = SDL_WINDOWPOS_CENTERED;
+    int Window::yPos = SDL_WINDOWPOS_CENTERED;
+    int Window::width = 25 * gridWidth;
+    int Window::height = 19 * gridWidth;
+    std::string Window::windowTitle = "Own 2D Engine - Exit with ESC";
+    SDL_Window* Window::window = nullptr;
+    GraphicsHandler* Window::graphicsHandler = nullptr;
 
-    Window::Window()
-        : xPos(SDL_WINDOWPOS_CENTERED)
-        , yPos(SDL_WINDOWPOS_CENTERED)
-        , width(25 * gridWidth)
-        , height(19 * gridWidth)
-        , windowTitle("Own 2D Engine - Exit with ESC")
-        , window(nullptr)
-        , graphicsHandler(nullptr) {
-        spdlog::trace("Window::Window()");
-        spdlog::trace("Window::Window()~");
+    void Window::Initialize() {
+        spdlog::trace("Window::Initialize()");
+        spdlog::trace("Window::Initialize()~");
     }
 
-    Window::~Window() {
-        spdlog::trace("Window::~Window()");
-        if (graphicsHandler) delete graphicsHandler;
-        if (window) SDL_DestroyWindow(window);
+    void Window::Destroy() {
+        spdlog::trace("Window::Destroy()");
+        if (Window::graphicsHandler) delete Window::graphicsHandler;
+        if (Window::window) SDL_DestroyWindow(Window::window);
 
         Mix_Quit();
         IMG_Quit();
         SDL_Quit();
-        spdlog::trace("Window::~Window()~");
-    }
-
-    Window* Window::GetInstance() {
-        spdlog::trace("Window::GetInstance()");
-        if (!Window::instance) Window::instance = new Window();
-        spdlog::trace("Window::GetInstance()~");
-        return Window::instance;
+        spdlog::trace("Window::Destroy()~");
     }
 
     bool Window::InitializeSDL() {
@@ -68,20 +60,20 @@ namespace SFG {
 
     bool Window::InitializeWindow() {
         spdlog::trace("Window::InitializeWindow()");
-        window = SDL_CreateWindow(windowTitle.c_str(), xPos, yPos, width, height, SDL_WINDOW_HIDDEN);
-        if (!window) {
+        Window::window = SDL_CreateWindow(Window::windowTitle.c_str(), Window::xPos, Window::yPos, Window::width, Window::height, SDL_WINDOW_HIDDEN);
+        if (!Window::window) {
             fmt::print(stderr, "Window creation error! {}\n", SDL_GetError());
             spdlog::trace("Window::InitializeWindow()~");
             return false;
         }
-        graphicsHandler = new GraphicsHandler(window);
+        Window::graphicsHandler = new GraphicsHandler(Window::window);
         spdlog::trace("Window::InitializeWindow()~");
         return true;
     }
 
     bool Window::ShowWindow() {
         spdlog::trace("Window::ShowWindow()");
-        SDL_ShowWindow(window);
+        SDL_ShowWindow(Window::window);
         spdlog::trace("Window::ShowWindow()~");
         return true;
     }
@@ -89,12 +81,13 @@ namespace SFG {
     SDL_Window* Window::GetSdlWindow() {
         spdlog::trace("Window::GetSdlWindow()");
         spdlog::trace("Window::GetSdlWindow()~");
-        return window;
+        return Window::window;
     }
 
     GraphicsHandler* Window::GetGraphicsHandler() {
         spdlog::trace("Window::GetGraphicsHandler()");
         spdlog::trace("Window::GetGraphicsHandler()~");
-        return graphicsHandler;
+        return Window::graphicsHandler;
     }
 }
+

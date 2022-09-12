@@ -40,14 +40,14 @@ int main(int argc, char* argv[]) {
     bool quit = false;
     bool* quitPtr = &quit;
 
-    SFG::FontHandler* fontHandler = SFG::FontHandler::GetInstance();
-    SFG::InputHandler* inputHandler = SFG::InputHandler::GetInstance();
-    SFG::LogicHandler* logicHandler = SFG::LogicHandler::GetInstance();
-    SFG::Window* window = SFG::Window::GetInstance();
-    window->InitializeSDL();
-    window->InitializeWindow();
-    window->ShowWindow();
-    SFG::GraphicsHandler* graphicsHandler = window->GetGraphicsHandler();
+    SFG::FontHandler::Initialize();
+    SFG::InputHandler::Initialize();
+    SFG::LogicHandler::Initialize();
+    SFG::Window::Initialize();
+    SFG::Window::InitializeSDL();
+    SFG::Window::InitializeWindow();
+    SFG::Window::ShowWindow();
+    SFG::GraphicsHandler* graphicsHandler = SFG::Window::GetGraphicsHandler();
 
     std::string performanceString;
     bool makeNewPerformanceTexture = false;
@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
     performanceTextureRect.y = 5;
     performanceTextureRect.w = 0;
     performanceTextureRect.h = 0;
-    graphicsHandler->RegisterDrawEvent([&performanceString, &makeNewPerformanceTexture, &performanceTexture, &performanceTextureRect, &fontHandler](SDL_Renderer* windowRenderer) {
+    graphicsHandler->RegisterDrawEvent([&performanceString, &makeNewPerformanceTexture, &performanceTexture, &performanceTextureRect](SDL_Renderer* windowRenderer) {
         if (makeNewPerformanceTexture) {
             SDL_Color white;
             white.r = 255;
@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
             black.g = 0;
             black.b = 0;
             black.a = 0;
-            SDL_Surface* textSurface = TTF_RenderUTF8_Shaded_Wrapped(fontHandler->GetFont(SFG::FontType::Console), performanceString.c_str(), white, black, 0);
+            SDL_Surface* textSurface = TTF_RenderUTF8_Shaded_Wrapped(SFG::FontHandler::GetFont(SFG::FontType::Console), performanceString.c_str(), white, black, 0);
 
             if (performanceTexture) {
                 SDL_DestroyTexture(performanceTexture);
@@ -87,51 +87,51 @@ int main(int argc, char* argv[]) {
     });
     graphicsHandler->SetQuitFlag(quitPtr);
 
-    inputHandler->RegisterQuitEvent([&quit]() {
+    SFG::InputHandler::RegisterQuitEvent([&quit]() {
         quit = true;
     });
-    inputHandler->RegisterWindowEvent([&quit](SDL_WindowEvent& window) {
+    SFG::InputHandler::RegisterWindowEvent([&quit](SDL_WindowEvent& window) {
         quit |= window.event == SDL_WINDOWEVENT_CLOSE;
     });
-    inputHandler->RegisterKeyDownEvent([&quit](SDL_KeyboardEvent& key) {
+    SFG::InputHandler::RegisterKeyDownEvent([&quit](SDL_KeyboardEvent& key) {
         quit |= key.keysym.sym == SDLK_ESCAPE;
     });
 
-    logicHandler->AddTimer([](std::optional<std::chrono::secondsLongDouble> /*interval*/) {
+    SFG::LogicHandler::AddTimer([](std::optional<std::chrono::secondsLongDouble> /*interval*/) {
         // 50 hz test timer
         //fmt::print("Interval: {:.9f} seconds\n", interval.value().count());
     }, std::chrono::duration_cast<std::chrono::nanoseconds>(1.0s / 50.0), false);
-    logicHandler->AddTimer([&performanceString, &makeNewPerformanceTexture](std::optional<std::chrono::secondsLongDouble> /*interval*/) {
+    SFG::LogicHandler::AddTimer([&performanceString, &makeNewPerformanceTexture](std::optional<std::chrono::secondsLongDouble> /*interval*/) {
         performanceString = fmt::format(
 R"(Performance (per second):
-{:>9} Frames
+{:>9} Frames drawn
 {:>9} Input checks
 {:>9} Logic loops)", SFG::Performance::GetGraphicsLoop(), SFG::Performance::GetInputLoop(), SFG::Performance::GetLogicLoop());
         makeNewPerformanceTexture = true;
     }, std::chrono::duration_cast<std::chrono::nanoseconds>(1.0s), false);
-    logicHandler->SetQuitFlag(quitPtr);
+    SFG::LogicHandler::SetQuitFlag(quitPtr);
 
     graphicsHandler->StartDraw();
-    logicHandler->StartLogic();
+    SFG::LogicHandler::StartLogic();
 
     // inputs have to be checked in the main thread
     while (!quit) {
-        inputHandler->CheckInputs();
+        SFG::InputHandler::CheckInputs();
         SFG::Performance::AddInputLoop();
     }
 
-    logicHandler->StopLogic();
+    SFG::LogicHandler::StopLogic();
     graphicsHandler->StopDraw();
     if (performanceTexture) {
         SDL_DestroyTexture(performanceTexture);
     }
 
-    //delete graphicsHandler; // gets deleted by window
-    delete window;
-    delete logicHandler;
-    delete inputHandler;
-    delete fontHandler;
+    SFG::Window::Destroy();
+    SFG::LogicHandler::Destroy();
+    SFG::InputHandler::Destroy();
+    SFG::FontHandler::Destroy();
 
     spdlog::trace("main()~");
     return EXIT_SUCCESS;
 }
+

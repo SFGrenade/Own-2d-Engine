@@ -17,27 +17,26 @@ namespace SFG {
     class InputHandler
     {
     private:
-        static InputHandler* instance;
-	    SDL_Event sdlEvent;
-        std::vector<KeyCallback> keyDownCallbacks;
-        std::vector<KeyCallback> keyUpCallbacks;
-        std::vector<MouseButtonCallback> mouseButtonCallbacks;
-        std::vector<MouseMotionCallback> mouseMotionCallbacks;
-        std::vector<MouseWheelCallback> mouseWheelCallbacks;
-        std::vector<QuitEventCallback> quitEventCallbacks;
-        std::vector<WindowEventCallback> windowEventCallbacks;
-        InputHandler();
+	    static SDL_Event sdlEvent;
+        static std::vector<KeyCallback> keyDownCallbacks;
+        static std::vector<KeyCallback> keyUpCallbacks;
+        static std::vector<MouseButtonCallback> mouseButtonCallbacks;
+        static std::vector<MouseMotionCallback> mouseMotionCallbacks;
+        static std::vector<MouseWheelCallback> mouseWheelCallbacks;
+        static std::vector<QuitEventCallback> quitEventCallbacks;
+        static std::vector<WindowEventCallback> windowEventCallbacks;
     public:
-        ~InputHandler();
-        static InputHandler* GetInstance();
+        static void Initialize();
+        static void Destroy();
 
-        void CheckInputs();
-        void RegisterKeyDownEvent(KeyCallback callback);
-        void RegisterKeyUpEvent(KeyCallback callback);
-        void RegisterMouseButtonEvent(MouseButtonCallback callback);
-        void RegisterMouseMotionEvent(MouseMotionCallback callback);
-        void RegisterMouseWheelEvent(MouseWheelCallback callback);
-        void RegisterQuitEvent(QuitEventCallback callback);
-        void RegisterWindowEvent(WindowEventCallback callback);
+        static void CheckInputs();
+        static void RegisterKeyDownEvent(KeyCallback callback);
+        static void RegisterKeyUpEvent(KeyCallback callback);
+        static void RegisterMouseButtonEvent(MouseButtonCallback callback);
+        static void RegisterMouseMotionEvent(MouseMotionCallback callback);
+        static void RegisterMouseWheelEvent(MouseWheelCallback callback);
+        static void RegisterQuitEvent(QuitEventCallback callback);
+        static void RegisterWindowEvent(WindowEventCallback callback);
     };
 }
+

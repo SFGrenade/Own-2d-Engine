@@ -19,12 +19,11 @@ namespace SFG {
     class FontHandler
     {
     private:
-        static FontHandler* instance;
-        std::map<FontType, TTF_Font*> fonts;
-        FontHandler();
+        static std::map<FontType, TTF_Font*> fonts;
     public:
-        ~FontHandler();
-        static FontHandler* GetInstance();
-        TTF_Font* GetFont(FontType type);
+        static void Initialize();
+        static void Destroy();
+        static TTF_Font* GetFont(FontType type);
     };
 }
+

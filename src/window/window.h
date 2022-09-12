@@ -11,23 +11,22 @@ namespace SFG {
     class Window
     {
     private:
-        static Window* instance;
-        int xPos;
-        int yPos;
-        int width;
-        int height;
-        std::string windowTitle;
-        SDL_Window* window;
-        GraphicsHandler* graphicsHandler;
-        Window();
+        static int xPos;
+        static int yPos;
+        static int width;
+        static int height;
+        static std::string windowTitle;
+        static SDL_Window* window;
+        static GraphicsHandler* graphicsHandler;
     public:
-        ~Window();
-        static Window* GetInstance();
+        static void Initialize();
+        static void Destroy();
 
-        bool InitializeSDL();
-        bool InitializeWindow();
-        bool ShowWindow();
-        SDL_Window* GetSdlWindow();
-        GraphicsHandler* GetGraphicsHandler();
+        static bool InitializeSDL();
+        static bool InitializeWindow();
+        static bool ShowWindow();
+        static SDL_Window* GetSdlWindow();
+        static GraphicsHandler* GetGraphicsHandler();
     };
 }
+

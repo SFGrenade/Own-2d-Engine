@@ -1,39 +1,32 @@
 #include "fonthandler.h"
 
 namespace SFG {
-    FontHandler* FontHandler::instance = nullptr;
+    std::map<FontType, TTF_Font*> FontHandler::fonts = std::map<FontType, TTF_Font*>();
 
-    FontHandler::FontHandler()
-      : fonts() {
-        spdlog::trace("FontHandler::FontHandler()");
+    void FontHandler::Initialize() {
+        spdlog::trace("FontHandler::Initialize()");
         TTF_Init();
 
-        fonts[FontType::Console] = TTF_OpenFont("./Resources/Fonts/NotoSansMono-Regular.ttf", 18);
-        fonts[FontType::Ui] = TTF_OpenFont("./Resources/Fonts/NotoSerif-Regular.ttf", 18);
-        spdlog::trace("FontHandler::FontHandler()~");
+        FontHandler::fonts[FontType::Console] = TTF_OpenFont("./Resources/Fonts/NotoSansMono-Regular.ttf", 18);
+        FontHandler::fonts[FontType::Ui] = TTF_OpenFont("./Resources/Fonts/NotoSerif-Regular.ttf", 18);
+        spdlog::trace("FontHandler::Initialize()~");
     }
 
-    FontHandler::~FontHandler() {
-        spdlog::trace("FontHandler::~FontHandler()");
-        for (auto pair : fonts) {
+    void FontHandler::Destroy() {
+        spdlog::trace("FontHandler::Destroy()");
+        for (auto pair : FontHandler::fonts) {
             TTF_CloseFont(pair.second);
         }
-        fonts.clear();
+        FontHandler::fonts.clear();
 
         TTF_Quit();
-        spdlog::trace("FontHandler::~FontHandler()~");
-    }
-
-    FontHandler* FontHandler::GetInstance() {
-        spdlog::trace("FontHandler::GetInstance()");
-        if (!FontHandler::instance) FontHandler::instance = new FontHandler();
-        spdlog::trace("FontHandler::GetInstance()~");
-        return FontHandler::instance;
+        spdlog::trace("FontHandler::Destroy()~");
     }
 
     TTF_Font* FontHandler::GetFont(FontType type) {
         spdlog::trace("FontHandler::GetFont(FontType type = {})", (int) type);
         spdlog::trace("FontHandler::GetFont()~");
-        return fonts[type];
+        return FontHandler::fonts[type];
     }
 }
+

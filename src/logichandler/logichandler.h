@@ -13,19 +13,18 @@ namespace SFG {
     class LogicHandler
     {
     private:
-        static LogicHandler* instance;
-        std::vector<Timer*> timers;
-        bool* quitFlag;
-        std::thread logicThread;
-        LogicHandler();
+        static std::vector<Timer*> timers;
+        static bool* quitFlag;
+        static std::thread logicThread;
         static void UpdateLogic();
     public:
-        ~LogicHandler();
-        static LogicHandler* GetInstance();
+        static void Initialize();
+        static void Destroy();
 
-        void SetQuitFlag(bool* quitFlag);
-        void StartLogic();
-        void StopLogic();
-        void AddTimer(TimerCallback callback, std::chrono::nanoseconds interval, bool returnInterval);
+        static void SetQuitFlag(bool* quitFlag);
+        static void StartLogic();
+        static void StopLogic();
+        static void AddTimer(TimerCallback callback, std::chrono::nanoseconds interval, bool returnInterval);
     };
 }
+
