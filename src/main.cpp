@@ -7,6 +7,8 @@
 #include "logichandler/logichandler.h"
 #include "performance/performance.h"
 #include "window/window.h"
+#include "scripthandler/scripthandler.h"
+#include "scripthandler/CustomScripts/logscript.h"
 
 #include <SDL2/SDL_ttf.h>
 
@@ -48,6 +50,7 @@ int main(int argc, char* argv[]) {
     SFG::Window::InitializeWindow();
     SFG::Window::ShowWindow();
     SFG::GraphicsHandler* graphicsHandler = SFG::Window::GetGraphicsHandler();
+    SFG::ScriptHandler::Initialize();
 
     std::string performanceString;
     bool makeNewPerformanceTexture = false;
@@ -57,6 +60,9 @@ int main(int argc, char* argv[]) {
     performanceTextureRect.y = 5;
     performanceTextureRect.w = 0;
     performanceTextureRect.h = 0;
+    graphicsHandler->RegisterDrawEvent([](SDL_Renderer* /*windowRenderer*/) {
+        SFG::ScriptHandler::UpdateScriptsFrame();
+    });
     graphicsHandler->RegisterDrawEvent([&performanceString, &makeNewPerformanceTexture, &performanceTexture, &performanceTextureRect](SDL_Renderer* windowRenderer) {
         if (makeNewPerformanceTexture) {
             SDL_Color white;
@@ -99,6 +105,7 @@ int main(int argc, char* argv[]) {
 
     SFG::LogicHandler::AddTimer([](std::optional<std::chrono::secondsLongDouble> /*interval*/) {
         // 50 hz test timer
+        SFG::ScriptHandler::UpdateScriptsLogicFrame();
         //fmt::print("Interval: {:.9f} seconds\n", interval.value().count());
     }, std::chrono::duration_cast<std::chrono::nanoseconds>(1.0s / 50.0), false);
     SFG::LogicHandler::AddTimer([&performanceString, &makeNewPerformanceTexture](std::optional<std::chrono::secondsLongDouble> /*interval*/) {
@@ -110,6 +117,8 @@ R"(Performance (per second):
         makeNewPerformanceTexture = true;
     }, std::chrono::duration_cast<std::chrono::nanoseconds>(1.0s), false);
     SFG::LogicHandler::SetQuitFlag(quitPtr);
+
+    SFG::LogScript* testScript = SFG::ScriptHandler::AddScript<SFG::LogScript>();
 
     graphicsHandler->StartDraw();
     SFG::LogicHandler::StartLogic();
@@ -126,6 +135,7 @@ R"(Performance (per second):
         SDL_DestroyTexture(performanceTexture);
     }
 
+    SFG::ScriptHandler::Destroy();
     SFG::Window::Destroy();
     SFG::LogicHandler::Destroy();
     SFG::InputHandler::Destroy();
