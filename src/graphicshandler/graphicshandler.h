@@ -20,6 +20,7 @@ namespace SFG {
     private:
         std::vector<DrawCallback> drawCallbacks;
         bool* quitFlag;
+        int rendererIndex;
         SDL_Window* window;
         SDL_Renderer* windowRenderer;
         std::thread graphicsThread;
@@ -29,6 +30,7 @@ namespace SFG {
         ~GraphicsHandler();
 
         void SetQuitFlag(bool* quitFlag);
+        void SetRendererIndex(int index);
         void StartDraw();
         void StopDraw();
         void RegisterDrawEvent(DrawCallback callback);
