@@ -9,6 +9,7 @@ typedef std::function<void(SDL_Renderer* windowRenderer)> DrawCallback;
 
 class GraphicsHandler {
    private:
+    spdlogger logger;
     std::vector<DrawCallback> drawCallbacks;
     bool* quitFlag;
     int rendererIndex;

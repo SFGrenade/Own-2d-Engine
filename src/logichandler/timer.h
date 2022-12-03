@@ -10,6 +10,7 @@ typedef std::function<void(
 
 class Timer {
    private:
+    spdlogger logger;
     TimerCallback timerCallback;
     std::chrono::nanoseconds timerInterval;
     std::chrono::nanoseconds timerCurrent;

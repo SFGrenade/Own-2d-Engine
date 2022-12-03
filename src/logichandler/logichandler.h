@@ -7,6 +7,7 @@
 namespace SFG {
 class LogicHandler {
    private:
+    static spdlogger logger;
     static std::vector<Timer*> timers;
     static bool* quitFlag;
     static std::thread logicThread;

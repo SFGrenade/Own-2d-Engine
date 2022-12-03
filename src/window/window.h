@@ -7,6 +7,7 @@
 namespace SFG {
 class Window {
    private:
+    static spdlogger logger;
     static int xPos;
     static int yPos;
     static int width;

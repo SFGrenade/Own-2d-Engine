@@ -7,6 +7,7 @@ namespace SFG {
 class Script;
 class ScriptHandler {
    private:
+    static spdlogger logger;
     static std::vector<Script*> scripts;
 
    public:

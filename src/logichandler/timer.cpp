@@ -5,21 +5,22 @@
 namespace SFG {
 Timer::Timer(TimerCallback callback, std::chrono::nanoseconds interval,
              bool returnInterval)
-    : timerCallback(callback),
+    : logger(spdlog::get("Timer")),
+      timerCallback(callback),
       timerInterval(interval),
       timerCurrent(interval),
       timerReturnInterval(returnInterval) {
-    spdlog::trace("Timer::Timer()");
-    spdlog::trace("Timer::Timer()~");
+    logger->trace("Timer::Timer()");
+    logger->trace("Timer::Timer()~");
 }
 
 Timer::~Timer() {
-    spdlog::trace("Timer::~Timer()");
-    spdlog::trace("Timer::~Timer()~");
+    logger->trace("Timer::~Timer()");
+    logger->trace("Timer::~Timer()~");
 }
 
 void Timer::UpdateTimer(std::chrono::nanoseconds duration) {
-    // spdlog::trace("Timer::UpdateTimer(std::chrono::nanoseconds duration =
+    // logger->trace("Timer::UpdateTimer(std::chrono::nanoseconds duration =
     // {})", duration.count()); // todo too many log lines
     this->timerCurrent -= duration;
     if (this->timerCurrent <= 0ns) {
@@ -32,6 +33,6 @@ void Timer::UpdateTimer(std::chrono::nanoseconds duration) {
         }
         this->timerCurrent = this->timerInterval;
     }
-    // spdlog::trace("Timer::UpdateTimer()~"); // todo too many log lines
+    // logger->trace("Timer::UpdateTimer()~"); // todo too many log lines
 }
 }  // namespace SFG

@@ -11,6 +11,7 @@ enum FontType {
 
 class FontHandler {
    private:
+    static spdlogger logger;
     static std::map<FontType, TTF_Font*> fonts;
 
    public:

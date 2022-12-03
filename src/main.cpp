@@ -164,7 +164,7 @@ void PrintRendererInfo(const SDL_RendererInfo &rendererInfo) {
     spdlog::debug(" - Flags: {}", GetRendererFlags(rendererInfo.flags));
     spdlog::debug(" - NumTextureFormats: {}", rendererInfo.num_texture_formats);
     spdlog::debug(" - TextureFormats:");
-    for (int j = 0; j < rendererInfo.num_texture_formats; j++) {
+    for (uint32_t j = 0; j < rendererInfo.num_texture_formats; j++) {
         spdlog::debug("    - TextureFormat {}: {} / {}", j,
                       rendererInfo.texture_formats[j],
                       GetPixelFormatEnum(rendererInfo.texture_formats[j]));
@@ -206,7 +206,7 @@ void InitializeLoggers() {
 
     spdlogger mainLogger = std::make_shared<spdlog::logger>(
         "main", truncatedSinkList.begin(), truncatedSinkList.end());
-    spdlog::set_level(spdlog::level::trace);
+    mainLogger->set_level(spdlog::level::trace);
     spdlog::register_logger(mainLogger);
     spdlog::set_default_logger(mainLogger);
 
@@ -216,13 +216,12 @@ void InitializeLoggers() {
     spdlog::sinks_init_list normalSinkList = {normalFileSink, consoleSink};
 
     std::vector<std::string> allLoggerNames = {
-        "FontHandler",   "GraphicsHandler", "InputHandler",
-        "LogicHandler",  "Timer",           "Performance",
-        "ScriptHandler", "LogScript",       "Window"};
+        "FontHandler", "GraphicsHandler", "InputHandler", "LogicHandler",
+        "Timer",       "ScriptHandler",   "LogScript",    "Window"};
     for (auto name : allLoggerNames) {
         spdlogger logger = std::make_shared<spdlog::logger>(
             name, normalSinkList.begin(), normalSinkList.end());
-        spdlog::set_level(spdlog::level::trace);
+        logger->set_level(spdlog::level::trace);
         spdlog::register_logger(logger);
     }
 }
@@ -232,9 +231,20 @@ void InitializeComponents() {
     SFG::InputHandler::Initialize();
     SFG::LogicHandler::Initialize();
     SFG::Window::Initialize();
+    SFG::ScriptHandler::Initialize();
+}
+
+void InitializeWindow() {
     SFG::Window::InitializeSDL();
     SFG::Window::InitializeWindow();
-    SFG::ScriptHandler::Initialize();
+}
+
+void UninitializeComponents() {
+    SFG::ScriptHandler::Destroy();
+    SFG::Window::Destroy();
+    SFG::LogicHandler::Destroy();
+    SFG::InputHandler::Destroy();
+    SFG::FontHandler::Destroy();
 }
 
 #pragma endregion
@@ -253,8 +263,9 @@ int main(int argc, char *argv[]) {
     bool quit = false;
     bool *quitPtr = &quit;
 
-    SFG::Window::SetSize(1600, 900);
     InitializeComponents();
+    SFG::Window::SetSize(1600, 900);
+    InitializeWindow();
     SFG::Window::ShowWindow();
     SFG::GraphicsHandler *graphicsHandler = SFG::Window::GetGraphicsHandler();
 
@@ -342,8 +353,7 @@ int main(int argc, char *argv[]) {
         std::chrono::duration_cast<std::chrono::nanoseconds>(1.0s), false);
     SFG::LogicHandler::SetQuitFlag(quitPtr);
 
-    SFG::LogScript *testScript =
-        SFG::ScriptHandler::AddScript<SFG::LogScript>();
+    SFG::ScriptHandler::AddScript<SFG::LogScript>();
 
     graphicsHandler->StartDraw();
     SFG::LogicHandler::StartLogic();
@@ -360,11 +370,7 @@ int main(int argc, char *argv[]) {
         SDL_DestroyTexture(performanceTexture);
     }
 
-    SFG::ScriptHandler::Destroy();
-    SFG::Window::Destroy();
-    SFG::LogicHandler::Destroy();
-    SFG::InputHandler::Destroy();
-    SFG::FontHandler::Destroy();
+    UninitializeComponents();
 
     spdlog::trace("main()~");
     return EXIT_SUCCESS;

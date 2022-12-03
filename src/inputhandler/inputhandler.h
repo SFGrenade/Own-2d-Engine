@@ -13,6 +13,7 @@ typedef std::function<void(SDL_WindowEvent& window)> WindowEventCallback;
 
 class InputHandler {
    private:
+    static spdlogger logger;
     static SDL_Event sdlEvent;
     static std::vector<KeyCallback> keyDownCallbacks;
     static std::vector<KeyCallback> keyUpCallbacks;

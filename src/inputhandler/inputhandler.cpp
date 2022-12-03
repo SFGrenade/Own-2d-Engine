@@ -4,6 +4,7 @@
 #include "../globals.h"
 
 namespace SFG {
+spdlogger InputHandler::logger = nullptr;
 SDL_Event InputHandler::sdlEvent;
 std::vector<KeyCallback> InputHandler::keyDownCallbacks =
     std::vector<KeyCallback>();
@@ -21,17 +22,19 @@ std::vector<WindowEventCallback> InputHandler::windowEventCallbacks =
     std::vector<WindowEventCallback>();
 
 void InputHandler::Initialize() {
-    spdlog::trace("InputHandler::Initialize()");
-    spdlog::trace("InputHandler::Initialize()~");
+    InputHandler::logger = spdlog::get("InputHandler");
+    InputHandler::logger->trace("InputHandler::Initialize()");
+    InputHandler::logger->trace("InputHandler::Initialize()~");
 }
 
 void InputHandler::Destroy() {
-    spdlog::trace("InputHandler::Destroy()");
-    spdlog::trace("InputHandler::Destroy()~");
+    InputHandler::logger->trace("InputHandler::Destroy()");
+    InputHandler::logger->trace("InputHandler::Destroy()~");
 }
 
 void InputHandler::CheckInputs() {
-    // spdlog::trace("InputHandler::CheckInputs()"); // todo too many log lines
+    // todo too many log lines
+    // InputHandler::logger->trace("InputHandler::CheckInputs()");
     while (SDL_PollEvent(&InputHandler::sdlEvent) != 0) {
         if (InputHandler::quitEventCallbacks.size() &&
             InputHandler::sdlEvent.type == SDL_QUIT) {
@@ -64,53 +67,56 @@ void InputHandler::CheckInputs() {
                 callback(InputHandler::sdlEvent.motion);
         }
     }
-    // spdlog::trace("InputHandler::CheckInputs()~"); // todo too many log lines
+    // todo too many log lines
+    // InputHandler::logger->trace("InputHandler::CheckInputs()~");
 }
 
 void InputHandler::RegisterKeyDownEvent(KeyCallback callback) {
-    spdlog::trace("InputHandler::RegisterKeyDownEvent(KeyCallback callback)");
+    InputHandler::logger->trace(
+        "InputHandler::RegisterKeyDownEvent(KeyCallback callback)");
     if (callback) InputHandler::keyDownCallbacks.push_back(callback);
-    spdlog::trace("InputHandler::RegisterKeyDownEvent()~");
+    InputHandler::logger->trace("InputHandler::RegisterKeyDownEvent()~");
 }
 
 void InputHandler::RegisterKeyUpEvent(KeyCallback callback) {
-    spdlog::trace("InputHandler::RegisterKeyUpEvent(KeyCallback callback)");
+    InputHandler::logger->trace(
+        "InputHandler::RegisterKeyUpEvent(KeyCallback callback)");
     if (callback) InputHandler::keyUpCallbacks.push_back(callback);
-    spdlog::trace("InputHandler::RegisterKeyUpEvent()~");
+    InputHandler::logger->trace("InputHandler::RegisterKeyUpEvent()~");
 }
 
 void InputHandler::RegisterMouseButtonEvent(MouseButtonCallback callback) {
-    spdlog::trace(
+    InputHandler::logger->trace(
         "InputHandler::RegisterMouseButtonEvent(MouseButtonCallback callback)");
     if (callback) InputHandler::mouseButtonCallbacks.push_back(callback);
-    spdlog::trace("InputHandler::RegisterMouseButtonEvent()~");
+    InputHandler::logger->trace("InputHandler::RegisterMouseButtonEvent()~");
 }
 
 void InputHandler::RegisterMouseMotionEvent(MouseMotionCallback callback) {
-    spdlog::trace(
+    InputHandler::logger->trace(
         "InputHandler::RegisterMouseMotionEvent(MouseMotionCallback callback)");
     if (callback) InputHandler::mouseMotionCallbacks.push_back(callback);
-    spdlog::trace("InputHandler::RegisterMouseMotionEvent()~");
+    InputHandler::logger->trace("InputHandler::RegisterMouseMotionEvent()~");
 }
 
 void InputHandler::RegisterMouseWheelEvent(MouseWheelCallback callback) {
-    spdlog::trace(
+    InputHandler::logger->trace(
         "InputHandler::RegisterMouseWheelEvent(MouseWheelCallback callback)");
     if (callback) InputHandler::mouseWheelCallbacks.push_back(callback);
-    spdlog::trace("InputHandler::RegisterMouseWheelEvent()~");
+    InputHandler::logger->trace("InputHandler::RegisterMouseWheelEvent()~");
 }
 
 void InputHandler::RegisterQuitEvent(QuitEventCallback callback) {
-    spdlog::trace(
+    InputHandler::logger->trace(
         "InputHandler::RegisterQuitEvent(QuitEventCallback callback)");
     if (callback) InputHandler::quitEventCallbacks.push_back(callback);
-    spdlog::trace("InputHandler::RegisterQuitEvent()~");
+    InputHandler::logger->trace("InputHandler::RegisterQuitEvent()~");
 }
 
 void InputHandler::RegisterWindowEvent(WindowEventCallback callback) {
-    spdlog::trace(
+    InputHandler::logger->trace(
         "InputHandler::RegisterWindowEvent(WindowEventCallback callback)");
     if (callback) InputHandler::windowEventCallbacks.push_back(callback);
-    spdlog::trace("InputHandler::RegisterWindowEvent()~");
+    InputHandler::logger->trace("InputHandler::RegisterWindowEvent()~");
 }
 }  // namespace SFG
