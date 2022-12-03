@@ -1,52 +1,46 @@
 #include "performance.h"
 
 namespace SFG {
-    uint32_t Performance::graphicsLoops = 0;
-    std::mutex Performance::graphicsMtx;
+    uint16_t Performance::graphicsLoops = 0;
+    char Performance::padding1[64];
+    uint16_t Performance::lastGraphicsLoops = 0;
+    char Performance::padding2[64];
     uint32_t Performance::inputLoops = 0;
-    std::mutex Performance::inputMtx;
+    char Performance::padding3[64];
+    uint32_t Performance::lastInputLoops = 0;
+    char Performance::padding4[64];
     uint32_t Performance::logicLoops = 0;
-    std::mutex Performance::logicMtx;
+    char Performance::padding5[64];
+    uint32_t Performance::lastLogicLoops = 0;
+    char Performance::padding6[64];
 
     void Performance::AddGraphicsLoop() {
-        Performance::graphicsMtx.lock();
-        Performance::graphicsLoops += 1;
-        Performance::graphicsMtx.unlock();
+        ++Performance::graphicsLoops;
     }
 
     void Performance::AddInputLoop() {
-        Performance::inputMtx.lock();
-        Performance::inputLoops += 1;
-        Performance::inputMtx.unlock();
+        ++Performance::inputLoops;
     }
 
     void Performance::AddLogicLoop() {
-        Performance::logicMtx.lock();
-        Performance::logicLoops += 1;
-        Performance::logicMtx.unlock();
+        ++Performance::logicLoops;
     }
 
-    uint32_t Performance::GetGraphicsLoop() {
-        Performance::graphicsMtx.lock();
-        uint32_t tmp = Performance::graphicsLoops;
-        Performance::graphicsLoops = 0;
-        Performance::graphicsMtx.unlock();
-        return tmp;
+    uint16_t Performance::GetGraphicsLoop() {
+        uint16_t tmp = Performance::lastGraphicsLoops;
+        Performance::lastGraphicsLoops = Performance::graphicsLoops;
+        return Performance::graphicsLoops - tmp;
     }
 
     uint32_t Performance::GetInputLoop() {
-        Performance::inputMtx.lock();
-        uint32_t tmp = Performance::inputLoops;
-        Performance::inputLoops = 0;
-        Performance::inputMtx.unlock();
-        return tmp;
+        uint32_t tmp = Performance::lastInputLoops;
+        Performance::lastInputLoops = Performance::inputLoops;
+        return Performance::inputLoops - tmp;
     }
 
     uint32_t Performance::GetLogicLoop() {
-        Performance::logicMtx.lock();
-        uint32_t tmp = Performance::logicLoops;
-        Performance::logicLoops = 0;
-        Performance::logicMtx.unlock();
-        return tmp;
+        uint32_t tmp = Performance::lastLogicLoops;
+        Performance::lastLogicLoops = Performance::logicLoops;
+        return Performance::logicLoops - tmp;
     }
 }
