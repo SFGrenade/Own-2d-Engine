@@ -204,7 +204,7 @@ void InitializeLoggers() {
     spdlog::sinks_init_list truncatedSinkList = {truncatedFileSink,
                                                  consoleSink};
 
-    auto mainLogger = std::make_shared<spdlog::logger>(
+    spdlogger mainLogger = std::make_shared<spdlog::logger>(
         "main", truncatedSinkList.begin(), truncatedSinkList.end());
     spdlog::set_level(spdlog::level::trace);
     spdlog::register_logger(mainLogger);
@@ -220,7 +220,7 @@ void InitializeLoggers() {
         "LogicHandler",  "Timer",           "Performance",
         "ScriptHandler", "LogScript",       "Window"};
     for (auto name : allLoggerNames) {
-        auto logger = std::make_shared<spdlog::logger>(
+        spdlogger logger = std::make_shared<spdlog::logger>(
             name, normalSinkList.begin(), normalSinkList.end());
         spdlog::set_level(spdlog::level::trace);
         spdlog::register_logger(logger);
