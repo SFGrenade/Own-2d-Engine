@@ -2,29 +2,25 @@
 
 // Including our headers
 #include "../globals.h"
-
 #include "timer.h"
 
-#include <functional>
-#include <thread>
-#include <vector>
-
 namespace SFG {
-    class LogicHandler
-    {
-    private:
-        static std::vector<Timer*> timers;
-        static bool* quitFlag;
-        static std::thread logicThread;
-        static void UpdateLogic();
-    public:
-        static void Initialize();
-        static void Destroy();
+class LogicHandler {
+   private:
+    static std::vector<Timer*> timers;
+    static bool* quitFlag;
+    static std::thread logicThread;
+    static void UpdateLogic();
 
-        static void SetQuitFlag(bool* quitFlag);
-        static void StartLogic();
-        static void StopLogic();
-        static void AddTimer(TimerCallback callback, std::chrono::nanoseconds interval, bool returnInterval);
-    };
-}
+   public:
+    static void Initialize();
+    static void Destroy();
 
+    static void SetQuitFlag(bool* quitFlag);
+    static void StartLogic();
+    static void StopLogic();
+    static void AddTimer(TimerCallback callback,
+                         std::chrono::nanoseconds interval,
+                         bool returnInterval);
+};
+}  // namespace SFG
