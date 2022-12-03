@@ -19,6 +19,7 @@ namespace SFG {
         static SDL_Window* window;
         static GraphicsHandler* graphicsHandler;
     public:
+        static void SetSize(int width, int height);
         static void Initialize();
         static void Destroy();
 

@@ -21,6 +21,13 @@ namespace SFG {
     SDL_Window* Window::window = nullptr;
     GraphicsHandler* Window::graphicsHandler = nullptr;
 
+    void Window::SetSize(int width, int height) {
+        spdlog::trace("Window::SetSize({}, {})", width, height);
+        Window::width = width;
+        Window::height = height;
+        spdlog::trace("Window::Initialize()~");
+    }
+
     void Window::Initialize() {
         spdlog::trace("Window::Initialize()");
         spdlog::trace("Window::Initialize()~");
