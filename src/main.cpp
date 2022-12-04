@@ -30,147 +30,175 @@ std::string GetRendererFlags(uint32_t rendererFlags) {
 
 std::string GetPixelFormatEnum(uint32_t textureFlags) {
     std::string ret = "";
-    if (textureFlags & SDL_PIXELFORMAT_UNKNOWN) {
+    if (textureFlags == SDL_PIXELFORMAT_UNKNOWN) {
         ret += "SDL_PIXELFORMAT_UNKNOWN | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_INDEX1LSB) {
+    if (textureFlags == SDL_PIXELFORMAT_INDEX1LSB) {
         ret += "SDL_PIXELFORMAT_INDEX1LSB | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_INDEX1MSB) {
+    if (textureFlags == SDL_PIXELFORMAT_INDEX1MSB) {
         ret += "SDL_PIXELFORMAT_INDEX1MSB | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_INDEX4LSB) {
+    if (textureFlags == SDL_PIXELFORMAT_INDEX4LSB) {
         ret += "SDL_PIXELFORMAT_INDEX4LSB | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_INDEX4MSB) {
+    if (textureFlags == SDL_PIXELFORMAT_INDEX4MSB) {
         ret += "SDL_PIXELFORMAT_INDEX4MSB | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_INDEX8) {
+    if (textureFlags == SDL_PIXELFORMAT_INDEX8) {
         ret += "SDL_PIXELFORMAT_INDEX8 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_RGB332) {
+    if (textureFlags == SDL_PIXELFORMAT_RGB332) {
         ret += "SDL_PIXELFORMAT_RGB332 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_RGB444) {
+    if (textureFlags == SDL_PIXELFORMAT_XRGB4444) {
+        ret += "SDL_PIXELFORMAT_XRGB4444 | ";
+    }
+    if (textureFlags == SDL_PIXELFORMAT_RGB444) {
         ret += "SDL_PIXELFORMAT_RGB444 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_RGB555) {
+    if (textureFlags == SDL_PIXELFORMAT_XBGR4444) {
+        ret += "SDL_PIXELFORMAT_XBGR4444 | ";
+    }
+    if (textureFlags == SDL_PIXELFORMAT_BGR444) {
+        ret += "SDL_PIXELFORMAT_BGR444 | ";
+    }
+    if (textureFlags == SDL_PIXELFORMAT_XRGB1555) {
+        ret += "SDL_PIXELFORMAT_XRGB1555 | ";
+    }
+    if (textureFlags == SDL_PIXELFORMAT_RGB555) {
         ret += "SDL_PIXELFORMAT_RGB555 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_BGR555) {
+    if (textureFlags == SDL_PIXELFORMAT_XBGR1555) {
+        ret += "SDL_PIXELFORMAT_XBGR1555 | ";
+    }
+    if (textureFlags == SDL_PIXELFORMAT_BGR555) {
         ret += "SDL_PIXELFORMAT_BGR555 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_ARGB4444) {
+    if (textureFlags == SDL_PIXELFORMAT_ARGB4444) {
         ret += "SDL_PIXELFORMAT_ARGB4444 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_RGBA4444) {
+    if (textureFlags == SDL_PIXELFORMAT_RGBA4444) {
         ret += "SDL_PIXELFORMAT_RGBA4444 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_ABGR4444) {
+    if (textureFlags == SDL_PIXELFORMAT_ABGR4444) {
         ret += "SDL_PIXELFORMAT_ABGR4444 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_BGRA4444) {
+    if (textureFlags == SDL_PIXELFORMAT_BGRA4444) {
         ret += "SDL_PIXELFORMAT_BGRA4444 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_ARGB1555) {
+    if (textureFlags == SDL_PIXELFORMAT_ARGB1555) {
         ret += "SDL_PIXELFORMAT_ARGB1555 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_RGBA5551) {
+    if (textureFlags == SDL_PIXELFORMAT_RGBA5551) {
         ret += "SDL_PIXELFORMAT_RGBA5551 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_ABGR1555) {
+    if (textureFlags == SDL_PIXELFORMAT_ABGR1555) {
         ret += "SDL_PIXELFORMAT_ABGR1555 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_BGRA5551) {
+    if (textureFlags == SDL_PIXELFORMAT_BGRA5551) {
         ret += "SDL_PIXELFORMAT_BGRA5551 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_RGB565) {
+    if (textureFlags == SDL_PIXELFORMAT_RGB565) {
         ret += "SDL_PIXELFORMAT_RGB565 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_BGR565) {
+    if (textureFlags == SDL_PIXELFORMAT_BGR565) {
         ret += "SDL_PIXELFORMAT_BGR565 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_RGB24) {
+    if (textureFlags == SDL_PIXELFORMAT_RGB24) {
         ret += "SDL_PIXELFORMAT_RGB24 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_BGR24) {
+    if (textureFlags == SDL_PIXELFORMAT_BGR24) {
         ret += "SDL_PIXELFORMAT_BGR24 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_RGB888) {
+    if (textureFlags == SDL_PIXELFORMAT_XRGB8888) {
+        ret += "SDL_PIXELFORMAT_XRGB8888 | ";
+    }
+    if (textureFlags == SDL_PIXELFORMAT_RGB888) {
         ret += "SDL_PIXELFORMAT_RGB888 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_RGBX8888) {
+    if (textureFlags == SDL_PIXELFORMAT_RGBX8888) {
         ret += "SDL_PIXELFORMAT_RGBX8888 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_BGR888) {
+    if (textureFlags == SDL_PIXELFORMAT_XBGR8888) {
+        ret += "SDL_PIXELFORMAT_XBGR8888 | ";
+    }
+    if (textureFlags == SDL_PIXELFORMAT_BGR888) {
         ret += "SDL_PIXELFORMAT_BGR888 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_BGRX8888) {
+    if (textureFlags == SDL_PIXELFORMAT_BGRX8888) {
         ret += "SDL_PIXELFORMAT_BGRX8888 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_ARGB8888) {
+    if (textureFlags == SDL_PIXELFORMAT_ARGB8888) {
         ret += "SDL_PIXELFORMAT_ARGB8888 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_RGBA8888) {
+    if (textureFlags == SDL_PIXELFORMAT_RGBA8888) {
         ret += "SDL_PIXELFORMAT_RGBA8888 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_ABGR8888) {
+    if (textureFlags == SDL_PIXELFORMAT_ABGR8888) {
         ret += "SDL_PIXELFORMAT_ABGR8888 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_BGRA8888) {
+    if (textureFlags == SDL_PIXELFORMAT_BGRA8888) {
         ret += "SDL_PIXELFORMAT_BGRA8888 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_ARGB2101010) {
+    if (textureFlags == SDL_PIXELFORMAT_ARGB2101010) {
         ret += "SDL_PIXELFORMAT_ARGB2101010 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_RGBA32) {
+    if (textureFlags == SDL_PIXELFORMAT_RGBA32) {
         ret += "SDL_PIXELFORMAT_RGBA32 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_ARGB32) {
+    if (textureFlags == SDL_PIXELFORMAT_ARGB32) {
         ret += "SDL_PIXELFORMAT_ARGB32 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_BGRA32) {
+    if (textureFlags == SDL_PIXELFORMAT_BGRA32) {
         ret += "SDL_PIXELFORMAT_BGRA32 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_ABGR32) {
+    if (textureFlags == SDL_PIXELFORMAT_ABGR32) {
         ret += "SDL_PIXELFORMAT_ABGR32 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_YV12) {
+    if (textureFlags == SDL_PIXELFORMAT_YV12) {
         ret += "SDL_PIXELFORMAT_YV12 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_IYUV) {
+    if (textureFlags == SDL_PIXELFORMAT_IYUV) {
         ret += "SDL_PIXELFORMAT_IYUV | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_YUY2) {
+    if (textureFlags == SDL_PIXELFORMAT_YUY2) {
         ret += "SDL_PIXELFORMAT_YUY2 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_UYVY) {
+    if (textureFlags == SDL_PIXELFORMAT_UYVY) {
         ret += "SDL_PIXELFORMAT_UYVY | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_YVYU) {
+    if (textureFlags == SDL_PIXELFORMAT_YVYU) {
         ret += "SDL_PIXELFORMAT_YVYU | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_NV12) {
+    if (textureFlags == SDL_PIXELFORMAT_NV12) {
         ret += "SDL_PIXELFORMAT_NV12 | ";
     }
-    if (textureFlags & SDL_PIXELFORMAT_NV21) {
+    if (textureFlags == SDL_PIXELFORMAT_NV21) {
         ret += "SDL_PIXELFORMAT_NV21 | ";
+    }
+    if (textureFlags == SDL_PIXELFORMAT_EXTERNAL_OES) {
+        ret += "SDL_PIXELFORMAT_EXTERNAL_OES | ";
     }
     return ret.substr(0, ret.size() - 3);
 }
 
 void PrintRendererInfo(const SDL_RendererInfo &rendererInfo) {
-    spdlog::debug("Renderer \"{}\":", rendererInfo.name);
-    spdlog::debug(" - Flags: {}", GetRendererFlags(rendererInfo.flags));
-    spdlog::debug(" - NumTextureFormats: {}", rendererInfo.num_texture_formats);
-    spdlog::debug(" - TextureFormats:");
+    spdlog::debug("- Renderer \"{}\":", rendererInfo.name);
+    std::string tmpString1 = GetRendererFlags(rendererInfo.flags);
+    spdlog::debug(fmt::runtime("  - Flags: {:#034b} / {}"), rendererInfo.flags,
+                  tmpString1);
+    spdlog::debug("  - NumTextureFormats: {}",
+                  rendererInfo.num_texture_formats);
+    spdlog::debug("  - TextureFormats:");
     for (uint32_t j = 0; j < rendererInfo.num_texture_formats; j++) {
-        spdlog::debug("    - TextureFormat {}: {} / {}", j,
-                      rendererInfo.texture_formats[j],
-                      GetPixelFormatEnum(rendererInfo.texture_formats[j]));
+        std::string tmpString2 =
+            GetPixelFormatEnum(rendererInfo.texture_formats[j]);
+        spdlog::debug(fmt::runtime("    - TextureFormat {}: {:#034b} / {}"), j,
+                      rendererInfo.texture_formats[j], tmpString2);
     }
-    spdlog::debug(" - MaxTextureWidth: {}", rendererInfo.max_texture_width);
-    spdlog::debug(" - MaxTextureHeight: {}", rendererInfo.max_texture_height);
+    spdlog::debug("  - MaxTextureWidth: {}", rendererInfo.max_texture_width);
+    spdlog::debug("  - MaxTextureHeight: {}", rendererInfo.max_texture_height);
 }
 
 void CheckAndSelectRenderer(SFG::GraphicsHandler *graphicsHandler,
@@ -207,6 +235,7 @@ void InitializeLoggers() {
     spdlogger mainLogger = std::make_shared<spdlog::logger>(
         "main", truncatedSinkList.begin(), truncatedSinkList.end());
     mainLogger->set_level(spdlog::level::trace);
+    mainLogger->flush_on(spdlog::level::trace);
     spdlog::register_logger(mainLogger);
     spdlog::set_default_logger(mainLogger);
 
@@ -222,8 +251,10 @@ void InitializeLoggers() {
         spdlogger logger = std::make_shared<spdlog::logger>(
             name, normalSinkList.begin(), normalSinkList.end());
         logger->set_level(spdlog::level::trace);
+        logger->flush_on(spdlog::level::trace);
         spdlog::register_logger(logger);
     }
+    spdlog::get("LogScript")->set_level(spdlog::level::warn);
 }
 
 void InitializeComponents() {
