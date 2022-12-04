@@ -25,8 +25,7 @@ void LogicHandler::Destroy() {
 
 void LogicHandler::UpdateLogic() {
     LogicHandler::logger->trace("LogicHandler::UpdateLogic()");
-    std::chrono::time_point<std::chrono::high_resolution_clock> old =
-        std::chrono::high_resolution_clock::now();
+    std::chrono::time_point<std::chrono::high_resolution_clock> old = std::chrono::high_resolution_clock::now();
     std::chrono::time_point<std::chrono::high_resolution_clock> now;
     std::chrono::nanoseconds duration;
     while (!(*LogicHandler::quitFlag)) {
@@ -42,8 +41,7 @@ void LogicHandler::UpdateLogic() {
 }
 
 void LogicHandler::SetQuitFlag(bool* newQuitFlag) {
-    LogicHandler::logger->trace(
-        "LogicHandler::SetQuitFlag(bool* quitFlag = {})", (void*)newQuitFlag);
+    LogicHandler::logger->trace("LogicHandler::SetQuitFlag(bool* quitFlag = {})", (void*)newQuitFlag);
     if (newQuitFlag) LogicHandler::quitFlag = newQuitFlag;
     LogicHandler::logger->trace("LogicHandler::SetQuitFlag()~");
 }
@@ -60,9 +58,7 @@ void LogicHandler::StopLogic() {
     LogicHandler::logger->trace("LogicHandler::StopLogic()~");
 }
 
-void LogicHandler::AddTimer(TimerCallback callback,
-                            std::chrono::nanoseconds interval,
-                            bool returnInterval) {
+void LogicHandler::AddTimer(TimerCallback callback, std::chrono::nanoseconds interval, bool returnInterval) {
     LogicHandler::logger->trace(
         "LogicHandler::AddTimer(TimerCallback callback, "
         "std::chrono::nanoseconds interval = {}, bool returnInterval = {})",

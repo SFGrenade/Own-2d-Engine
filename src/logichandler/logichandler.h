@@ -20,8 +20,6 @@ class LogicHandler {
     static void SetQuitFlag(bool* quitFlag);
     static void StartLogic();
     static void StopLogic();
-    static void AddTimer(TimerCallback callback,
-                         std::chrono::nanoseconds interval,
-                         bool returnInterval);
+    static void AddTimer(TimerCallback callback, std::chrono::nanoseconds interval, bool returnInterval);
 };
 }  // namespace SFG

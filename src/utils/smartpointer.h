@@ -16,8 +16,7 @@ class SmartPointer {
     void AddToMap() {
         if (_pointer == nullptr) return;
         _pointerCounterMtx.lock();
-        if (_pointerCounter.find(_pointer) == _pointerCounter.end())
-            _pointerCounter[_pointer] = 0;
+        if (_pointerCounter.find(_pointer) == _pointerCounter.end()) _pointerCounter[_pointer] = 0;
         _pointerCounter[_pointer] += 1;
         _pointerCounterMtx.unlock();
     }

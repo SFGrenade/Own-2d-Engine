@@ -38,8 +38,7 @@ void ScriptHandler::Destroy() {
 
 template <class T>
 T* ScriptHandler::AddScript() {
-    static_assert(std::is_base_of<Script, T>::value,
-                  "class need to be inherited from SFG::Script");
+    static_assert(std::is_base_of<Script, T>::value, "class need to be inherited from SFG::Script");
     ScriptHandler::logger->trace("ScriptHandler::AddScript()");
     Script* script = (Script*)new T();
     ScriptHandler::scripts.push_back(script);

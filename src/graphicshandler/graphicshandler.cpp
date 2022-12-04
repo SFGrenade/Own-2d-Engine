@@ -5,14 +5,8 @@
 
 namespace SFG {
 GraphicsHandler::GraphicsHandler(SDL_Window* window)
-    : logger(spdlog::get("GraphicsHandler")),
-      drawCallbacks(),
-      quitFlag(nullptr),
-      rendererIndex(-1),
-      window(window),
-      windowRenderer(nullptr) {
-    logger->trace("GraphicsHandler::GraphicsHandler(SDL_Window* window = {})",
-                  (void*)window);
+    : logger(spdlog::get("GraphicsHandler")), drawCallbacks(), quitFlag(nullptr), rendererIndex(-1), window(window), windowRenderer(nullptr) {
+    logger->trace("GraphicsHandler::GraphicsHandler(SDL_Window* window = {})", (void*)window);
     logger->trace("GraphicsHandler::GraphicsHandler()~");
 }
 
@@ -22,16 +16,13 @@ GraphicsHandler::~GraphicsHandler() {
 }
 
 void GraphicsHandler::Draw(GraphicsHandler* self) {
-    self->logger->trace("GraphicsHandler::Draw(GraphicsHandler* self = {})",
-                        (void*)self);
-    self->windowRenderer =
-        SDL_CreateRenderer(self->window, self->rendererIndex, 0);
+    self->logger->trace("GraphicsHandler::Draw(GraphicsHandler* self = {})", (void*)self);
+    self->windowRenderer = SDL_CreateRenderer(self->window, self->rendererIndex, 0);
     SDL_SetRenderDrawColor(self->windowRenderer, 0, 0, 0, 255);
     while (!(*self->quitFlag)) {
         SDL_RenderClear(self->windowRenderer);
 
-        for (auto callback : self->drawCallbacks)
-            callback(self->windowRenderer);
+        for (auto callback : self->drawCallbacks) callback(self->windowRenderer);
 
         SDL_RenderPresent(self->windowRenderer);
         Performance::AddGraphicsLoop();
@@ -42,8 +33,7 @@ void GraphicsHandler::Draw(GraphicsHandler* self) {
 }
 
 void GraphicsHandler::SetQuitFlag(bool* newQuitFlag) {
-    logger->trace("GraphicsHandler::SetQuitFlag(bool* quitFlag = {})",
-                  (void*)newQuitFlag);
+    logger->trace("GraphicsHandler::SetQuitFlag(bool* quitFlag = {})", (void*)newQuitFlag);
     if (newQuitFlag) this->quitFlag = newQuitFlag;
     logger->trace("GraphicsHandler::SetQuitFlag()~");
 }

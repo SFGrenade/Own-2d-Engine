@@ -184,30 +184,24 @@ std::string GetPixelFormatEnum(uint32_t textureFlags) {
 }
 
 void PrintRendererInfo(const SDL_RendererInfo &rendererInfo) {
-    spdlog::debug("- Renderer \"{}\":", rendererInfo.name);
+    spdlog::debug("- Renderer \"{:s}\":", rendererInfo.name);
     std::string tmpString1 = GetRendererFlags(rendererInfo.flags);
-    spdlog::debug(fmt::runtime("  - Flags: {:#034b} / {}"), rendererInfo.flags,
-                  tmpString1);
-    spdlog::debug("  - NumTextureFormats: {}",
-                  rendererInfo.num_texture_formats);
+    spdlog::debug("  - Flags: {:#034b} / {:s}", rendererInfo.flags, tmpString1);
+    spdlog::debug("  - NumTextureFormats: {:d}", rendererInfo.num_texture_formats);
     spdlog::debug("  - TextureFormats:");
     for (uint32_t j = 0; j < rendererInfo.num_texture_formats; j++) {
-        std::string tmpString2 =
-            GetPixelFormatEnum(rendererInfo.texture_formats[j]);
-        spdlog::debug(fmt::runtime("    - TextureFormat {}: {:#034b} / {}"), j,
-                      rendererInfo.texture_formats[j], tmpString2);
+        std::string tmpString2 = GetPixelFormatEnum(rendererInfo.texture_formats[j]);
+        spdlog::debug("    - TextureFormat {:d}: {:#034b} / {:s}", j, rendererInfo.texture_formats[j], tmpString2);
     }
-    spdlog::debug("  - MaxTextureWidth: {}", rendererInfo.max_texture_width);
-    spdlog::debug("  - MaxTextureHeight: {}", rendererInfo.max_texture_height);
+    spdlog::debug("  - MaxTextureWidth: {:d}", rendererInfo.max_texture_width);
+    spdlog::debug("  - MaxTextureHeight: {:d}", rendererInfo.max_texture_height);
 }
 
-void CheckAndSelectRenderer(SFG::GraphicsHandler *graphicsHandler,
-                            const std::string &cliSelection) {
+void CheckAndSelectRenderer(SFG::GraphicsHandler *graphicsHandler, const std::string &cliSelection) {
     int numRDevices = SDL_GetNumRenderDrivers();
-    spdlog::debug("SDL_GetNumRenderDrivers() => {}", numRDevices);
+    spdlog::debug("SDL_GetNumRenderDrivers() => {:d}", numRDevices);
     for (int i = 0; i < numRDevices; i++) {
-        SDL_Renderer *renderer =
-            SDL_CreateRenderer(SFG::Window::GetSdlWindow(), i, 0);
+        SDL_Renderer *renderer = SDL_CreateRenderer(SFG::Window::GetSdlWindow(), i, 0);
         SDL_RendererInfo info;
         SDL_GetRendererInfo(renderer, &info);
         SDL_DestroyRenderer(renderer);
@@ -226,30 +220,24 @@ void InitializeLoggers() {
     auto consoleSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
     consoleSink->set_level(spdlog::level::warn);
 
-    auto truncatedFileSink =
-        std::make_shared<spdlog::sinks::basic_file_sink_mt>("log.log", true);
+    auto truncatedFileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("log.log", true);
     truncatedFileSink->set_level(spdlog::level::trace);
-    spdlog::sinks_init_list truncatedSinkList = {truncatedFileSink,
-                                                 consoleSink};
+    spdlog::sinks_init_list truncatedSinkList = {truncatedFileSink, consoleSink};
 
-    spdlogger mainLogger = std::make_shared<spdlog::logger>(
-        "main", truncatedSinkList.begin(), truncatedSinkList.end());
+    spdlogger mainLogger = std::make_shared<spdlog::logger>("main", truncatedSinkList.begin(), truncatedSinkList.end());
     mainLogger->set_level(spdlog::level::trace);
     mainLogger->flush_on(spdlog::level::trace);
     spdlog::register_logger(mainLogger);
     spdlog::set_default_logger(mainLogger);
 
-    auto normalFileSink =
-        std::make_shared<spdlog::sinks::basic_file_sink_mt>("log.log", false);
+    auto normalFileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("log.log", false);
     normalFileSink->set_level(spdlog::level::trace);
     spdlog::sinks_init_list normalSinkList = {normalFileSink, consoleSink};
 
-    std::vector<std::string> allLoggerNames = {
-        "FontHandler", "GraphicsHandler", "InputHandler", "LogicHandler",
-        "Timer",       "ScriptHandler",   "LogScript",    "Window"};
+    std::vector<std::string> allLoggerNames = {"FontHandler", "GraphicsHandler", "InputHandler", "LogicHandler",
+                                               "Timer",       "ScriptHandler",   "LogScript",    "Window"};
     for (auto name : allLoggerNames) {
-        spdlogger logger = std::make_shared<spdlog::logger>(
-            name, normalSinkList.begin(), normalSinkList.end());
+        spdlogger logger = std::make_shared<spdlog::logger>(name, normalSinkList.begin(), normalSinkList.end());
         logger->set_level(spdlog::level::trace);
         logger->flush_on(spdlog::level::trace);
         spdlog::register_logger(logger);
@@ -288,8 +276,7 @@ int main(int argc, char *argv[]) {
 
     InitializeLoggers();
 
-    spdlog::trace("main(int argc = {}, char* argv[] = {} {} {})", argc, "{",
-                  fmt::join(argvVec, ", "), "}");
+    spdlog::trace("main(int argc = {}, char* argv[] = {} {} {})", argc, "{", fmt::join(argvVec, ", "), "}");
 
     bool quit = false;
     bool *quitPtr = &quit;
@@ -314,12 +301,9 @@ int main(int argc, char *argv[]) {
     performanceTextureRect.y = 5;
     performanceTextureRect.w = 0;
     performanceTextureRect.h = 0;
-    graphicsHandler->RegisterDrawEvent([](SDL_Renderer * /*windowRenderer*/) {
-        SFG::ScriptHandler::UpdateScriptsFrame();
-    });
+    graphicsHandler->RegisterDrawEvent([](SDL_Renderer * /*windowRenderer*/) { SFG::ScriptHandler::UpdateScriptsFrame(); });
     graphicsHandler->RegisterDrawEvent(
-        [&performanceString, &makeNewPerformanceTexture, &performanceTexture,
-         &performanceTextureRect](SDL_Renderer *windowRenderer) {
+        [&performanceString, &makeNewPerformanceTexture, &performanceTexture, &performanceTextureRect](SDL_Renderer *windowRenderer) {
             if (makeNewPerformanceTexture) {
                 SDL_Color foreground;
                 foreground.r = 255;
@@ -331,33 +315,26 @@ int main(int argc, char *argv[]) {
                 background.g = 0;
                 background.b = 0;
                 background.a = 0;
-                SDL_Surface *textSurface = TTF_RenderUTF8_Shaded_Wrapped(
-                    SFG::FontHandler::GetFont(SFG::FontType::Console),
-                    performanceString.c_str(), foreground, background, 0);
+                SDL_Surface *textSurface =
+                    TTF_RenderUTF8_Shaded_Wrapped(SFG::FontHandler::GetFont(SFG::FontType::Console), performanceString.c_str(), foreground, background, 0);
                 if (performanceTexture) {
                     SDL_DestroyTexture(performanceTexture);
                 }
-                performanceTexture =
-                    SDL_CreateTextureFromSurface(windowRenderer, textSurface);
+                performanceTexture = SDL_CreateTextureFromSurface(windowRenderer, textSurface);
                 performanceTextureRect.w = textSurface->w;
                 performanceTextureRect.h = textSurface->h;
                 SDL_FreeSurface(textSurface);
                 makeNewPerformanceTexture = false;
             }
             if (performanceTexture) {
-                SDL_RenderCopy(windowRenderer, performanceTexture, NULL,
-                               &performanceTextureRect);
+                SDL_RenderCopy(windowRenderer, performanceTexture, NULL, &performanceTextureRect);
             }
         });
     graphicsHandler->SetQuitFlag(quitPtr);
 
     SFG::InputHandler::RegisterQuitEvent([&quit]() { quit = true; });
-    SFG::InputHandler::RegisterWindowEvent([&quit](SDL_WindowEvent &window) {
-        quit |= window.event == SDL_WINDOWEVENT_CLOSE;
-    });
-    SFG::InputHandler::RegisterKeyDownEvent([&quit](SDL_KeyboardEvent &key) {
-        quit |= key.keysym.sym == SDLK_ESCAPE;
-    });
+    SFG::InputHandler::RegisterWindowEvent([&quit](SDL_WindowEvent &window) { quit |= window.event == SDL_WINDOWEVENT_CLOSE; });
+    SFG::InputHandler::RegisterKeyDownEvent([&quit](SDL_KeyboardEvent &key) { quit |= key.keysym.sym == SDLK_ESCAPE; });
 
     SFG::LogicHandler::AddTimer(
         [](std::optional<std::chrono::secondsLongDouble>
@@ -365,19 +342,15 @@ int main(int argc, char *argv[]) {
             // 50 hz test timer
             SFG::ScriptHandler::UpdateScriptsLogicFrame();
         },
-        std::chrono::duration_cast<std::chrono::nanoseconds>(1.0s / 50.0),
-        false);
+        std::chrono::duration_cast<std::chrono::nanoseconds>(1.0s / 50.0), false);
     SFG::LogicHandler::AddTimer(
-        [&performanceString, &makeNewPerformanceTexture](
-            std::optional<std::chrono::secondsLongDouble> /*interval*/) {
+        [&performanceString, &makeNewPerformanceTexture](std::optional<std::chrono::secondsLongDouble> /*interval*/) {
             performanceString = fmt::format(
                 R"(Performance (per second):
 {:>9} Frames drawn
 {:>9} Input checks
 {:>9} Logic loops)",
-                SFG::Performance::GetGraphicsLoop(),
-                SFG::Performance::GetInputLoop(),
-                SFG::Performance::GetLogicLoop());
+                SFG::Performance::GetGraphicsLoop(), SFG::Performance::GetInputLoop(), SFG::Performance::GetLogicLoop());
             spdlog::debug(performanceString);
             makeNewPerformanceTexture = true;
         },

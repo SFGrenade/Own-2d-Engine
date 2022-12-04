@@ -7,12 +7,9 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 
-#define SDL_IMG_INIT_EVERYTHING \
-    (IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP)
+#define SDL_IMG_INIT_EVERYTHING (IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP)
 
-#define SDL_MIX_INIT_EVERYTHING                                   \
-    (MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG | \
-     MIX_INIT_MID | MIX_INIT_OPUS)
+#define SDL_MIX_INIT_EVERYTHING (MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG | MIX_INIT_MID | MIX_INIT_OPUS)
 #define SDL_MIX_INIT_MP3_OGG (MIX_INIT_MP3 | MIX_INIT_OGG)
 
 namespace SFG {
@@ -61,8 +58,7 @@ bool Window::InitializeSDL() {
         Window::logger->trace("Window::InitializeSDL()~");
         return false;
     }
-    if ((Mix_Init(SDL_MIX_INIT_MP3_OGG) != SDL_MIX_INIT_MP3_OGG) ||
-        Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+    if ((Mix_Init(SDL_MIX_INIT_MP3_OGG) != SDL_MIX_INIT_MP3_OGG) || Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
         Window::logger->error("SDL_mixer initialize error! {}", Mix_GetError());
         Window::logger->trace("Window::InitializeSDL()~");
         return false;
@@ -73,9 +69,7 @@ bool Window::InitializeSDL() {
 
 bool Window::InitializeWindow() {
     Window::logger->trace("Window::InitializeWindow()");
-    Window::window = SDL_CreateWindow(Window::windowTitle.c_str(), Window::xPos,
-                                      Window::yPos, Window::width,
-                                      Window::height, SDL_WINDOW_HIDDEN);
+    Window::window = SDL_CreateWindow(Window::windowTitle.c_str(), Window::xPos, Window::yPos, Window::width, Window::height, SDL_WINDOW_HIDDEN);
     if (!Window::window) {
         Window::logger->error("Window creation error! {}", SDL_GetError());
         Window::logger->trace("Window::InitializeWindow()~");
