@@ -18,6 +18,7 @@ add_requires("libsdl_image")
 add_requires("libsdl_mixer")
 add_requires("libsdl_ttf")
 add_requires("spdlog")
+add_requireconfs("spdlog", {configs = {fmt_external = true}})
 
 set_warnings("allextra")
 
