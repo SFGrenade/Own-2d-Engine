@@ -1,9 +1,5 @@
 #include "smartpointer.h"
 
-// Including SDL headers
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-
 #include "../fonthandler/fonthandler.h"
 #include "../graphicshandler/graphicshandler.h"
 #include "../inputhandler/inputhandler.h"

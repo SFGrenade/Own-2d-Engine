@@ -10,21 +10,21 @@ std::thread LogicHandler::logicThread;
 
 void LogicHandler::Initialize() {
     LogicHandler::logger = spdlog::get("LogicHandler");
-    LogicHandler::logger->trace("LogicHandler::Initialize()");
-    LogicHandler::logger->trace("LogicHandler::Initialize()~");
+    LogicHandler::logger->trace("Initialize()");
+    LogicHandler::logger->trace("Initialize()~");
 }
 
 void LogicHandler::Destroy() {
-    LogicHandler::logger->trace("LogicHandler::Destroy()");
+    LogicHandler::logger->trace("Destroy()");
     for (auto timer : LogicHandler::timers) {
         delete timer;
     }
     LogicHandler::timers.clear();
-    LogicHandler::logger->trace("LogicHandler::Destroy()~");
+    LogicHandler::logger->trace("Destroy()~");
 }
 
 void LogicHandler::UpdateLogic() {
-    LogicHandler::logger->trace("LogicHandler::UpdateLogic()");
+    LogicHandler::logger->trace("UpdateLogic()");
     std::chrono::time_point<std::chrono::high_resolution_clock> old = std::chrono::high_resolution_clock::now();
     std::chrono::time_point<std::chrono::high_resolution_clock> now;
     std::chrono::nanoseconds duration;
@@ -37,36 +37,34 @@ void LogicHandler::UpdateLogic() {
         Performance::AddLogicLoop();
         old = now;
     }
-    LogicHandler::logger->trace("LogicHandler::UpdateLogic()~");
+    LogicHandler::logger->trace("UpdateLogic()~");
 }
 
 void LogicHandler::SetQuitFlag(bool* newQuitFlag) {
-    LogicHandler::logger->trace("LogicHandler::SetQuitFlag(bool* quitFlag = {})", (void*)newQuitFlag);
+    LogicHandler::logger->trace("SetQuitFlag(bool* quitFlag = {:p})", static_cast<void*>(newQuitFlag));
     if (newQuitFlag) LogicHandler::quitFlag = newQuitFlag;
-    LogicHandler::logger->trace("LogicHandler::SetQuitFlag()~");
+    LogicHandler::logger->trace("SetQuitFlag()~");
 }
 
 void LogicHandler::StartLogic() {
-    LogicHandler::logger->trace("LogicHandler::StartLogic()");
+    LogicHandler::logger->trace("StartLogic()");
     LogicHandler::logicThread = std::thread(UpdateLogic);
-    LogicHandler::logger->trace("LogicHandler::StartLogic()~");
+    LogicHandler::logger->trace("StartLogic()~");
 }
 
 void LogicHandler::StopLogic() {
-    LogicHandler::logger->trace("LogicHandler::StopLogic()");
+    LogicHandler::logger->trace("StopLogic()");
     LogicHandler::logicThread.join();
-    LogicHandler::logger->trace("LogicHandler::StopLogic()~");
+    LogicHandler::logger->trace("StopLogic()~");
 }
 
 void LogicHandler::AddTimer(TimerCallback callback, std::chrono::nanoseconds interval, bool returnInterval) {
-    LogicHandler::logger->trace(
-        "LogicHandler::AddTimer(TimerCallback callback, "
-        "std::chrono::nanoseconds interval = {}, bool returnInterval = {})",
-        interval.count(), returnInterval);
+    LogicHandler::logger->trace("AddTimer(TimerCallback callback, std::chrono::nanoseconds interval = {:d}, bool returnInterval = {})", interval.count(),
+                                returnInterval);
     if (callback) {
         Timer* timer = new Timer(callback, interval, returnInterval);
         LogicHandler::timers.push_back(timer);
     }
-    LogicHandler::logger->trace("LogicHandler::AddTimer()~");
+    LogicHandler::logger->trace("AddTimer()~");
 }
 }  // namespace SFG

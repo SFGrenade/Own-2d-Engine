@@ -1,22 +1,20 @@
 #include "timer.h"
 
-#include <iostream>
-
 namespace SFG {
 Timer::Timer(TimerCallback callback, std::chrono::nanoseconds interval, bool returnInterval)
     : logger(spdlog::get("Timer")), timerCallback(callback), timerInterval(interval), timerCurrent(interval), timerReturnInterval(returnInterval) {
-    logger->trace("Timer::Timer()");
-    logger->trace("Timer::Timer()~");
+    logger->trace("Timer()");
+    logger->trace("Timer()~");
 }
 
 Timer::~Timer() {
-    logger->trace("Timer::~Timer()");
-    logger->trace("Timer::~Timer()~");
+    logger->trace("~Timer()");
+    logger->trace("~Timer()~");
 }
 
 void Timer::UpdateTimer(std::chrono::nanoseconds duration) {
-    // logger->trace("Timer::UpdateTimer(std::chrono::nanoseconds duration =
-    // {})", duration.count()); // todo too many log lines
+    // todo too many log lines
+    // logger->trace("UpdateTimer(std::chrono::nanoseconds duration = {:d})", duration.count());
     this->timerCurrent -= duration;
     if (this->timerCurrent <= 0ns) {
         if (timerReturnInterval) {
@@ -26,6 +24,7 @@ void Timer::UpdateTimer(std::chrono::nanoseconds duration) {
         }
         this->timerCurrent = this->timerInterval;
     }
-    // logger->trace("Timer::UpdateTimer()~"); // todo too many log lines
+    // todo too many log lines
+    // logger->trace("UpdateTimer()~");
 }
 }  // namespace SFG

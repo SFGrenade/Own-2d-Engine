@@ -276,7 +276,7 @@ int main(int argc, char *argv[]) {
 
     InitializeLoggers();
 
-    spdlog::trace("main(int argc = {}, char* argv[] = {} {} {})", argc, "{", fmt::join(argvVec, ", "), "}");
+    spdlog::trace("main(int argc = {:d}, char* argv[] = {:c} {:s} {:c})", argc, '{', fmt::join(argvVec, ", "), '}');
 
     bool quit = false;
     bool *quitPtr = &quit;

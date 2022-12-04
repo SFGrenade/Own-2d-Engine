@@ -12,24 +12,24 @@ class LogScript : public Script {
    public:
     LogScript() {
         logger = spdlog::get("LogScript");
-        logger->trace("LogScript::LogScript()");
-        logger->trace("LogScript::LogScript()~");
+        logger->trace("LogScript()");
+        logger->trace("LogScript()~");
     }
     virtual void Start() {
-        logger->trace("LogScript::Start()");
-        logger->trace("LogScript::Start()~");
+        logger->trace("Start()");
+        logger->trace("Start()~");
     }
     virtual void UpdateFrame() {
-        logger->trace("LogScript::UpdateFrame()");
-        logger->trace("LogScript::UpdateFrame()~");
+        logger->trace("UpdateFrame()");
+        logger->trace("UpdateFrame()~");
     }
     virtual void UpdateLogicFrame() {
-        logger->trace("LogScript::UpdateLogicFrame()");
-        logger->trace("LogScript::UpdateLogicFrame()~");
+        logger->trace("UpdateLogicFrame()");
+        logger->trace("UpdateLogicFrame()~");
     }
     virtual void End() {
-        logger->trace("LogScript::End()");
-        logger->trace("LogScript::End()~");
+        logger->trace("End()");
+        logger->trace("End()~");
     }
 };
 }  // namespace SFG
