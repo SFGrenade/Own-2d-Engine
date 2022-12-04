@@ -11,7 +11,7 @@
 
 #pragma region Debug Output
 
-std::string GetRendererFlags(uint32_t rendererFlags) {
+constexpr std::string GetRendererFlags(uint32_t rendererFlags) {
     std::string ret = "";
     if (rendererFlags & SDL_RENDERER_SOFTWARE) {
         ret += "SDL_RENDERER_SOFTWARE | ";
@@ -28,7 +28,7 @@ std::string GetRendererFlags(uint32_t rendererFlags) {
     return ret.substr(0, ret.size() - 3);
 }
 
-std::string GetPixelFormatEnum(uint32_t textureFlags) {
+constexpr std::string GetPixelFormatEnum(uint32_t textureFlags) {
     std::string ret = "";
     if (textureFlags == SDL_PIXELFORMAT_UNKNOWN) {
         ret += "SDL_PIXELFORMAT_UNKNOWN | ";
@@ -347,9 +347,9 @@ int main(int argc, char *argv[]) {
         [&performanceString, &makeNewPerformanceTexture](std::optional<std::chrono::secondsLongDouble> /*interval*/) {
             performanceString = fmt::format(
                 R"(Performance (per second):
-{:>9} Frames drawn
-{:>9} Input checks
-{:>9} Logic loops)",
+{:>20d} Frames drawn
+{:>20d} Input checks
+{:>20d} Logic loops)",
                 SFG::Performance::GetGraphicsLoop(), SFG::Performance::GetInputLoop(), SFG::Performance::GetLogicLoop());
             spdlog::debug(performanceString);
             makeNewPerformanceTexture = true;
