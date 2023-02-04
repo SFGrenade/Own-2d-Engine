@@ -11,7 +11,7 @@
 
 #pragma region Debug Output
 
-constexpr std::string GetRendererFlags(uint32_t rendererFlags) {
+constexpr const std::string GetRendererFlags(const uint32_t rendererFlags) {
     std::string ret = "";
     if (rendererFlags & SDL_RENDERER_SOFTWARE) {
         ret += "SDL_RENDERER_SOFTWARE | ";
@@ -28,7 +28,7 @@ constexpr std::string GetRendererFlags(uint32_t rendererFlags) {
     return ret.substr(0, ret.size() - 3);
 }
 
-constexpr std::string GetPixelFormatEnum(uint32_t textureFlags) {
+constexpr const std::string GetPixelFormatEnum(const uint32_t textureFlags) {
     std::string ret = "";
     if (textureFlags == SDL_PIXELFORMAT_UNKNOWN) {
         ret += "SDL_PIXELFORMAT_UNKNOWN | ";
@@ -197,7 +197,7 @@ void PrintRendererInfo(const SDL_RendererInfo &rendererInfo) {
     spdlog::debug("  - MaxTextureHeight: {:d}", rendererInfo.max_texture_height);
 }
 
-void CheckAndSelectRenderer(SFG::GraphicsHandler *graphicsHandler, const std::string &cliSelection) {
+void CheckAndSelectRenderer(const SFG::GraphicsHandler *graphicsHandler, const std::string_view cliSelection) {
     int numRDevices = SDL_GetNumRenderDrivers();
     spdlog::debug("SDL_GetNumRenderDrivers() => {:d}", numRDevices);
     for (int i = 0; i < numRDevices; i++) {
@@ -207,7 +207,7 @@ void CheckAndSelectRenderer(SFG::GraphicsHandler *graphicsHandler, const std::st
         SDL_DestroyRenderer(renderer);
         PrintRendererInfo(info);
         if (cliSelection == info.name) {
-            graphicsHandler->SetRendererIndex(i);
+            const_cast<SFG::GraphicsHandler *>(graphicsHandler)->SetRendererIndex(i);
         }
     }
 }
@@ -268,15 +268,16 @@ void UninitializeComponents() {
 
 #pragma endregion
 
-int main(int argc, char *argv[]) {
-    std::vector<std::string> argvVec;
-    for (int i = 0; i < argc; i++) {
-        argvVec.push_back(std::string(argv[i]));
-    }
+int main(const int argc, const char const *const *const argv) {
+    [[nodiscard]] int better_main(std::span<const std::string_view>) noexcept;
+    std::vector<std::string_view> args(argv, std::next(argv, static_cast<std::ptrdiff_t>(argc)));
+    return better_main(args);
+}
 
+[[nodiscard]] int better_main([[maybe_unused]] std::span<const std::string_view> args) noexcept {
     InitializeLoggers();
 
-    spdlog::trace("main(int argc = {:d}, char* argv[] = {:c} {:s} {:c})", argc, '{', fmt::join(argvVec, ", "), '}');
+    spdlog::trace("better_main(args = {:c} \"{:s}\" {:c})", '{', fmt::join(args, "\", \""), '}');
 
     bool quit = false;
     bool *quitPtr = &quit;
@@ -287,8 +288,8 @@ int main(int argc, char *argv[]) {
     SFG::Window::ShowWindow();
     SFG::GraphicsHandler *graphicsHandler = SFG::Window::GetGraphicsHandler();
 
-    if (argvVec.size() > 1) {
-        CheckAndSelectRenderer(graphicsHandler, argvVec[1]);
+    if (args.size() > 1) {
+        CheckAndSelectRenderer(graphicsHandler, args[1]);
     } else {
         CheckAndSelectRenderer(graphicsHandler, "");
     }
@@ -376,6 +377,6 @@ int main(int argc, char *argv[]) {
 
     UninitializeComponents();
 
-    spdlog::trace("main()~");
+    spdlog::trace("better_main()~");
     return EXIT_SUCCESS;
 }
