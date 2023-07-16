@@ -5,24 +5,26 @@
 #include "../performance/performance.h"
 
 namespace SFG {
-typedef std::function<void(SDL_Renderer* windowRenderer)> DrawCallback;
+typedef std::function<void(std::shared_ptr<SDL_Renderer> windowRenderer)> DrawCallback;
 
 class GraphicsHandler {
    private:
     spdlogger logger;
     std::vector<DrawCallback> drawCallbacks;
-    bool* quitFlag;
+    std::shared_ptr<bool> quitFlag;
     int rendererIndex;
-    SDL_Window* window;
-    SDL_Renderer* windowRenderer;
+    std::shared_ptr<SDL_Window> window;
+    std::shared_ptr<SDL_Renderer> windowRenderer;
     std::thread graphicsThread;
+
+    void deleteRenderer(SDL_Renderer* ptr);
     static void Draw(GraphicsHandler* self);
 
    public:
-    GraphicsHandler(SDL_Window* window);
+    GraphicsHandler(std::shared_ptr<SDL_Window> window);
     ~GraphicsHandler();
 
-    void SetQuitFlag(bool* quitFlag);
+    void SetQuitFlag(std::shared_ptr<bool> quitFlag);
     void SetRendererIndex(int index);
     void StartDraw();
     void StopDraw();

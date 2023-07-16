@@ -23,7 +23,7 @@ void InputHandler::Destroy() {
 }
 
 void InputHandler::CheckInputs() {
-    // todo too many log lines
+    // todo: too many log lines
     // InputHandler::logger->trace("CheckInputs()");
     while (SDL_PollEvent(&InputHandler::sdlEvent) != 0) {
         if (InputHandler::quitEventCallbacks.size() && InputHandler::sdlEvent.type == SDL_QUIT) {
@@ -34,17 +34,16 @@ void InputHandler::CheckInputs() {
             for (auto callback : InputHandler::keyDownCallbacks) callback(InputHandler::sdlEvent.key);
         } else if (InputHandler::keyUpCallbacks.size() && InputHandler::sdlEvent.type == SDL_KEYUP) {
             for (auto callback : InputHandler::keyUpCallbacks) callback(InputHandler::sdlEvent.key);
-        } else if (InputHandler::mouseWheelCallbacks.size() && InputHandler::sdlEvent.type == SDL_MOUSEWHEEL) {
-            for (auto callback : InputHandler::mouseWheelCallbacks) callback(InputHandler::sdlEvent.wheel);
         } else if (InputHandler::mouseButtonCallbacks.size() &&
                    (InputHandler::sdlEvent.type == SDL_MOUSEBUTTONDOWN || InputHandler::sdlEvent.type == SDL_MOUSEBUTTONUP)) {
             for (auto callback : InputHandler::mouseButtonCallbacks) callback(InputHandler::sdlEvent.button);
-        } else if (InputHandler::mouseMotionCallbacks.size() &&
-                   (InputHandler::sdlEvent.type == SDL_MOUSEBUTTONDOWN || InputHandler::sdlEvent.type == SDL_MOUSEMOTION)) {
+        } else if (InputHandler::mouseMotionCallbacks.size() && InputHandler::sdlEvent.type == SDL_MOUSEMOTION) {
             for (auto callback : InputHandler::mouseMotionCallbacks) callback(InputHandler::sdlEvent.motion);
+        } else if (InputHandler::mouseWheelCallbacks.size() && InputHandler::sdlEvent.type == SDL_MOUSEWHEEL) {
+            for (auto callback : InputHandler::mouseWheelCallbacks) callback(InputHandler::sdlEvent.wheel);
         }
     }
-    // todo too many log lines
+    // todo: too many log lines
     // InputHandler::logger->trace("CheckInputs()~");
 }
 

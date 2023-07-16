@@ -12,11 +12,13 @@ enum FontType {
 class FontHandler {
    private:
     static spdlogger logger;
-    static std::map<FontType, TTF_Font*> fonts;
+    static std::map<FontType, std::shared_ptr<TTF_Font>> fonts;
+
+    static void deleteFont(TTF_Font* ptr);
 
    public:
     static void Initialize();
     static void Destroy();
-    static TTF_Font* GetFont(FontType type);
+    static std::shared_ptr<TTF_Font> GetFont(FontType type);
 };
 }  // namespace SFG

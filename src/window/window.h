@@ -13,8 +13,11 @@ class Window {
     static int width;
     static int height;
     static std::string windowTitle;
-    static SDL_Window* window;
-    static GraphicsHandler* graphicsHandler;
+    static std::shared_ptr<SDL_Window> window;
+    static std::shared_ptr<GraphicsHandler> graphicsHandler;
+
+    static void deleteGraphicsHandler(GraphicsHandler* window);
+    static void deleteWindow(SDL_Window* window);
 
    public:
     static void SetSize(int width, int height);
@@ -24,7 +27,7 @@ class Window {
     static bool InitializeSDL();
     static bool InitializeWindow();
     static bool ShowWindow();
-    static SDL_Window* GetSdlWindow();
-    static GraphicsHandler* GetGraphicsHandler();
+    static std::shared_ptr<SDL_Window> GetSdlWindow();
+    static std::shared_ptr<GraphicsHandler> GetGraphicsHandler();
 };
 }  // namespace SFG

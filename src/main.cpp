@@ -11,7 +11,7 @@
 
 #pragma region Debug Output
 
-constexpr const std::string GetRendererFlags(const uint32_t rendererFlags) {
+constexpr std::string const GetRendererFlags(uint32_t const rendererFlags) {
     std::string ret = "";
     if (rendererFlags & SDL_RENDERER_SOFTWARE) {
         ret += "SDL_RENDERER_SOFTWARE | ";
@@ -28,7 +28,7 @@ constexpr const std::string GetRendererFlags(const uint32_t rendererFlags) {
     return ret.substr(0, ret.size() - 3);
 }
 
-constexpr const std::string GetPixelFormatEnum(const uint32_t textureFlags) {
+constexpr std::string const GetPixelFormatEnum(uint32_t const textureFlags) {
     std::string ret = "";
     if (textureFlags == SDL_PIXELFORMAT_UNKNOWN) {
         ret += "SDL_PIXELFORMAT_UNKNOWN | ";
@@ -183,7 +183,7 @@ constexpr const std::string GetPixelFormatEnum(const uint32_t textureFlags) {
     return ret.substr(0, ret.size() - 3);
 }
 
-void PrintRendererInfo(const SDL_RendererInfo &rendererInfo) {
+void PrintRendererInfo(SDL_RendererInfo const &rendererInfo) {
     spdlog::debug("- Renderer \"{:s}\":", rendererInfo.name);
     std::string tmpString1 = GetRendererFlags(rendererInfo.flags);
     spdlog::debug("  - Flags: {:#034b} / {:s}", rendererInfo.flags, tmpString1);
@@ -197,17 +197,17 @@ void PrintRendererInfo(const SDL_RendererInfo &rendererInfo) {
     spdlog::debug("  - MaxTextureHeight: {:d}", rendererInfo.max_texture_height);
 }
 
-void CheckAndSelectRenderer(const SFG::GraphicsHandler *graphicsHandler, const std::string_view cliSelection) {
+void CheckAndSelectRenderer(std::shared_ptr<SFG::GraphicsHandler> graphicsHandler, std::string_view const cliSelection) {
     int numRDevices = SDL_GetNumRenderDrivers();
     spdlog::debug("SDL_GetNumRenderDrivers() => {:d}", numRDevices);
     for (int i = 0; i < numRDevices; i++) {
-        SDL_Renderer *renderer = SDL_CreateRenderer(SFG::Window::GetSdlWindow(), i, 0);
+        SDL_Renderer *renderer = SDL_CreateRenderer(SFG::Window::GetSdlWindow().get(), i, 0);
         SDL_RendererInfo info;
         SDL_GetRendererInfo(renderer, &info);
         SDL_DestroyRenderer(renderer);
         PrintRendererInfo(info);
         if (cliSelection == info.name) {
-            const_cast<SFG::GraphicsHandler *>(graphicsHandler)->SetRendererIndex(i);
+            graphicsHandler->SetRendererIndex(i);
         }
     }
 }
@@ -242,7 +242,7 @@ void InitializeLoggers() {
         logger->flush_on(spdlog::level::trace);
         spdlog::register_logger(logger);
     }
-    spdlog::get("LogScript")->set_level(spdlog::level::warn);
+    // spdlog::get("LogScript")->set_level(spdlog::level::warn);
 }
 
 void InitializeComponents() {
@@ -268,25 +268,26 @@ void UninitializeComponents() {
 
 #pragma endregion
 
-int main(const int argc, const char const *const *const argv) {
-    [[nodiscard]] int better_main(std::span<const std::string_view>) noexcept;
+int main(int const argc, char const *const *argv) {
+    [[nodiscard]] int better_main(std::span<std::string_view const>) noexcept;
     std::vector<std::string_view> args(argv, std::next(argv, static_cast<std::ptrdiff_t>(argc)));
     return better_main(args);
 }
 
-[[nodiscard]] int better_main([[maybe_unused]] std::span<const std::string_view> args) noexcept {
+[[nodiscard]] int better_main([[maybe_unused]] std::span<std::string_view const> args) noexcept {
     InitializeLoggers();
 
     spdlog::trace("better_main(args = {:c} \"{:s}\" {:c})", '{', fmt::join(args, "\", \""), '}');
 
     bool quit = false;
-    bool *quitPtr = &quit;
+    auto quitFlagDeleteFunction = [](bool *ptr) {};  // since quitFlag is on the stack
+    std::shared_ptr<bool> quitPtr = std::shared_ptr<bool>(&quit, quitFlagDeleteFunction);
 
     InitializeComponents();
     SFG::Window::SetSize(1600, 900);
     InitializeWindow();
     SFG::Window::ShowWindow();
-    SFG::GraphicsHandler *graphicsHandler = SFG::Window::GetGraphicsHandler();
+    std::shared_ptr<SFG::GraphicsHandler> graphicsHandler = SFG::Window::GetGraphicsHandler();
 
     if (args.size() > 1) {
         CheckAndSelectRenderer(graphicsHandler, args[1]);
@@ -302,35 +303,35 @@ int main(const int argc, const char const *const *const argv) {
     performanceTextureRect.y = 5;
     performanceTextureRect.w = 0;
     performanceTextureRect.h = 0;
-    graphicsHandler->RegisterDrawEvent([](SDL_Renderer * /*windowRenderer*/) { SFG::ScriptHandler::UpdateScriptsFrame(); });
-    graphicsHandler->RegisterDrawEvent(
-        [&performanceString, &makeNewPerformanceTexture, &performanceTexture, &performanceTextureRect](SDL_Renderer *windowRenderer) {
-            if (makeNewPerformanceTexture) {
-                SDL_Color foreground;
-                foreground.r = 255;
-                foreground.g = 255;
-                foreground.b = 255;
-                foreground.a = 255;
-                SDL_Color background;
-                background.r = 0;
-                background.g = 0;
-                background.b = 0;
-                background.a = 0;
-                SDL_Surface *textSurface =
-                    TTF_RenderUTF8_Shaded_Wrapped(SFG::FontHandler::GetFont(SFG::FontType::Console), performanceString.c_str(), foreground, background, 0);
-                if (performanceTexture) {
-                    SDL_DestroyTexture(performanceTexture);
-                }
-                performanceTexture = SDL_CreateTextureFromSurface(windowRenderer, textSurface);
-                performanceTextureRect.w = textSurface->w;
-                performanceTextureRect.h = textSurface->h;
-                SDL_FreeSurface(textSurface);
-                makeNewPerformanceTexture = false;
-            }
+    graphicsHandler->RegisterDrawEvent([](std::shared_ptr<SDL_Renderer> /*windowRenderer*/) { SFG::ScriptHandler::UpdateScriptsFrame(); });
+    graphicsHandler->RegisterDrawEvent([&performanceString, &makeNewPerformanceTexture, &performanceTexture,
+                                        &performanceTextureRect](std::shared_ptr<SDL_Renderer> windowRenderer) {
+        if (makeNewPerformanceTexture) {
+            SDL_Color foreground;
+            foreground.r = 255;
+            foreground.g = 255;
+            foreground.b = 255;
+            foreground.a = 255;
+            SDL_Color background;
+            background.r = 0;
+            background.g = 0;
+            background.b = 0;
+            background.a = 0;
+            SDL_Surface *textSurface =
+                TTF_RenderUTF8_Shaded_Wrapped(SFG::FontHandler::GetFont(SFG::FontType::Console).get(), performanceString.c_str(), foreground, background, 0);
             if (performanceTexture) {
-                SDL_RenderCopy(windowRenderer, performanceTexture, NULL, &performanceTextureRect);
+                SDL_DestroyTexture(performanceTexture);
             }
-        });
+            performanceTexture = SDL_CreateTextureFromSurface(windowRenderer.get(), textSurface);
+            performanceTextureRect.w = textSurface->w;
+            performanceTextureRect.h = textSurface->h;
+            SDL_FreeSurface(textSurface);
+            makeNewPerformanceTexture = false;
+        }
+        if (performanceTexture) {
+            SDL_RenderCopy(windowRenderer.get(), performanceTexture, NULL, &performanceTextureRect);
+        }
+    });
     graphicsHandler->SetQuitFlag(quitPtr);
 
     SFG::InputHandler::RegisterQuitEvent([&quit]() { quit = true; });
@@ -338,20 +339,18 @@ int main(const int argc, const char const *const *const argv) {
     SFG::InputHandler::RegisterKeyDownEvent([&quit](SDL_KeyboardEvent &key) { quit |= key.keysym.sym == SDLK_ESCAPE; });
 
     SFG::LogicHandler::AddTimer(
-        [](std::optional<std::chrono::secondsLongDouble>
-           /*interval*/) {
+        [](std::optional<std::chrono::secondsLongDouble> /*interval*/) {
             // 50 hz test timer
             SFG::ScriptHandler::UpdateScriptsLogicFrame();
         },
         std::chrono::duration_cast<std::chrono::nanoseconds>(1.0s / 50.0), false);
     SFG::LogicHandler::AddTimer(
         [&performanceString, &makeNewPerformanceTexture](std::optional<std::chrono::secondsLongDouble> /*interval*/) {
-            performanceString = fmt::format(
-                R"(Performance (per second):
+            performanceString = fmt::format(R"(Performance (per second):
 {:>20d} Frames drawn
 {:>20d} Input checks
 {:>20d} Logic loops)",
-                SFG::Performance::GetGraphicsLoop(), SFG::Performance::GetInputLoop(), SFG::Performance::GetLogicLoop());
+                                            SFG::Performance::GetGraphicsLoop(), SFG::Performance::GetInputLoop(), SFG::Performance::GetLogicLoop());
             spdlog::debug(performanceString);
             makeNewPerformanceTexture = true;
         },

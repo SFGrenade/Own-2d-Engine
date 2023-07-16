@@ -12,14 +12,26 @@ int Window::yPos = SDL_WINDOWPOS_CENTERED;
 int Window::width = 25 * gridWidth;
 int Window::height = 19 * gridWidth;
 std::string Window::windowTitle = "Own 2D Engine - Exit with ESC";
-SDL_Window* Window::window = nullptr;
-GraphicsHandler* Window::graphicsHandler = nullptr;
+std::shared_ptr<SDL_Window> Window::window = std::shared_ptr<SDL_Window>();
+std::shared_ptr<GraphicsHandler> Window::graphicsHandler = std::shared_ptr<GraphicsHandler>();
+
+void Window::deleteGraphicsHandler(GraphicsHandler* graphicsHandler) {
+    Window::logger->trace("deleteGraphicsHandler({:p})", static_cast<void*>(graphicsHandler));
+    delete graphicsHandler;
+    Window::logger->trace("deleteGraphicsHandler()~");
+}
+
+void Window::deleteWindow(SDL_Window* window) {
+    Window::logger->trace("deleteWindow({:p})", static_cast<void*>(window));
+    SDL_DestroyWindow(window);
+    Window::logger->trace("deleteWindow()~");
+}
 
 void Window::SetSize(int newWidth, int newHeight) {
     Window::logger->trace("SetSize({:d}, {:d})", newWidth, newHeight);
     Window::width = newWidth;
     Window::height = newHeight;
-    Window::logger->trace("Initialize()~");
+    Window::logger->trace("SetSize()~");
 }
 
 void Window::Initialize() {
@@ -30,9 +42,8 @@ void Window::Initialize() {
 
 void Window::Destroy() {
     Window::logger->trace("Destroy()");
-    if (Window::graphicsHandler) delete Window::graphicsHandler;
-    if (Window::window) SDL_DestroyWindow(Window::window);
-
+    Window::graphicsHandler.reset();
+    Window::window.reset();
     Mix_Quit();
     IMG_Quit();
     SDL_Quit();
@@ -62,31 +73,32 @@ bool Window::InitializeSDL() {
 
 bool Window::InitializeWindow() {
     Window::logger->trace("InitializeWindow()");
-    Window::window = SDL_CreateWindow(Window::windowTitle.c_str(), Window::xPos, Window::yPos, Window::width, Window::height, SDL_WINDOW_HIDDEN);
+    Window::window = std::shared_ptr<SDL_Window>(
+        SDL_CreateWindow(Window::windowTitle.c_str(), Window::xPos, Window::yPos, Window::width, Window::height, SDL_WINDOW_HIDDEN), deleteWindow);
     if (!Window::window) {
         Window::logger->error("Window creation error! {:s}", SDL_GetError());
         Window::logger->trace("InitializeWindow()~");
         return false;
     }
-    Window::graphicsHandler = new GraphicsHandler(Window::window);
+    Window::graphicsHandler = std::shared_ptr<GraphicsHandler>(new GraphicsHandler(Window::window), deleteGraphicsHandler);
     Window::logger->trace("InitializeWindow()~");
     return true;
 }
 
 bool Window::ShowWindow() {
     Window::logger->trace("ShowWindow()");
-    SDL_ShowWindow(Window::window);
+    SDL_ShowWindow(Window::window.get());
     Window::logger->trace("ShowWindow()~");
     return true;
 }
 
-SDL_Window* Window::GetSdlWindow() {
+std::shared_ptr<SDL_Window> Window::GetSdlWindow() {
     Window::logger->trace("GetSdlWindow()");
     Window::logger->trace("GetSdlWindow()~");
     return Window::window;
 }
 
-GraphicsHandler* Window::GetGraphicsHandler() {
+std::shared_ptr<GraphicsHandler> Window::GetGraphicsHandler() {
     Window::logger->trace("GetGraphicsHandler()");
     Window::logger->trace("GetGraphicsHandler()~");
     return Window::graphicsHandler;

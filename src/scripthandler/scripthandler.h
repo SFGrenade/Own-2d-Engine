@@ -8,7 +8,8 @@ class Script;
 class ScriptHandler {
    private:
     static spdlogger logger;
-    static std::vector<Script*> scripts;
+    static std::vector<std::shared_ptr<Script>> scripts;
+    static void deleteScript(Script* script);
 
    public:
     static void Initialize();
@@ -16,6 +17,6 @@ class ScriptHandler {
     static void UpdateScriptsLogicFrame();
     static void Destroy();
     template <class T>
-    static T* AddScript();
+    static std::shared_ptr<T> AddScript();
 };
 }  // namespace SFG
