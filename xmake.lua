@@ -9,6 +9,8 @@ if is_plat("windows") then
     -- bruh
     add_cxflags("/Zc:__cplusplus")
     add_cxflags("/Zc:preprocessor")
+
+    add_cxflags("/permissive-")
 else
     set_languages("cxx20")
 end
@@ -27,6 +29,11 @@ if is_mode("debug") then
     add_defines("DEBUG")
 
     set_symbols("debug")
+    if is_plat("windows") then
+        add_cxflags("/Zi")
+        add_cxflags("/ZI")
+    else
+    end
 
     set_optimize("fastest")
 end
@@ -34,7 +41,11 @@ end
 if is_mode("release") then
     add_defines("NDEBUG")
 
-    add_cxflags("-fomit-frame-pointer")
+    if is_plat("windows") then
+        add_cxflags("/Qpar")
+    else
+        add_cxflags("-fomit-frame-pointer")
+    end
 
     set_optimize("fastest")
 end
