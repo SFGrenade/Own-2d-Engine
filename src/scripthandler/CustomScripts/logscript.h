@@ -10,8 +10,7 @@ class LogScript : public Script {
   spdlogger logger;
 
   public:
-  LogScript() {
-    logger = spdlog::get( "LogScript" );
+  LogScript() : logger( spdlog::get( "LogScript" ) ) {
     logger->trace( "LogScript()" );
     logger->trace( "LogScript()~" );
   }
