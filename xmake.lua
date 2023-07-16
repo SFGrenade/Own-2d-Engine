@@ -61,6 +61,7 @@ target("Own-2d-Engine")
     add_packages("libsdl_image")
     add_packages("libsdl_mixer")
     add_packages("libsdl_ttf")
+    add_packages("pugixml")
     add_packages("spdlog")
 
     after_build(function (target)
