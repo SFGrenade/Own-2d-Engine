@@ -40,7 +40,7 @@
 using namespace std::chrono_literals;
 namespace std {
 namespace chrono {
-typedef duration<long double> secondsLongDouble;
+typedef duration< long double > secondsLongDouble;
 }
 }  // namespace std
 
@@ -48,4 +48,4 @@ typedef duration<long double> secondsLongDouble;
 
 static const uint16_t gridWidth = 32;
 
-typedef std::shared_ptr<spdlog::logger> spdlogger;
+typedef std::shared_ptr< spdlog::logger > spdlogger;
