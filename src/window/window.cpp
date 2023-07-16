@@ -1,4 +1,4 @@
-#include "window.h"
+#include "window/window.h"
 
 #define SDL_IMG_INIT_EVERYTHING ( IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP )
 
@@ -15,15 +15,15 @@ std::string Window::windowTitle = "Own 2D Engine - Exit with ESC";
 std::shared_ptr< SDL_Window > Window::window = std::shared_ptr< SDL_Window >();
 std::shared_ptr< GraphicsHandler > Window::graphicsHandler = std::shared_ptr< GraphicsHandler >();
 
-void Window::deleteGraphicsHandler( GraphicsHandler* graphicsHandler ) {
-  Window::logger->trace( "deleteGraphicsHandler({:p})", static_cast< void* >( graphicsHandler ) );
-  delete graphicsHandler;
+void Window::deleteGraphicsHandler( GraphicsHandler* ptr ) {
+  Window::logger->trace( "deleteGraphicsHandler({:p})", static_cast< void* >( ptr ) );
+  delete ptr;
   Window::logger->trace( "deleteGraphicsHandler()~" );
 }
 
-void Window::deleteWindow( SDL_Window* window ) {
-  Window::logger->trace( "deleteWindow({:p})", static_cast< void* >( window ) );
-  SDL_DestroyWindow( window );
+void Window::deleteWindow( SDL_Window* ptr ) {
+  Window::logger->trace( "deleteWindow({:p})", static_cast< void* >( ptr ) );
+  SDL_DestroyWindow( ptr );
   Window::logger->trace( "deleteWindow()~" );
 }
 

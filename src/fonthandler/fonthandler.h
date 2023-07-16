@@ -1,7 +1,7 @@
 #pragma once
 
 // Include general stuff
-#include "../globals.h"
+#include "globals.h"
 
 namespace SFG {
 enum FontType {

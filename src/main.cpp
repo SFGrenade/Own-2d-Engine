@@ -280,7 +280,7 @@ int main( int const argc, char const *const *argv ) {
   spdlog::trace( "better_main(args = {:c} \"{:s}\" {:c})", '{', fmt::join( args, "\", \"" ), '}' );
 
   bool quit = false;
-  auto quitFlagDeleteFunction = []( bool *ptr ) {};  // since quitFlag is on the stack
+  auto quitFlagDeleteFunction = []( bool * ) {};  // since quitFlag is on the stack
   std::shared_ptr< bool > quitPtr = std::shared_ptr< bool >( &quit, quitFlagDeleteFunction );
 
   InitializeComponents();

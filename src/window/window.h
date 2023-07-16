@@ -1,8 +1,8 @@
 #pragma once
 
 // Including our headers
-#include "../globals.h"
-#include "../graphicshandler/graphicshandler.h"
+#include "globals.h"
+#include "graphicshandler/graphicshandler.h"
 
 namespace SFG {
 class Window {
@@ -16,8 +16,8 @@ class Window {
   static std::shared_ptr< SDL_Window > window;
   static std::shared_ptr< GraphicsHandler > graphicsHandler;
 
-  static void deleteGraphicsHandler( GraphicsHandler* window );
-  static void deleteWindow( SDL_Window* window );
+  static void deleteGraphicsHandler( GraphicsHandler* ptr );
+  static void deleteWindow( SDL_Window* ptr );
 
   public:
   static void SetSize( int width, int height );

@@ -1,4 +1,4 @@
-#include "graphicshandler.h"
+#include "graphicshandler/graphicshandler.h"
 
 namespace SFG {
 GraphicsHandler::GraphicsHandler( std::shared_ptr< SDL_Window > window )

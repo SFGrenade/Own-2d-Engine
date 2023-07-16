@@ -1,8 +1,8 @@
 #pragma once
 
 // Including our headers
-#include "../globals.h"
-#include "timer.h"
+#include "globals.h"
+#include "logichandler/timer.h"
 
 namespace SFG {
 class LogicHandler {

@@ -1,6 +1,6 @@
-#include "logichandler.h"
+#include "logichandler/logichandler.h"
 
-#include "../performance/performance.h"
+#include "performance/performance.h"
 
 namespace SFG {
 spdlogger LogicHandler::logger = nullptr;

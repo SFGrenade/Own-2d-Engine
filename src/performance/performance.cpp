@@ -1,4 +1,4 @@
-#include "performance.h"
+#include "performance/performance.h"
 
 namespace SFG {
 uint64_t Performance::graphicsLoops = 0;

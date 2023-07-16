@@ -1,4 +1,4 @@
-#include "inputhandler.h"
+#include "inputhandler/inputhandler.h"
 
 namespace SFG {
 spdlogger InputHandler::logger = nullptr;

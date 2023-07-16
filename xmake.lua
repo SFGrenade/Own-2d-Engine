@@ -53,8 +53,9 @@ end
 target("Own-2d-Engine")
     set_kind("binary")
 
-    add_files("src/**.cpp")
     add_headerfiles("src/**.h")
+    add_files("src/**.cpp")
+    add_includedirs("src")
 
     add_packages("fmt")
     add_packages("libsdl")

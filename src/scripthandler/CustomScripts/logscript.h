@@ -1,8 +1,8 @@
 #pragma once
 
 // Including our headers
-#include "../../globals.h"
-#include "../script.h"
+#include "globals.h"
+#include "scripthandler/script.h"
 
 namespace SFG {
 class LogScript : public Script {

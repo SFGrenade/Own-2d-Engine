@@ -1,4 +1,4 @@
-#include "fonthandler.h"
+#include "fonthandler/fonthandler.h"
 
 namespace SFG {
 spdlogger FontHandler::logger = nullptr;

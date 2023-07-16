@@ -1,8 +1,8 @@
 #pragma once
 
 // Include general stuff
-#include "../globals.h"
-#include "../performance/performance.h"
+#include "globals.h"
+#include "performance/performance.h"
 
 namespace SFG {
 typedef std::function< void( std::shared_ptr< SDL_Renderer > windowRenderer ) > DrawCallback;

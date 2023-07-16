@@ -1,7 +1,7 @@
 #pragma once
 
 // Including our headers
-#include "../globals.h"
+#include "globals.h"
 
 namespace SFG {
 class Script;
