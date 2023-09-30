@@ -2,7 +2,7 @@
 
 namespace SFG {
 GraphicsHandler::GraphicsHandler( std::shared_ptr< SDL_Window > window )
-    : logger( spdlog::get( "GraphicsHandler" ) ), drawCallbacks(), quitFlag( nullptr ), rendererIndex( -1 ), window( window ), windowRenderer( nullptr ) {
+    : logger( spdlog::get( "GraphicsHandler" ) ), drawCallbacks(), quitFlag( nullptr ), rendererIndex( 0 ), window( window ), windowRenderer( nullptr ) {
   logger->trace( "GraphicsHandler(std::shared_ptr<SDL_Window> window = {:p})", static_cast< void* >( window.get() ) );
   logger->trace( "GraphicsHandler()~" );
 }
@@ -23,9 +23,16 @@ void GraphicsHandler::Draw( GraphicsHandler* self ) {
   auto rendererDeleteFunction = [self]( SDL_Renderer* ptr ) { self->deleteRenderer( ptr ); };
 
   self->windowRenderer = std::shared_ptr< SDL_Renderer >( SDL_CreateRenderer( self->window.get(), self->rendererIndex, 0 ), rendererDeleteFunction );
-  SDL_SetRenderDrawColor( self->windowRenderer.get(), 0, 0, 0, 255 );
+  if( self->windowRenderer.get() == nullptr ) {
+    self->logger->error( "Draw - Error when SDL_CreateRenderer: {:s}", SDL_GetError() );
+  }
+  if( SDL_SetRenderDrawColor( self->windowRenderer.get(), 0, 0, 0, 255 ) != 0 ) {
+    self->logger->error( "Draw - Error when SDL_SetRenderDrawColor: {:s}", SDL_GetError() );
+  }
   while( !( *self->quitFlag ) ) {
-    SDL_RenderClear( self->windowRenderer.get() );
+    if( SDL_RenderClear( self->windowRenderer.get() ) != 0 ) {
+      self->logger->error( "Draw - Error when SDL_RenderClear: {:s}", SDL_GetError() );
+    }
 
     for( auto callback : self->drawCallbacks )
       callback( self->windowRenderer );

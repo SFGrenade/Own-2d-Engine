@@ -4,7 +4,7 @@
 #include "globals.h"
 
 namespace SFG {
-enum FontType {
+enum class FontType {
   Console,
   Ui,
 };

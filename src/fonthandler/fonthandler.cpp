@@ -12,11 +12,19 @@ void FontHandler::deleteFont( TTF_Font* ptr ) {
 void FontHandler::Initialize() {
   FontHandler::logger = spdlog::get( "FontHandler" );
   FontHandler::logger->trace( "Initialize()" );
-  TTF_Init();
+  if( TTF_Init() != 0 ) {
+    FontHandler::logger->error( "Initialize - Error when TTF_Init: {:s}", TTF_GetError() );
+  }
 
   FontHandler::fonts[FontType::Console]
       = std::shared_ptr< TTF_Font >( TTF_OpenFont( "./Resources/Fonts/NotoSansMono-Regular.ttf", 18 ), FontHandler::deleteFont );
+  if( FontHandler::fonts[FontType::Console].get() == nullptr ) {
+    FontHandler::logger->error( "Initialize - Error when creating font `Console`: {:s}", TTF_GetError() );
+  }
   FontHandler::fonts[FontType::Ui] = std::shared_ptr< TTF_Font >( TTF_OpenFont( "./Resources/Fonts/NotoSerif-Regular.ttf", 18 ), FontHandler::deleteFont );
+  if( FontHandler::fonts[FontType::Ui].get() == nullptr ) {
+    FontHandler::logger->error( "Initialize - Error when creating font `Ui`: {:s}", TTF_GetError() );
+  }
   FontHandler::logger->trace( "Initialize()~" );
 }
 
@@ -29,7 +37,7 @@ void FontHandler::Destroy() {
 }
 
 std::shared_ptr< TTF_Font > FontHandler::GetFont( FontType type ) {
-  FontHandler::logger->trace( "GetFont(FontType type = {:d})", type );
+  FontHandler::logger->trace( "GetFont(FontType type = {:d})", static_cast< int >( type ) );
   FontHandler::logger->trace( "GetFont()~" );
   return FontHandler::fonts[type];
 }
