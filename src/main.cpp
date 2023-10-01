@@ -391,6 +391,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
                                          SFG::Performance::GetInputLoop(),
                                          SFG::Performance::GetLogicLoop() );
         spdlog::debug( performanceString );
+        SFG::NetworkHandler::SendMessageRequest( "TestUser", performanceString );
         makeNewPerformanceTexture = true;
       },
       std::chrono::duration_cast< std::chrono::nanoseconds >( 1.0s ),

@@ -90,7 +90,7 @@ void NetworkHandler::RequestAllMessage() {
 }
 
 void NetworkHandler::onSendMessageResponse( SFG::Proto::SendMessageResponse const& msg ) {
-  NetworkHandler::logger->trace( "onSendMessageResponse(SFG::Proto::SendMessageResponse const& msg = \"{:s}\")", msg.SerializeAsString() );
+  NetworkHandler::logger->trace( "onSendMessageResponse(SFG::Proto::SendMessageResponse const& msg)" );
 
   if( !msg.success() ) {
     NetworkHandler::logger->error( "onSendMessageResponse - error sending message!" );
@@ -100,7 +100,15 @@ void NetworkHandler::onSendMessageResponse( SFG::Proto::SendMessageResponse cons
 }
 
 void NetworkHandler::onAllMessages( SFG::Proto::AllMessages const& msg ) {
-  NetworkHandler::logger->trace( "onAllMessages(SFG::Proto::AllMessages const& msg = \"{:s}\")", msg.SerializeAsString() );
+  NetworkHandler::logger->trace( "onAllMessages(SFG::Proto::AllMessages const& msg)" );
+
+  if( msg.msglist_size() > 0 ) {
+    NetworkHandler::logger->trace( "onAllMessages - Messages:" );
+    for( auto message : msg.msglist() ) {
+      NetworkHandler::logger->trace( "onAllMessages - - \"{:s}\" - \"{:s}\"", message.username(), message.msgtext() );
+    }
+  }
+
   NetworkHandler::logger->trace( "onAllMessages()~" );
 }
 }  // namespace SFG
