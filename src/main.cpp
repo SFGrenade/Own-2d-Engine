@@ -4,6 +4,7 @@
 #include "globals.h"
 #include "inputhandler/inputhandler.h"
 #include "logichandler/logichandler.h"
+#include "networkhandler/networkhandler.h"
 #include "performance/performance.h"
 #include "scripthandler/CustomScripts/logscript.h"
 #include "scripthandler/scripthandler.h"
@@ -246,7 +247,7 @@ void InitializeLoggers() {
   spdlog::sinks_init_list normalSinkList = { normalFileSink, consoleSink };
 
   std::vector< std::string > allLoggerNames
-      = { "FontHandler", "GraphicsHandler", "InputHandler", "LogicHandler", "Timer", "ScriptHandler", "LogScript", "Window" };
+      = { "FontHandler", "GraphicsHandler", "InputHandler", "LogicHandler", "NetworkHandler", "Timer", "ScriptHandler", "LogScript", "Window" };
   for( auto name : allLoggerNames ) {
     spdlogger logger = std::make_shared< spdlog::logger >( name, normalSinkList.begin(), normalSinkList.end() );
     logger->set_level( spdlog::level::trace );
@@ -259,9 +260,16 @@ void InitializeLoggers() {
 void InitializeComponents() {
   SFG::FontHandler::Initialize();
   SFG::InputHandler::Initialize();
+  SFG::NetworkHandler::Initialize();
   SFG::LogicHandler::Initialize();
   SFG::Window::Initialize();
   SFG::ScriptHandler::Initialize();
+}
+
+void InitializeNetwork() {
+  SFG::NetworkHandler::SetReqRepInfo( "tcp://127.0.0.1", 13337 );
+  SFG::NetworkHandler::SetPubSubInfo( "tcp://127.0.0.1", 13338 );
+  SFG::NetworkHandler::InitializeNetwork();
 }
 
 void InitializeWindow() {
@@ -273,6 +281,7 @@ void UninitializeComponents() {
   SFG::ScriptHandler::Destroy();
   SFG::Window::Destroy();
   SFG::LogicHandler::Destroy();
+  SFG::NetworkHandler::Destroy();
   SFG::InputHandler::Destroy();
   SFG::FontHandler::Destroy();
 }
@@ -295,6 +304,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   std::shared_ptr< bool > quitPtr = std::shared_ptr< bool >( &quit, quitFlagDeleteFunction );
 
   InitializeComponents();
+  InitializeNetwork();
   SFG::Window::SetSize( 1600, 900 );
   InitializeWindow();
 
@@ -365,6 +375,13 @@ int better_main( std::span< std::string_view const > args ) noexcept {
       std::chrono::duration_cast< std::chrono::nanoseconds >( 1.0s / 50.0 ),
       false );
   SFG::LogicHandler::AddTimer(
+      []( std::optional< std::chrono::secondsLongDouble > /*interval*/ ) {
+        // 50 hz network timer
+        SFG::NetworkHandler::RunNetwork();
+      },
+      std::chrono::duration_cast< std::chrono::nanoseconds >( 1.0s / 50.0 ),
+      false );
+  SFG::LogicHandler::AddTimer(
       [&performanceString, &makeNewPerformanceTexture]( std::optional< std::chrono::secondsLongDouble > /*interval*/ ) {
         performanceString = fmt::format( R"(Performance (per second):
 {:>20d} Frames drawn
@@ -380,7 +397,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
       false );
   SFG::LogicHandler::SetQuitFlag( quitPtr );
 
-  SFG::ScriptHandler::AddScript< SFG::LogScript >();
+  // SFG::ScriptHandler::AddScript< SFG::LogScript >();
 
   SFG::Window::ShowWindow();
 
