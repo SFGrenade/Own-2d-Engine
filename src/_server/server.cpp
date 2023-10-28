@@ -3,8 +3,8 @@
 namespace SFG {
 Server::Server( uint16_t portReqRep, uint16_t portPubSub )
     : logger_( spdlog::get( "Server" ) ),
-      rrNetwork_( "tcp://*", portReqRep, true ),
-      psNetwork_( "tcp://*", portPubSub, true ),
+      rrNetwork_( fmt::format( "tcp://*:{}", portReqRep ), true ),
+      psNetwork_( fmt::format( "tcp://*:{}", portPubSub ), true ),
       thread_( nullptr ),
       loop_( false ) {
   logger_->trace( "Server()" );
@@ -38,8 +38,17 @@ void Server::startServer() {
   thread_ = new std::thread( [this]() {
     this->logger_->trace( "thread_()" );
     while( this->loop_ ) {
-      this->rrNetwork_.run();
-      this->psNetwork_.run();
+      try {
+        this->rrNetwork_.run();
+      } catch( std::exception const& e ) {
+        this->logger_->error( "thread_ - reqRep error: {}", e.what() );
+        this->rrNetwork_.sendMessage( new SFG::Proto::ReqRepErrorMessage() );  // needed since reqRep is always back and forth
+      }
+      try {
+        this->psNetwork_.run();
+      } catch( std::exception const& e ) {
+        this->logger_->error( "thread_ - pubSub error: {}", e.what() );
+      }
       std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
     }
     this->logger_->trace( "thread_()~" );
@@ -72,11 +81,19 @@ void Server::onSendMessageRequest( SFG::Proto::SendMessageRequest const& msg ) {
   logger_->trace( "onSendMessageRequest(SFG::Proto::SendMessageRequest const& msg = \"{:s}\"/\"{:s}\")", msg.msg().username(), msg.msg().msgtext() );
 
   SFG::Proto::SendMessageResponse* repMsg = new SFG::Proto::SendMessageResponse();
-  if( msg.msg().username().empty() || msg.msg().msgtext().empty() ) {
+  if( msg.msg().username().empty() ) {
     repMsg->set_success( false );
+    repMsg->set_errormsg( "username is empty!" );
+  } else if( msg.msg().msgtext().empty() ) {
+    repMsg->set_success( false );
+    repMsg->set_errormsg( "msgText is empty!" );
+  } else if( messages_.size() >= messages_.max_size() ) {
+    repMsg->set_success( false );
+    repMsg->set_errormsg( "message storage is maxed out!" );
   } else {
     messages_.push_back( msg.msg() );
     repMsg->set_success( true );
+    repMsg->set_errormsg( "" );
   }
   rrNetwork_.sendMessage( repMsg );
 

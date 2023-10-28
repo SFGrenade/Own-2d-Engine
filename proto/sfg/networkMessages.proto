@@ -12,6 +12,7 @@ message SendMessageRequest {
 }
 message SendMessageResponse {
   bool success = 1;
+  string errorMsg = 2;
 }
 
 message GetAllMessagesRequest {
@@ -19,4 +20,8 @@ message GetAllMessagesRequest {
 // This shall be returned by req-rep with above request or by pub-sub
 message AllMessages {
   repeated MsgContent msgList = 1;
+}
+
+// This shall be only used for errors before the server doesn't respond anymore
+message ReqRepErrorMessage {
 }

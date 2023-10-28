@@ -36,8 +36,10 @@ void NetworkHandler::Initialize() {
 void NetworkHandler::InitializeNetwork() {
   NetworkHandler::logger->trace( "InitializeNetwork()" );
 
-  NetworkHandler::rrNetwork = new ZmqPb::ReqRep( NetworkHandler::hostReqRep, NetworkHandler::portReqRep, false );
-  NetworkHandler::psNetwork = new ZmqPb::PubSub( NetworkHandler::hostPubSub, NetworkHandler::portPubSub, false );
+  NetworkHandler::rrNetwork = new ZmqPb::ReqRep( fmt::format( "{}:{}", NetworkHandler::hostReqRep, NetworkHandler::portReqRep ), false );
+  NetworkHandler::psNetwork = new ZmqPb::PubSub( fmt::format( "{}:{}", NetworkHandler::hostPubSub, NetworkHandler::portPubSub ), false );
+  NetworkHandler::rrNetwork->subscribe( new SFG::Proto::ReqRepErrorMessage(), []( google::protobuf::Message const& ) {} );
+
   NetworkHandler::rrNetwork->subscribe( new SFG::Proto::SendMessageResponse(), []( google::protobuf::Message const& message ) {
     NetworkHandler::onSendMessageResponse( static_cast< SFG::Proto::SendMessageResponse const& >( message ) );
   } );
@@ -93,7 +95,7 @@ void NetworkHandler::onSendMessageResponse( SFG::Proto::SendMessageResponse cons
   NetworkHandler::logger->trace( "onSendMessageResponse(SFG::Proto::SendMessageResponse const& msg)" );
 
   if( !msg.success() ) {
-    NetworkHandler::logger->error( "onSendMessageResponse - error sending message!" );
+    NetworkHandler::logger->error( "onSendMessageResponse - error sending message: {}", msg.errormsg() );
   }
 
   NetworkHandler::logger->trace( "onSendMessageResponse()~" );
