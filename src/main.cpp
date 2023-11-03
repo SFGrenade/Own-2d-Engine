@@ -247,7 +247,7 @@ void InitializeLoggers() {
   spdlog::sinks_init_list normalSinkList = { normalFileSink, consoleSink };
 
   std::vector< std::string > allLoggerNames
-      = { "FontHandler", "GraphicsHandler", "InputHandler", "LogicHandler", "NetworkHandler", "Timer", "ScriptHandler", "LogScript", "Window" };
+      = { "ConfigHandler", "FontHandler", "GraphicsHandler", "InputHandler", "LogicHandler", "NetworkHandler", "Timer", "ScriptHandler", "LogScript", "Window" };
   for( auto name : allLoggerNames ) {
     spdlogger logger = std::make_shared< spdlog::logger >( name, normalSinkList.begin(), normalSinkList.end() );
     logger->set_level( spdlog::level::trace );
