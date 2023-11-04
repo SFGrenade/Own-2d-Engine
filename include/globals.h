@@ -44,6 +44,4 @@ typedef duration< long double > secondsLongDouble;
 }
 }  // namespace std
 
-static const uint16_t gridWidth = 32;
-
 typedef std::shared_ptr< spdlog::logger > spdlogger;

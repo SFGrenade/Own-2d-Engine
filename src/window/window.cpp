@@ -9,8 +9,8 @@ namespace SFG {
 spdlogger Window::logger = nullptr;
 int Window::xPos = SDL_WINDOWPOS_CENTERED;
 int Window::yPos = SDL_WINDOWPOS_CENTERED;
-int Window::width = 25 * gridWidth;
-int Window::height = 19 * gridWidth;
+int Window::width = 800;
+int Window::height = 600;
 std::string Window::windowTitle = "Own 2D Engine - Exit with ESC";
 std::shared_ptr< SDL_Window > Window::window = std::shared_ptr< SDL_Window >();
 std::shared_ptr< GraphicsHandler > Window::graphicsHandler = std::shared_ptr< GraphicsHandler >();
@@ -44,6 +44,7 @@ void Window::Destroy() {
   Window::logger->trace( "Destroy()" );
   Window::graphicsHandler.reset();
   Window::window.reset();
+  Mix_CloseAudio();
   Mix_Quit();
   IMG_Quit();
   SDL_Quit();
