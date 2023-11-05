@@ -19,10 +19,14 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
+// Including SimpleIni headers
+#include <SimpleIni.h>
+
 // library headers
 #include <chrono>
 #include <cstdint>
 #include <cstring>
+#include <exception>
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -43,5 +47,7 @@ namespace chrono {
 typedef duration< long double > secondsLongDouble;
 }
 }  // namespace std
+
+std::vector< std::string > str_split( std::string s, std::string delim );
 
 typedef std::shared_ptr< spdlog::logger > spdlogger;
