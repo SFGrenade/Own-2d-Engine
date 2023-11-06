@@ -4,6 +4,7 @@
 #include <string>
 
 // Including our headers
+#include "_globals/sdlInclude.h"
 #include "_globals/spdlogInclude.h"
 
 namespace SFG {

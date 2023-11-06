@@ -3,8 +3,8 @@
 #include <map>
 
 // Including our headers
-#include "_globals/spdlogInclude.h"
 #include "_globals/sdlInclude.h"
+#include "_globals/spdlogInclude.h"
 
 namespace SFG {
 enum class FontType {
