@@ -1,7 +1,10 @@
 #pragma once
 
+#include <string>
+
 // Including our headers
-#include "globals.h"
+#include "_globals/spdlogInclude.h"
+#include "_globals/sdlInclude.h"
 #include "graphicshandler/graphicshandler.h"
 
 namespace SFG {

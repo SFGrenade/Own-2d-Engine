@@ -109,8 +109,8 @@ void Server::onSendMessageRequest( SFG::Proto::SendMessageRequest const& msg ) {
   logger_->trace( "onMessageRequest()~" );
 }
 
-void Server::onGetAllMessagesRequest( SFG::Proto::GetAllMessagesRequest const& msg ) {
-  logger_->trace( "onGetAllMessagesRequest(SFG::Proto::GetAllMessagesRequest const& msg)" );
+void Server::onGetAllMessagesRequest( SFG::Proto::GetAllMessagesRequest const& ) {
+  logger_->trace( "onGetAllMessagesRequest(SFG::Proto::GetAllMessagesRequest const&)" );
 
   SFG::Proto::AllMessages* repMsg = new SFG::Proto::AllMessages();
   SFG::Proto::MsgContent* singleMsg;

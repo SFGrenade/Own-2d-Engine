@@ -1,7 +1,10 @@
 #pragma once
 
-// Include general stuff
-#include "globals.h"
+#include <cstdint>
+#include <string>
+
+// Including our headers
+#include "_globals/spdlogInclude.h"
 
 namespace SFG {
 class ConfigHandler {

@@ -1,10 +1,12 @@
 #pragma once
 
+#include <vector>
+
 // Including our headers
-#include "globals.h"
+#include "_globals/spdlogInclude.h"
+#include "scripthandler/script.h"
 
 namespace SFG {
-class Script;
 class ScriptHandler {
   private:
   static spdlogger logger;

@@ -1,7 +1,11 @@
 #pragma once
 
+#include <functional>
+#include <vector>
+
 // Including our headers
-#include "globals.h"
+#include "_globals/spdlogInclude.h"
+#include "_globals/sdlInclude.h"
 
 namespace SFG {
 typedef std::function< void( SDL_KeyboardEvent& key ) > KeyCallback;

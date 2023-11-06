@@ -1,8 +1,11 @@
 #include <csignal>
+#include <cstdint>
+#include <string_view>
+#include <vector>
 
-// Include our overall Objects
+// Including our headers
+#include "_globals/spdlogInclude.h"
 #include "_server/server.h"
-#include "globals.h"
 
 #pragma region Initialization
 

@@ -1,44 +1,8 @@
 #pragma once
 
-// Including FMT headers
-#include <fmt/chrono.h>
-#include <fmt/core.h>
-
-// Including SDL headers
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL_ttf.h>
-
-// Including SPDLOG headers
-#ifndef SPDLOG_FMT_EXTERNAL
-#define SPDLOG_FMT_EXTERNAL
-#endif
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
-#include <spdlog/sinks/basic_file_sink.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/spdlog.h>
-
-// Including SimpleIni headers
-#include <SimpleIni.h>
-
 // library headers
 #include <chrono>
-#include <cstdint>
-#include <cstring>
-#include <exception>
-#include <fstream>
-#include <functional>
-#include <iostream>
-#include <map>
-#include <memory>
-#include <mutex>
-#include <optional>
-#include <span>
 #include <string>
-#include <string_view>
-#include <thread>
-#include <type_traits>
 #include <vector>
 
 using namespace std::chrono_literals;
@@ -49,5 +13,3 @@ typedef duration< long double > secondsLongDouble;
 }  // namespace std
 
 std::vector< std::string > str_split( std::string s, std::string delim );
-
-typedef std::shared_ptr< spdlog::logger > spdlogger;

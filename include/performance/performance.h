@@ -1,7 +1,6 @@
 #pragma once
 
-// Include general stuff
-#include "globals.h"
+#include <cstdint>
 
 namespace SFG {
 class Performance {

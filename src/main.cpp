@@ -336,15 +336,15 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   std::vector< std::string > fgCol = str_split( SFG::ConfigHandler::get_Rendering_PerformanceStringTextColor(), " " );
   std::vector< std::string > bgCol = str_split( SFG::ConfigHandler::get_Rendering_PerformanceStringBackgroundColor(), " " );
   SDL_Color foregroundColor;
-  foregroundColor.r = std::stoi( fgCol[0] );
-  foregroundColor.g = std::stoi( fgCol[1] );
-  foregroundColor.b = std::stoi( fgCol[2] );
-  foregroundColor.a = std::stoi( fgCol[3] );
+  foregroundColor.r = static_cast< uint8_t >( std::stoi( fgCol[0] ) );
+  foregroundColor.g = static_cast< uint8_t >( std::stoi( fgCol[1] ) );
+  foregroundColor.b = static_cast< uint8_t >( std::stoi( fgCol[2] ) );
+  foregroundColor.a = static_cast< uint8_t >( std::stoi( fgCol[3] ) );
   SDL_Color backgroundColor;
-  backgroundColor.r = std::stoi( bgCol[0] );
-  backgroundColor.g = std::stoi( bgCol[1] );
-  backgroundColor.b = std::stoi( bgCol[2] );
-  backgroundColor.a = std::stoi( bgCol[3] );
+  backgroundColor.r = static_cast< uint8_t >( std::stoi( bgCol[0] ) );
+  backgroundColor.g = static_cast< uint8_t >( std::stoi( bgCol[1] ) );
+  backgroundColor.b = static_cast< uint8_t >( std::stoi( bgCol[2] ) );
+  backgroundColor.a = static_cast< uint8_t >( std::stoi( bgCol[3] ) );
   graphicsHandler->RegisterDrawEvent( []( std::shared_ptr< SDL_Renderer > /*windowRenderer*/ ) { SFG::ScriptHandler::UpdateScriptsFrame(); } );
   graphicsHandler->RegisterDrawEvent( [&performanceString, &makeNewPerformanceTexture, &performanceTexture, &performanceTextureRect, foregroundColor, backgroundColor]( std::shared_ptr< SDL_Renderer > windowRenderer ) {
     if( makeNewPerformanceTexture ) {

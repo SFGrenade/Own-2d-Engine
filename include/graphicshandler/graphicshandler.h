@@ -1,8 +1,12 @@
 #pragma once
 
-// Include general stuff
-#include "globals.h"
-#include "performance/performance.h"
+#include <functional>
+#include <thread>
+#include <vector>
+
+// Including our headers
+#include "_globals/spdlogInclude.h"
+#include "_globals/sdlInclude.h"
 
 namespace SFG {
 typedef std::function< void( std::shared_ptr< SDL_Renderer > windowRenderer ) > DrawCallback;

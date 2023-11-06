@@ -1,7 +1,10 @@
 #pragma once
 
-// Include general stuff
-#include "globals.h"
+#include <map>
+
+// Including our headers
+#include "_globals/spdlogInclude.h"
+#include "_globals/sdlInclude.h"
 
 namespace SFG {
 enum class FontType {

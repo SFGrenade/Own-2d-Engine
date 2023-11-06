@@ -1,4 +1,5 @@
 #include "graphicshandler/graphicshandler.h"
+#include "performance/performance.h"
 
 namespace SFG {
 GraphicsHandler::GraphicsHandler( std::shared_ptr< SDL_Window > window )
@@ -20,7 +21,7 @@ void GraphicsHandler::deleteRenderer( SDL_Renderer* ptr ) {
 void GraphicsHandler::Draw( GraphicsHandler* self ) {
   self->logger->trace( "Draw(GraphicsHandler* self = {:p})", static_cast< void* >( self ) );
 
-  auto rendererDeleteFunction = [self]( SDL_Renderer* ptr ) { self->deleteRenderer( ptr ); };
+  std::function< void( SDL_Renderer* ) > rendererDeleteFunction = [self]( SDL_Renderer* ptr ) { self->deleteRenderer( ptr ); };
 
   self->windowRenderer = std::shared_ptr< SDL_Renderer >( SDL_CreateRenderer( self->window.get(), self->rendererIndex, 0 ), rendererDeleteFunction );
   if( self->windowRenderer.get() == nullptr ) {

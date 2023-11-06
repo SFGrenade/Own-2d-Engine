@@ -1,7 +1,10 @@
 #pragma once
 
+#include <thread>
+#include <vector>
+
 // Including our headers
-#include "globals.h"
+#include "_globals/spdlogInclude.h"
 #include "logichandler/timer.h"
 
 namespace SFG {

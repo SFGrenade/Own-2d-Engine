@@ -1,6 +1,9 @@
 #pragma once
 
+#include <functional>
+
 // Including our headers
+#include "_globals/spdlogInclude.h"
 #include "globals.h"
 
 namespace SFG {

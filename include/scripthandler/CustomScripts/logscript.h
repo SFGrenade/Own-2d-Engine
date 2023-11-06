@@ -1,7 +1,7 @@
 #pragma once
 
 // Including our headers
-#include "globals.h"
+#include "_globals/spdlogInclude.h"
 #include "scripthandler/script.h"
 
 namespace SFG {

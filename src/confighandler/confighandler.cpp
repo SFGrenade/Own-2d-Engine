@@ -1,5 +1,8 @@
 #include "confighandler/confighandler.h"
 
+#include <SimpleIni.h>
+#include "_globals/sdlInclude.h"
+
 namespace SFG {
 spdlogger ConfigHandler::logger = nullptr;
 

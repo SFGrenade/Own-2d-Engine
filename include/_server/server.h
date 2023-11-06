@@ -1,10 +1,13 @@
 #pragma once
 
+#include <cstdint>
+#include <thread>
+#include <vector>
 #include <zmqPb/pubSub.hpp>
 #include <zmqPb/reqRep.hpp>
 
 // Including our headers
-#include "globals.h"
+#include "_globals/spdlogInclude.h"
 #include "networkMessages.pb.h"
 
 namespace SFG {
