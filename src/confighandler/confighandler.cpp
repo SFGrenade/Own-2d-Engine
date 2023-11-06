@@ -8,19 +8,19 @@ spdlogger ConfigHandler::logger = nullptr;
 
 spdlog::level::level_enum ConfigHandler::config_Logging_StdOutLevel;
 spdlog::level::level_enum ConfigHandler::config_Logging_LogFileLevel;
-uint16_t ConfigHandler::config_Font_PixelSize;
-uint16_t ConfigHandler::config_Input_StopGameKey;
+int ConfigHandler::config_Font_PixelSize;
+SDL_Keycode ConfigHandler::config_Input_StopGameKey;
 double ConfigHandler::config_Logic_LogicInterval;
 double ConfigHandler::config_Logic_NetworkInterval;
 double ConfigHandler::config_Logic_PerformanceInterval;
 std::string ConfigHandler::config_Network_Host;
 uint16_t ConfigHandler::config_Network_PortReqRep;
 uint16_t ConfigHandler::config_Network_PortPubSub;
-uint16_t ConfigHandler::config_Window_Width;
-uint16_t ConfigHandler::config_Window_Height;
+int ConfigHandler::config_Window_Width;
+int ConfigHandler::config_Window_Height;
 uint32_t ConfigHandler::config_Audio_SampleRate;
-uint32_t ConfigHandler::config_Audio_Format;
-uint16_t ConfigHandler::config_Audio_Channels;
+uint16_t ConfigHandler::config_Audio_Format;
+uint32_t ConfigHandler::config_Audio_Channels;
 uint32_t ConfigHandler::config_Audio_ChunkSize;
 std::string ConfigHandler::config_Rendering_Renderer;
 std::string ConfigHandler::config_Rendering_PerformanceStringTextColor;
@@ -38,22 +38,22 @@ void ConfigHandler::InitializeNoLog() {
     throw new std::runtime_error( "Error reading config file at \"" + configPath + "\"" );
   }
 
-  ConfigHandler::config_Logging_StdOutLevel = static_cast< spdlog::level::level_enum >( ini.GetLongValue( "Logging", "StdOutLevel", static_cast< long >( spdlog::level::warn ) ) );
-  ConfigHandler::config_Logging_LogFileLevel = static_cast< spdlog::level::level_enum >( ini.GetLongValue( "Logging", "LogFileLevel", static_cast< long >( spdlog::level::trace ) ) );
-  ConfigHandler::config_Font_PixelSize = static_cast< uint16_t >( ini.GetLongValue( "Font", "PixelSize", 18 ) );
-  ConfigHandler::config_Input_StopGameKey = static_cast< uint16_t >( ini.GetLongValue( "Input", "StopGameKey", SDLK_ESCAPE ) );
+  ConfigHandler::config_Logging_StdOutLevel = static_cast< spdlog::level::level_enum >( ini.GetLongValue( "Logging", "StdOutLevel", static_cast< int >( spdlog::level::warn ) ) );
+  ConfigHandler::config_Logging_LogFileLevel = static_cast< spdlog::level::level_enum >( ini.GetLongValue( "Logging", "LogFileLevel", static_cast< int >( spdlog::level::trace ) ) );
+  ConfigHandler::config_Font_PixelSize = static_cast< int >( ini.GetLongValue( "Font", "PixelSize", 18 ) );
+  ConfigHandler::config_Input_StopGameKey = static_cast< SDL_Keycode >( ini.GetLongValue( "Input", "StopGameKey", SDLK_ESCAPE ) );
   ConfigHandler::config_Logic_LogicInterval = static_cast< double >( ini.GetDoubleValue( "Logic", "LogicInterval", 50.0 ) );
   ConfigHandler::config_Logic_NetworkInterval = static_cast< double >( ini.GetDoubleValue( "Logic", "NetworkInterval", 50.0 ) );
   ConfigHandler::config_Logic_PerformanceInterval = static_cast< double >( ini.GetDoubleValue( "Logic", "PerformanceInterval", 1.0 ) );
   ConfigHandler::config_Network_Host = ini.GetValue( "Network", "Host", "127.0.0.1" );
   ConfigHandler::config_Network_PortReqRep = static_cast< uint16_t >( ini.GetLongValue( "Network", "PortReqRep", 13337 ) );
   ConfigHandler::config_Network_PortPubSub = static_cast< uint16_t >( ini.GetLongValue( "Network", "PortPubSub", 13338 ) );
-  ConfigHandler::config_Window_Width = static_cast< uint16_t >( ini.GetLongValue( "Window", "Width", 1600 ) );
-  ConfigHandler::config_Window_Height = static_cast< uint16_t >( ini.GetLongValue( "Window", "Height", 900 ) );
+  ConfigHandler::config_Window_Width = static_cast< int >( ini.GetLongValue( "Window", "Width", 800 ) );
+  ConfigHandler::config_Window_Height = static_cast< int >( ini.GetLongValue( "Window", "Height", 600 ) );
   ConfigHandler::config_Audio_SampleRate = static_cast< uint32_t >( ini.GetLongValue( "Audio", "SampleRate", 44100 ) );
-  ConfigHandler::config_Audio_Format = static_cast< uint32_t >( ini.GetLongValue( "Audio", "Format", MIX_DEFAULT_FORMAT ) );
-  ConfigHandler::config_Audio_Channels = static_cast< uint16_t >( ini.GetLongValue( "Audio", "Channels", 2 ) );
-  ConfigHandler::config_Audio_ChunkSize = static_cast< uint16_t >( ini.GetLongValue( "Audio", "ChunkSize", 2048 ) );
+  ConfigHandler::config_Audio_Format = static_cast< uint16_t >( ini.GetLongValue( "Audio", "Format", MIX_DEFAULT_FORMAT ) );
+  ConfigHandler::config_Audio_Channels = static_cast< uint32_t >( ini.GetLongValue( "Audio", "Channels", 2 ) );
+  ConfigHandler::config_Audio_ChunkSize = static_cast< uint32_t >( ini.GetLongValue( "Audio", "ChunkSize", 2048 ) );
   ConfigHandler::config_Rendering_Renderer = ini.GetValue( "Rendering", "Renderer", "" );
   ConfigHandler::config_Rendering_PerformanceStringTextColor = ini.GetValue( "Rendering", "PerformanceStringTextColor", "255 255 255 255" );
   ConfigHandler::config_Rendering_PerformanceStringBackgroundColor = ini.GetValue( "Rendering", "PerformanceStringBackgroundColor", "0 0 0 0" );
@@ -89,8 +89,8 @@ void ConfigHandler::Initialize() {
   ConfigHandler::logger->trace( "Initialize()" );
 
   ConfigHandler::logger->debug( "Initialize - Loaded values:" );
-  ConfigHandler::logger->debug( "Initialize -     config_Logging_StdOutLevel = {:d}", static_cast< uint32_t >( config_Logging_StdOutLevel ) );
-  ConfigHandler::logger->debug( "Initialize -     config_Logging_LogFileLevel = {:d}", static_cast< uint32_t >( config_Logging_LogFileLevel ) );
+  ConfigHandler::logger->debug( "Initialize -     config_Logging_StdOutLevel = {:d}", static_cast< int >( config_Logging_StdOutLevel ) );
+  ConfigHandler::logger->debug( "Initialize -     config_Logging_LogFileLevel = {:d}", static_cast< int >( config_Logging_LogFileLevel ) );
   ConfigHandler::logger->debug( "Initialize -     config_Font_PixelSize = {:d}", ConfigHandler::config_Font_PixelSize );
   ConfigHandler::logger->debug( "Initialize -     config_Input_StopGameKey = {:d}", ConfigHandler::config_Input_StopGameKey );
   ConfigHandler::logger->debug( "Initialize -     config_Logic_LogicInterval = {:f}", ConfigHandler::config_Logic_LogicInterval );
@@ -126,11 +126,11 @@ spdlog::level::level_enum ConfigHandler::get_Logging_LogFileLevel() {
   return config_Logging_LogFileLevel;
 }
 
-uint16_t ConfigHandler::get_Font_PixelSize() {
+int ConfigHandler::get_Font_PixelSize() {
   return config_Font_PixelSize;
 }
 
-uint16_t ConfigHandler::get_Input_StopGameKey() {
+SDL_Keycode ConfigHandler::get_Input_StopGameKey() {
   return config_Input_StopGameKey;
 }
 
@@ -158,11 +158,11 @@ uint16_t ConfigHandler::get_Network_PortPubSub() {
   return config_Network_PortPubSub;
 }
 
-uint16_t ConfigHandler::get_Window_Width() {
+int ConfigHandler::get_Window_Width() {
   return config_Window_Width;
 }
 
-uint16_t ConfigHandler::get_Window_Height() {
+int ConfigHandler::get_Window_Height() {
   return config_Window_Height;
 }
 
@@ -170,11 +170,11 @@ uint32_t ConfigHandler::get_Audio_SampleRate() {
   return config_Audio_SampleRate;
 }
 
-uint32_t ConfigHandler::get_Audio_Format() {
+uint16_t ConfigHandler::get_Audio_Format() {
   return config_Audio_Format;
 }
 
-uint16_t ConfigHandler::get_Audio_Channels() {
+uint32_t ConfigHandler::get_Audio_Channels() {
   return config_Audio_Channels;
 }
 
