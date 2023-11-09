@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package SFG.Proto;
+
+message InterThreadFunctionCall {
+  fixed64 functionPointer = 1;
+}

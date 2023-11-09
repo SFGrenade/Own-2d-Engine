@@ -1,5 +1,8 @@
 #include "_globals/misc.h"
 
+#include <sstream>
+#include <thread>
+
 std::vector< std::string > str_split( std::string s, std::string delim ) {
   std::vector< std::string > ret;
   size_t pos = 0;

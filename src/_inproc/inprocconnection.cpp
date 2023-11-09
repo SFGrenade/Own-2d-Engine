@@ -6,26 +6,17 @@ zmq::context_t InProcConnection::networkContext_ = zmq::context_t( 0 );
 
 InProcConnection::InProcConnection( std::string const& host, bool server )
   : logger_( spdlog::get( "TSrv" ) ),
-    network_( host, server, &InProcConnection::networkContext_ ),
-    thread_( nullptr ),
-    loop_( false ) {
+    network_( host, server, &InProcConnection::networkContext_ ) {
   logger_->trace( fmt::runtime( "[thread {:s}] InProcConnection(std::string const& host = \"{:s}\", bool server = {})" ), getThreadId(), host, server );
-  network_.subscribe( new SFG::Proto::InterThreadFunctionCall(), [this]( google::protobuf::Message const& message ) {
-    this->onInterThreadFunctionCall( static_cast< SFG::Proto::InterThreadFunctionCall const& >( message ) );
+  network_.subscribe( new SFG::Proto::InProc::TestThis(), [this]( google::protobuf::Message const& message ) {
+    this->onInProcTestThis( static_cast< SFG::Proto::InProc::TestThis const& >( message ) );
   } );
   logger_->trace( fmt::runtime( "[thread {:s}] InProcConnection()~" ), getThreadId() );
 }
 
 InProcConnection::~InProcConnection() {
   logger_->trace( fmt::runtime( "[thread {:s}] ~InProcConnection()" ), getThreadId() );
-  if( thread_ ) {
-    logger_->trace( fmt::runtime( "[thread {:s}] ~InProcConnection - deleting thread" ), getThreadId() );
-    if( thread_->joinable() ) {
-      thread_->join();
-    }
-    delete thread_;
-    thread_ = nullptr;
-  }
+
   logger_->trace( fmt::runtime( "[thread {:s}] ~InProcConnection()~" ), getThreadId() );
 }
 
@@ -41,25 +32,19 @@ void InProcConnection::run() {
   // logger_->trace( fmt::runtime( "[thread {:s}] run()~" ), getThreadId() );
 }
 
-void InProcConnection::sendFunctionCall( std::function< void() > functionToSend ) {
-  logger_->trace( fmt::runtime( "[thread {:s}] sendFunctionCall(std::function< void() > functionToSend = {:p})" ), getThreadId(), static_cast< void* >( functionToSend.target< void(*)() >() ) );
+void InProcConnection::sendInProcTestThis( std::string const& t1, std::string const& t2 ) {
+  logger_->trace( fmt::runtime( "[thread {:s}] sendInProcTestThis(std::string const& t1 = \"{:s}\", std::string const& t2 = \"{:s}\")" ), getThreadId(), t1, t2 );
 
-  SFG::Proto::InterThreadFunctionCall* msg = new SFG::Proto::InterThreadFunctionCall();
-  msg->set_functionpointer( reinterpret_cast< int64_t >( functionToSend.target< void(*)() >() ) );
+  SFG::Proto::InProc::TestThis* msg = new SFG::Proto::InProc::TestThis();
+  msg->set_username( t1 );
+  msg->set_msgtext( t2 );
   network_.sendMessage( msg );
 
   logger_->trace( fmt::runtime( "[thread {:s}] sendFunctionCall()~" ), getThreadId() );
 }
 
-void InProcConnection::onInterThreadFunctionCall( SFG::Proto::InterThreadFunctionCall const& msg ) {
-  void( *functionToCall )() = reinterpret_cast< void(*)() >( msg.functionpointer() );
-  logger_->trace( fmt::runtime( "[thread {:s}] onInterThreadFunctionCall(SFG::Proto::InterThreadFunctionCall const& msg = {:p})" ), getThreadId(), static_cast< void* >( functionToCall ) );
-
-  if ( functionToCall != nullptr ) {
-    functionToCall();
-  } else {
-    stopServer();
-  }
+void InProcConnection::onInProcTestThis( SFG::Proto::InProc::TestThis const& msg ) {
+  logger_->trace( fmt::runtime( "[thread {:s}] onInterThreadFunctionCall(SFG::Proto::InProc::TestThis const& msg = \"{:s}\"/\"{:s}\")" ), getThreadId(), msg.username(), msg.msgtext() );
 
   logger_->trace( fmt::runtime( "[thread {:s}] onInterThreadFunctionCall()~" ), getThreadId() );
 }

@@ -8,18 +8,9 @@
 #include <zmqPb/pair.hpp>
 
 // Including our headers
+#include "_globals/misc.h"
 #include "_globals/spdlogInclude.h"
-#include "networkMessages.pb.h"
-
-#pragma region Misc
-
-std::string getThreadId() {
-  std::stringstream ret;
-  ret << std::this_thread::get_id();
-  return ret.str();
-}
-
-#pragma endregion Misc
+#include "testMessages.pb.h"
 
 #pragma region ThreadServer
 

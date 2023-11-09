@@ -7,7 +7,7 @@
 
 // Including our headers
 #include "_globals/spdlogInclude.h"
-#include "networkMessages.pb.h"
+#include "inProcMessages.pb.h"
 
 namespace SFG {
 class InProcConnection {
@@ -17,10 +17,10 @@ class InProcConnection {
 
   void run();
 
-  void sendFunctionCall( std::function< void() > functionToSend );
+  void sendInProcTestThis( std::string const& t1, std::string const& t2 );
 
   private:
-  void onInterThreadFunctionCall( SFG::Proto::InterThreadFunctionCall const& msg );
+  void onInProcTestThis( SFG::Proto::InProc::TestThis const& msg );
 
   private:
   spdlogger logger_;

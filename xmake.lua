@@ -94,6 +94,7 @@ target("Own-2d-Engine")
     add_files("proto/sfg/*.proto", {proto_public = true})
 
     add_files("src/*.cpp")
+    add_files("src/_globals/*.cpp")
     add_files("src/_inproc/*.cpp")
     add_files("src/confighandler/*.cpp")
     add_files("src/fonthandler/*.cpp")
@@ -153,6 +154,7 @@ target("Own-2d-Engine-Server")
 
     add_files("proto/sfg/*.proto", {proto_public = true})
 
+    add_files("src/_globals/*.cpp")
     add_files("src/_inproc/*.cpp")
     add_files("src/_server/*.cpp")
     add_files("src/confighandler/*.cpp")
@@ -202,6 +204,7 @@ target("Own-2d-Engine-Test")
 
     add_files("proto/sfg/*.proto", {proto_public = true})
 
+    add_files("src/_globals/*.cpp")
     add_files("src/_inproc/*.cpp")
     add_files("src/_test/*.cpp")
     add_files("src/confighandler/*.cpp")

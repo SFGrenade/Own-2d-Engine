@@ -1,8 +1,9 @@
 // Include our overall Objects
 
+#include "_globals/misc.h"
+#include "_globals/moreChrono.h"
 #include "confighandler/confighandler.h"
 #include "fonthandler/fonthandler.h"
-#include "globals.h"
 #include "inputhandler/inputhandler.h"
 #include "logichandler/logichandler.h"
 #include "networkhandler/networkhandler.h"

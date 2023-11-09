@@ -3,8 +3,8 @@
 #include <functional>
 
 // Including our headers
+#include "_globals/moreChrono.h"
 #include "_globals/spdlogInclude.h"
-#include "globals.h"
 
 namespace SFG {
 typedef std::function< void( std::optional< std::chrono::secondsLongDouble > interval ) > TimerCallback;
