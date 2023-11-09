@@ -17,64 +17,64 @@ std::shared_ptr< SDL_Window > Window::window = std::shared_ptr< SDL_Window >();
 std::shared_ptr< GraphicsHandler > Window::graphicsHandler = std::shared_ptr< GraphicsHandler >();
 
 void Window::deleteGraphicsHandler( GraphicsHandler* ptr ) {
-  Window::logger->trace( "deleteGraphicsHandler({:p})", static_cast< void* >( ptr ) );
+  Window::logger->trace( fmt::runtime( "deleteGraphicsHandler({:p})" ), static_cast< void* >( ptr ) );
   delete ptr;
-  Window::logger->trace( "deleteGraphicsHandler()~" );
+  Window::logger->trace( fmt::runtime( "deleteGraphicsHandler()~" ) );
 }
 
 void Window::deleteWindow( SDL_Window* ptr ) {
-  Window::logger->trace( "deleteWindow({:p})", static_cast< void* >( ptr ) );
+  Window::logger->trace( fmt::runtime( "deleteWindow({:p})" ), static_cast< void* >( ptr ) );
   SDL_DestroyWindow( ptr );
-  Window::logger->trace( "deleteWindow()~" );
+  Window::logger->trace( fmt::runtime( "deleteWindow()~" ) );
 }
 
 void Window::SetSize( int newWidth, int newHeight ) {
-  Window::logger->trace( "SetSize({:d}, {:d})", newWidth, newHeight );
+  Window::logger->trace( fmt::runtime( "SetSize({:d}, {:d})" ), newWidth, newHeight );
   Window::width = newWidth;
   Window::height = newHeight;
-  Window::logger->trace( "SetSize()~" );
+  Window::logger->trace( fmt::runtime( "SetSize()~" ) );
 }
 
 void Window::Initialize() {
   Window::logger = spdlog::get( "Window" );
-  Window::logger->trace( "Initialize()" );
-  Window::logger->trace( "Initialize()~" );
+  Window::logger->trace( fmt::runtime( "Initialize()" ) );
+  Window::logger->trace( fmt::runtime( "Initialize()~" ) );
 }
 
 void Window::Destroy() {
-  Window::logger->trace( "Destroy()" );
+  Window::logger->trace( fmt::runtime( "Destroy()" ) );
   Window::graphicsHandler.reset();
   Window::window.reset();
   Mix_CloseAudio();
   Mix_Quit();
   IMG_Quit();
   SDL_Quit();
-  Window::logger->trace( "Destroy()~" );
+  Window::logger->trace( fmt::runtime( "Destroy()~" ) );
 }
 
 bool Window::InitializeSDL() {
-  Window::logger->trace( "InitializeSDL()" );
+  Window::logger->trace( fmt::runtime( "InitializeSDL()" ) );
   if( SDL_Init( SDL_INIT_EVERYTHING ) != 0 ) {
-    Window::logger->error( "SDL initialize error! {:s}", SDL_GetError() );
-    Window::logger->trace( "InitializeSDL()~" );
+    Window::logger->error( fmt::runtime( "SDL initialize error! {:s}" ), SDL_GetError() );
+    Window::logger->trace( fmt::runtime( "InitializeSDL()~" ) );
     return false;
   }
   if( IMG_Init( IMG_INIT_PNG ) != IMG_INIT_PNG ) {
-    Window::logger->error( "SDL_image initialize error! {:s}", IMG_GetError() );
-    Window::logger->trace( "InitializeSDL()~" );
+    Window::logger->error( fmt::runtime( "SDL_image initialize error! {:s}" ), IMG_GetError() );
+    Window::logger->trace( fmt::runtime( "InitializeSDL()~" ) );
     return false;
   }
   if( ( Mix_Init( SDL_MIX_INIT_MP3_OGG ) != SDL_MIX_INIT_MP3_OGG ) || Mix_OpenAudio( ConfigHandler::get_Audio_SampleRate(), ConfigHandler::get_Audio_Format(), ConfigHandler::get_Audio_Channels(), ConfigHandler::get_Audio_ChunkSize() ) < 0 ) {
-    Window::logger->error( "SDL_mixer initialize error! {:s}", Mix_GetError() );
-    Window::logger->trace( "InitializeSDL()~" );
+    Window::logger->error( fmt::runtime( "SDL_mixer initialize error! {:s}" ), Mix_GetError() );
+    Window::logger->trace( fmt::runtime( "InitializeSDL()~" ) );
     return false;
   }
-  Window::logger->trace( "InitializeSDL()~" );
+  Window::logger->trace( fmt::runtime( "InitializeSDL()~" ) );
   return true;
 }
 
 bool Window::InitializeWindow() {
-  Window::logger->trace( "InitializeWindow()" );
+  Window::logger->trace( fmt::runtime( "InitializeWindow()" ) );
   Window::window = std::shared_ptr< SDL_Window >( SDL_CreateWindow( Window::windowTitle.c_str(),
                                                                     Window::xPos,
                                                                     Window::yPos,
@@ -83,31 +83,31 @@ bool Window::InitializeWindow() {
                                                                     SDL_WINDOW_HIDDEN ),
                                                   deleteWindow );
   if( !Window::window ) {
-    Window::logger->error( "Window creation error! {:s}", SDL_GetError() );
-    Window::logger->trace( "InitializeWindow()~" );
+    Window::logger->error( fmt::runtime( "Window creation error! {:s}" ), SDL_GetError() );
+    Window::logger->trace( fmt::runtime( "InitializeWindow()~" ) );
     return false;
   }
   Window::graphicsHandler = std::shared_ptr< GraphicsHandler >( new GraphicsHandler( Window::window ), deleteGraphicsHandler );
-  Window::logger->trace( "InitializeWindow()~" );
+  Window::logger->trace( fmt::runtime( "InitializeWindow()~" ) );
   return true;
 }
 
 bool Window::ShowWindow() {
-  Window::logger->trace( "ShowWindow()" );
+  Window::logger->trace( fmt::runtime( "ShowWindow()" ) );
   SDL_ShowWindow( Window::window.get() );
-  Window::logger->trace( "ShowWindow()~" );
+  Window::logger->trace( fmt::runtime( "ShowWindow()~" ) );
   return true;
 }
 
 std::shared_ptr< SDL_Window > Window::GetSdlWindow() {
-  Window::logger->trace( "GetSdlWindow()" );
-  Window::logger->trace( "GetSdlWindow()~" );
+  Window::logger->trace( fmt::runtime( "GetSdlWindow()" ) );
+  Window::logger->trace( fmt::runtime( "GetSdlWindow()~" ) );
   return Window::window;
 }
 
 std::shared_ptr< GraphicsHandler > Window::GetGraphicsHandler() {
-  Window::logger->trace( "GetGraphicsHandler()" );
-  Window::logger->trace( "GetGraphicsHandler()~" );
+  Window::logger->trace( fmt::runtime( "GetGraphicsHandler()" ) );
+  Window::logger->trace( fmt::runtime( "GetGraphicsHandler()~" ) );
   return Window::graphicsHandler;
 }
 }  // namespace SFG

@@ -185,36 +185,36 @@ constexpr std::string const GetPixelFormatEnum( uint32_t const format ) {
 }
 
 void PrintRendererInfo( SDL_RendererInfo const &rendererInfo ) {
-  spdlog::debug( "- Renderer \"{:s}\":", rendererInfo.name );
+  spdlog::debug( fmt::runtime( "- Renderer \"{:s}\":" ), rendererInfo.name );
   std::string tmpString1 = GetRendererFlags( rendererInfo.flags );
-  spdlog::debug( "  - Flags: {:#034b} / {:s}", rendererInfo.flags, tmpString1 );
-  spdlog::debug( "  - NumTextureFormats: {:d}", rendererInfo.num_texture_formats );
-  spdlog::debug( "  - TextureFormats:" );
+  spdlog::debug( fmt::runtime( "  - Flags: {:#034b} / {:s}" ), rendererInfo.flags, tmpString1 );
+  spdlog::debug( fmt::runtime( "  - NumTextureFormats: {:d}" ), rendererInfo.num_texture_formats );
+  spdlog::debug( fmt::runtime( "  - TextureFormats:" ) );
   for( uint32_t j = 0; j < rendererInfo.num_texture_formats; j++ ) {
     std::string tmpString2 = GetPixelFormatEnum( rendererInfo.texture_formats[j] );
-    spdlog::debug( "    - TextureFormat {:d}: {:#034b} / {:s}", j, rendererInfo.texture_formats[j], tmpString2 );
+    spdlog::debug( fmt::runtime( "    - TextureFormat {:d}: {:#034b} / {:s}" ), j, rendererInfo.texture_formats[j], tmpString2 );
   }
-  spdlog::debug( "  - MaxTextureWidth: {:d}", rendererInfo.max_texture_width );
-  spdlog::debug( "  - MaxTextureHeight: {:d}", rendererInfo.max_texture_height );
+  spdlog::debug( fmt::runtime( "  - MaxTextureWidth: {:d}" ), rendererInfo.max_texture_width );
+  spdlog::debug( fmt::runtime( "  - MaxTextureHeight: {:d}" ), rendererInfo.max_texture_height );
 }
 
 int CheckAndSelectRenderer( std::string_view const cliSelection ) {
-  spdlog::debug( "CheckAndSelectRenderer(std::string_view const cliSelection = \"{:s}\")", cliSelection );
+  spdlog::debug( fmt::runtime( "CheckAndSelectRenderer(std::string_view const cliSelection = \"{:s}\")" ), cliSelection );
   int numRDevices = SDL_GetNumRenderDrivers();
   int ret = 0;
   if( numRDevices < 0 ) {
-    spdlog::error( "CheckAndSelectRenderer - Error when SDL_GetNumRenderDrivers: {:s}", SDL_GetError() );
+    spdlog::error( fmt::runtime( "CheckAndSelectRenderer - Error when SDL_GetNumRenderDrivers: {:s}" ), SDL_GetError() );
     return -1;
   }
-  spdlog::debug( "CheckAndSelectRenderer - SDL_GetNumRenderDrivers() => {:d}", numRDevices );
+  spdlog::debug( fmt::runtime( "CheckAndSelectRenderer - SDL_GetNumRenderDrivers() => {:d}" ), numRDevices );
   for( int i = 0; i < numRDevices; i++ ) {
     SDL_Renderer *renderer = SDL_CreateRenderer( SFG::Window::GetSdlWindow().get(), i, 0 );
     if( renderer == nullptr ) {
-      spdlog::error( "CheckAndSelectRenderer - Error when SDL_CreateRenderer: {:s}", SDL_GetError() );
+      spdlog::error( fmt::runtime( "CheckAndSelectRenderer - Error when SDL_CreateRenderer: {:s}" ), SDL_GetError() );
     }
     SDL_RendererInfo info;
     if( SDL_GetRendererInfo( renderer, &info ) != 0 ) {
-      spdlog::error( "CheckAndSelectRenderer - Error when SDL_GetRendererInfo: {:s}", SDL_GetError() );
+      spdlog::error( fmt::runtime( "CheckAndSelectRenderer - Error when SDL_GetRendererInfo: {:s}" ), SDL_GetError() );
     }
     SDL_DestroyRenderer( renderer );
     PrintRendererInfo( info );
@@ -273,8 +273,8 @@ void InitializeComponents() {
 }
 
 void InitializeNetwork() {
-  SFG::NetworkHandler::SetReqRepInfo( fmt::format( "tcp://{:s}", SFG::ConfigHandler::get_Network_Host() ), SFG::ConfigHandler::get_Network_PortReqRep() );
-  SFG::NetworkHandler::SetPubSubInfo( fmt::format( "tcp://{:s}", SFG::ConfigHandler::get_Network_Host() ), SFG::ConfigHandler::get_Network_PortPubSub() );
+  SFG::NetworkHandler::SetReqRepInfo( fmt::format( fmt::runtime( "tcp://{:s}" ), SFG::ConfigHandler::get_Network_Host() ), SFG::ConfigHandler::get_Network_PortReqRep() );
+  SFG::NetworkHandler::SetPubSubInfo( fmt::format( fmt::runtime( "tcp://{:s}" ), SFG::ConfigHandler::get_Network_Host() ), SFG::ConfigHandler::get_Network_PortPubSub() );
   SFG::NetworkHandler::InitializeNetwork();
 }
 
@@ -305,7 +305,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   InitializeConfig();
   InitializeLoggers();
 
-  spdlog::trace( "better_main(args = {:c} \"{:s}\" {:c})", '{', fmt::join( args, "\", \"" ), '}' );
+  spdlog::trace( fmt::runtime( "better_main(args = {:c} \"{:s}\" {:c})" ), '{', fmt::join( args, "\", \"" ), '}' );
 
   bool quit = false;
   auto quitFlagDeleteFunction = []( bool * ) {};  // since quitFlag is on the stack
@@ -361,7 +361,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
     }
     if( performanceTexture ) {
       if( SDL_RenderCopy( windowRenderer.get(), performanceTexture, NULL, &performanceTextureRect ) != 0 ) {
-        spdlog::error( "graphicsHandler->draw - Error when SDL_RenderCopy: {:s}", SDL_GetError() );
+        spdlog::error( fmt::runtime( "graphicsHandler->draw - Error when SDL_RenderCopy: {:s}" ), SDL_GetError() );
       }
     }
   } );
@@ -387,10 +387,10 @@ int better_main( std::span< std::string_view const > args ) noexcept {
       false );
   SFG::LogicHandler::AddTimer(
       [&performanceString, &makeNewPerformanceTexture]( std::optional< std::chrono::secondsLongDouble > /*interval*/ ) {
-        performanceString = fmt::format( R"(Performance (per second):
+        performanceString = fmt::format( fmt::runtime( R"(Performance (per second):
 {:>20d} Frames drawn
 {:>20d} Input checks
-{:>20d} Logic loops)",
+{:>20d} Logic loops)" ),
                                          static_cast< uint64_t >( SFG::Performance::GetGraphicsLoop() * SFG::ConfigHandler::get_Logic_PerformanceInterval() ),
                                          static_cast< uint64_t >( SFG::Performance::GetInputLoop() * SFG::ConfigHandler::get_Logic_PerformanceInterval() ),
                                          static_cast< uint64_t >( SFG::Performance::GetLogicLoop() * SFG::ConfigHandler::get_Logic_PerformanceInterval() ) );
@@ -423,6 +423,6 @@ int better_main( std::span< std::string_view const > args ) noexcept {
 
   UninitializeComponents();
 
-  spdlog::trace( "better_main()~" );
+  spdlog::trace( fmt::runtime( "better_main()~" ) );
   return EXIT_SUCCESS;
 }

@@ -14,8 +14,8 @@ void ScriptHandler::deleteScript( Script* script ) {
 
 void ScriptHandler::Initialize() {
   ScriptHandler::logger = spdlog::get( "ScriptHandler" );
-  ScriptHandler::logger->trace( "Initialize()" );
-  ScriptHandler::logger->trace( "Initialize()~" );
+  ScriptHandler::logger->trace( fmt::runtime( "Initialize()" ) );
+  ScriptHandler::logger->trace( fmt::runtime( "Initialize()~" ) );
 }
 
 void ScriptHandler::UpdateScriptsFrame() {
@@ -31,19 +31,19 @@ void ScriptHandler::UpdateScriptsLogicFrame() {
 }
 
 void ScriptHandler::Destroy() {
-  ScriptHandler::logger->trace( "Destroy()" );
+  ScriptHandler::logger->trace( fmt::runtime( "Destroy()" ) );
   ScriptHandler::scripts.clear();
-  ScriptHandler::logger->trace( "Destroy()~" );
+  ScriptHandler::logger->trace( fmt::runtime( "Destroy()~" ) );
 }
 
 template < class T >
 std::shared_ptr< T > ScriptHandler::AddScript() {
   static_assert( std::is_base_of< Script, T >::value, "Class need to be inherited from `SFG::Script`!" );
-  ScriptHandler::logger->trace( "AddScript()" );
+  ScriptHandler::logger->trace( fmt::runtime( "AddScript()" ) );
   std::shared_ptr< T > script = std::shared_ptr< T >( new T(), deleteScript );
   ScriptHandler::scripts.push_back( script );
   script->Start();
-  ScriptHandler::logger->trace( "AddScript()~" );
+  ScriptHandler::logger->trace( fmt::runtime( "AddScript()~" ) );
   return script;
 }
 }  // namespace SFG

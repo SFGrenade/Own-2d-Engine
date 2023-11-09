@@ -18,18 +18,18 @@ void signalHandler( int sigNum ) {
 }
 
 void InitializeSignalHandler() noexcept {
-  spdlog::trace( "InitializeSignalHandler()" );
+  spdlog::trace( fmt::runtime( "InitializeSignalHandler()" ) );
 
   std::set_terminate( []() {
-    spdlog::trace( "terminateCallback()" );
-    spdlog::trace( "terminateCallback()~" );
+    spdlog::trace( fmt::runtime( "terminateCallback()" ) );
+    spdlog::trace( fmt::runtime( "terminateCallback()~" ) );
   } );
   for( int i = 0; i <= NSIG; i++ ) {
     auto retCode = signal( i, signalHandler );
-    spdlog::debug( "Installing handler for {}: {}", i, SIG_ERR != retCode );
+    spdlog::debug( fmt::runtime( "Installing handler for {}: {}" ), i, SIG_ERR != retCode );
   }
 
-  spdlog::trace( "InitializeSignalHandler()~" );
+  spdlog::trace( fmt::runtime( "InitializeSignalHandler()~" ) );
 }
 
 void InitializeLoggers() {
@@ -70,30 +70,30 @@ int main( int const argc, char const *const *argv ) {
 
 int better_main( std::span< std::string_view const > args ) noexcept {
   InitializeLoggers();
-  spdlog::trace( "better_main(args = {:c} \"{:s}\" {:c})", '{', fmt::join( args, "\", \"" ), '}' );
+  spdlog::trace( fmt::runtime( "better_main(args = {:c} \"{:s}\" {:c})" ), '{', fmt::join( args, "\", \"" ), '}' );
 
   InitializeSignalHandler();
 
-  spdlog::trace( "Constructing Server" );
+  spdlog::trace( fmt::runtime( "Constructing Server" ) );
   SFG::Server *myServer = new SFG::Server( 13337, 13338 );
 
   signalCallback = [myServer]( int32_t signal ) {
-    spdlog::trace( "signalCallback( signal: {} )", signal );
+    spdlog::trace( fmt::runtime( "signalCallback( signal: {} )" ), signal );
     myServer->stopServer();
     // delete myServer;
-    spdlog::trace( "signalCallback()~" );
+    spdlog::trace( fmt::runtime( "signalCallback()~" ) );
   };
 
-  spdlog::trace( "Calling Server::startServer" );
+  spdlog::trace( fmt::runtime( "Calling Server::startServer" ) );
   myServer->startServer();
-  spdlog::trace( "Called Server::startServer" );
+  spdlog::trace( fmt::runtime( "Called Server::startServer" ) );
 
-  spdlog::trace( "Waiting for Server to stop" );
+  spdlog::trace( fmt::runtime( "Waiting for Server to stop" ) );
   myServer->waitForServer();
 
-  spdlog::trace( "Cleaning up Server" );
+  spdlog::trace( fmt::runtime( "Cleaning up Server" ) );
   delete myServer;
 
-  spdlog::trace( "better_main()~" );
+  spdlog::trace( fmt::runtime( "better_main()~" ) );
   return EXIT_SUCCESS;
 }

@@ -86,36 +86,36 @@ void ConfigHandler::InitializeNoLog() {
 
 void ConfigHandler::Initialize() {
   ConfigHandler::logger = spdlog::get( "ConfigHandler" );
-  ConfigHandler::logger->trace( "Initialize()" );
+  ConfigHandler::logger->trace( fmt::runtime( "Initialize()" ) );
 
-  ConfigHandler::logger->debug( "Initialize - Loaded values:" );
-  ConfigHandler::logger->debug( "Initialize -     config_Logging_StdOutLevel = {:d}", static_cast< int >( config_Logging_StdOutLevel ) );
-  ConfigHandler::logger->debug( "Initialize -     config_Logging_LogFileLevel = {:d}", static_cast< int >( config_Logging_LogFileLevel ) );
-  ConfigHandler::logger->debug( "Initialize -     config_Font_PixelSize = {:d}", ConfigHandler::config_Font_PixelSize );
-  ConfigHandler::logger->debug( "Initialize -     config_Input_StopGameKey = {:d}", ConfigHandler::config_Input_StopGameKey );
-  ConfigHandler::logger->debug( "Initialize -     config_Logic_LogicInterval = {:f}", ConfigHandler::config_Logic_LogicInterval );
-  ConfigHandler::logger->debug( "Initialize -     config_Logic_NetworkInterval = {:f}", ConfigHandler::config_Logic_NetworkInterval );
-  ConfigHandler::logger->debug( "Initialize -     config_Logic_PerformanceInterval = {:f}", ConfigHandler::config_Logic_PerformanceInterval );
-  ConfigHandler::logger->debug( "Initialize -     config_Network_Host = \"{:s}\"", ConfigHandler::config_Network_Host );
-  ConfigHandler::logger->debug( "Initialize -     config_Network_PortReqRep = {:d}", ConfigHandler::config_Network_PortReqRep );
-  ConfigHandler::logger->debug( "Initialize -     config_Network_PortPubSub = {:d}", ConfigHandler::config_Network_PortPubSub );
-  ConfigHandler::logger->debug( "Initialize -     config_Window_Width = {:d}", ConfigHandler::config_Window_Width );
-  ConfigHandler::logger->debug( "Initialize -     config_Window_Height = {:d}", ConfigHandler::config_Window_Height );
-  ConfigHandler::logger->debug( "Initialize -     config_Audio_SampleRate = {:d}", ConfigHandler::config_Audio_SampleRate );
-  ConfigHandler::logger->debug( "Initialize -     config_Audio_Format = {:d}", ConfigHandler::config_Audio_Format );
-  ConfigHandler::logger->debug( "Initialize -     config_Audio_Channels = {:d}", ConfigHandler::config_Audio_Channels );
-  ConfigHandler::logger->debug( "Initialize -     config_Audio_ChunkSize = {:d}", ConfigHandler::config_Audio_ChunkSize );
-  ConfigHandler::logger->debug( "Initialize -     config_Rendering_Renderer = \"{:s}\"", ConfigHandler::config_Rendering_Renderer );
-  ConfigHandler::logger->debug( "Initialize -     config_Rendering_PerformanceStringTextColor = \"{:s}\"", ConfigHandler::config_Rendering_PerformanceStringTextColor );
-  ConfigHandler::logger->debug( "Initialize -     config_Rendering_PerformanceStringBackgroundColor = \"{:s}\"", ConfigHandler::config_Rendering_PerformanceStringBackgroundColor );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize - Loaded values:" ) );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Logging_StdOutLevel = {:d}" ), static_cast< int >( config_Logging_StdOutLevel ) );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Logging_LogFileLevel = {:d}" ), static_cast< int >( config_Logging_LogFileLevel ) );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Font_PixelSize = {:d}" ), ConfigHandler::config_Font_PixelSize );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Input_StopGameKey = {:d}" ), ConfigHandler::config_Input_StopGameKey );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Logic_LogicInterval = {:f}" ), ConfigHandler::config_Logic_LogicInterval );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Logic_NetworkInterval = {:f}" ), ConfigHandler::config_Logic_NetworkInterval );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Logic_PerformanceInterval = {:f}" ), ConfigHandler::config_Logic_PerformanceInterval );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Network_Host = \"{:s}\"" ), ConfigHandler::config_Network_Host );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Network_PortReqRep = {:d}" ), ConfigHandler::config_Network_PortReqRep );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Network_PortPubSub = {:d}" ), ConfigHandler::config_Network_PortPubSub );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Window_Width = {:d}" ), ConfigHandler::config_Window_Width );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Window_Height = {:d}" ), ConfigHandler::config_Window_Height );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Audio_SampleRate = {:d}" ), ConfigHandler::config_Audio_SampleRate );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Audio_Format = {:d}" ), ConfigHandler::config_Audio_Format );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Audio_Channels = {:d}" ), ConfigHandler::config_Audio_Channels );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Audio_ChunkSize = {:d}" ), ConfigHandler::config_Audio_ChunkSize );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Rendering_Renderer = \"{:s}\"" ), ConfigHandler::config_Rendering_Renderer );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Rendering_PerformanceStringTextColor = \"{:s}\"" ), ConfigHandler::config_Rendering_PerformanceStringTextColor );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Rendering_PerformanceStringBackgroundColor = \"{:s}\"" ), ConfigHandler::config_Rendering_PerformanceStringBackgroundColor );
 
-  ConfigHandler::logger->trace( "Initialize()~" );
+  ConfigHandler::logger->trace( fmt::runtime( "Initialize()~" ) );
 }
 
 void ConfigHandler::Destroy() {
-  ConfigHandler::logger->trace( "Destroy()" );
+  ConfigHandler::logger->trace( fmt::runtime( "Destroy()" ) );
 
-  ConfigHandler::logger->trace( "Destroy()~" );
+  ConfigHandler::logger->trace( fmt::runtime( "Destroy()~" ) );
 }
 
 spdlog::level::level_enum ConfigHandler::get_Logging_StdOutLevel() {

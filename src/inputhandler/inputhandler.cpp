@@ -13,18 +13,18 @@ std::vector< WindowEventCallback > InputHandler::windowEventCallbacks = std::vec
 
 void InputHandler::Initialize() {
   InputHandler::logger = spdlog::get( "InputHandler" );
-  InputHandler::logger->trace( "Initialize()" );
-  InputHandler::logger->trace( "Initialize()~" );
+  InputHandler::logger->trace( fmt::runtime( "Initialize()" ) );
+  InputHandler::logger->trace( fmt::runtime( "Initialize()~" ) );
 }
 
 void InputHandler::Destroy() {
-  InputHandler::logger->trace( "Destroy()" );
-  InputHandler::logger->trace( "Destroy()~" );
+  InputHandler::logger->trace( fmt::runtime( "Destroy()" ) );
+  InputHandler::logger->trace( fmt::runtime( "Destroy()~" ) );
 }
 
 void InputHandler::CheckInputs() {
   // todo: too many log lines
-  // InputHandler::logger->trace("CheckInputs()");
+  // InputHandler::logger->trace( fmt::runtime( "CheckInputs()" ) );
   while( SDL_PollEvent( &InputHandler::sdlEvent ) != 0 ) {
     if( InputHandler::quitEventCallbacks.size() && InputHandler::sdlEvent.type == SDL_QUIT ) {
       for( auto callback : InputHandler::quitEventCallbacks )
@@ -51,55 +51,55 @@ void InputHandler::CheckInputs() {
     }
   }
   // todo: too many log lines
-  // InputHandler::logger->trace("CheckInputs()~");
+  // InputHandler::logger->trace( fmt::runtime( "CheckInputs()~" ) );
 }
 
 void InputHandler::RegisterKeyDownEvent( KeyCallback callback ) {
-  InputHandler::logger->trace( "RegisterKeyDownEvent(KeyCallback callback)" );
+  InputHandler::logger->trace( fmt::runtime( "RegisterKeyDownEvent(KeyCallback callback)" ) );
   if( callback )
     InputHandler::keyDownCallbacks.push_back( callback );
-  InputHandler::logger->trace( "RegisterKeyDownEvent()~" );
+  InputHandler::logger->trace( fmt::runtime( "RegisterKeyDownEvent()~" ) );
 }
 
 void InputHandler::RegisterKeyUpEvent( KeyCallback callback ) {
-  InputHandler::logger->trace( "RegisterKeyUpEvent(KeyCallback callback)" );
+  InputHandler::logger->trace( fmt::runtime( "RegisterKeyUpEvent(KeyCallback callback)" ) );
   if( callback )
     InputHandler::keyUpCallbacks.push_back( callback );
-  InputHandler::logger->trace( "RegisterKeyUpEvent()~" );
+  InputHandler::logger->trace( fmt::runtime( "RegisterKeyUpEvent()~" ) );
 }
 
 void InputHandler::RegisterMouseButtonEvent( MouseButtonCallback callback ) {
-  InputHandler::logger->trace( "RegisterMouseButtonEvent(MouseButtonCallback callback)" );
+  InputHandler::logger->trace( fmt::runtime( "RegisterMouseButtonEvent(MouseButtonCallback callback)" ) );
   if( callback )
     InputHandler::mouseButtonCallbacks.push_back( callback );
-  InputHandler::logger->trace( "RegisterMouseButtonEvent()~" );
+  InputHandler::logger->trace( fmt::runtime( "RegisterMouseButtonEvent()~" ) );
 }
 
 void InputHandler::RegisterMouseMotionEvent( MouseMotionCallback callback ) {
-  InputHandler::logger->trace( "RegisterMouseMotionEvent(MouseMotionCallback callback)" );
+  InputHandler::logger->trace( fmt::runtime( "RegisterMouseMotionEvent(MouseMotionCallback callback)" ) );
   if( callback )
     InputHandler::mouseMotionCallbacks.push_back( callback );
-  InputHandler::logger->trace( "RegisterMouseMotionEvent()~" );
+  InputHandler::logger->trace( fmt::runtime( "RegisterMouseMotionEvent()~" ) );
 }
 
 void InputHandler::RegisterMouseWheelEvent( MouseWheelCallback callback ) {
-  InputHandler::logger->trace( "RegisterMouseWheelEvent(MouseWheelCallback callback)" );
+  InputHandler::logger->trace( fmt::runtime( "RegisterMouseWheelEvent(MouseWheelCallback callback)" ) );
   if( callback )
     InputHandler::mouseWheelCallbacks.push_back( callback );
-  InputHandler::logger->trace( "RegisterMouseWheelEvent()~" );
+  InputHandler::logger->trace( fmt::runtime( "RegisterMouseWheelEvent()~" ) );
 }
 
 void InputHandler::RegisterQuitEvent( QuitEventCallback callback ) {
-  InputHandler::logger->trace( "RegisterQuitEvent(QuitEventCallback callback)" );
+  InputHandler::logger->trace( fmt::runtime( "RegisterQuitEvent(QuitEventCallback callback)" ) );
   if( callback )
     InputHandler::quitEventCallbacks.push_back( callback );
-  InputHandler::logger->trace( "RegisterQuitEvent()~" );
+  InputHandler::logger->trace( fmt::runtime( "RegisterQuitEvent()~" ) );
 }
 
 void InputHandler::RegisterWindowEvent( WindowEventCallback callback ) {
-  InputHandler::logger->trace( "RegisterWindowEvent(WindowEventCallback callback)" );
+  InputHandler::logger->trace( fmt::runtime( "RegisterWindowEvent(WindowEventCallback callback)" ) );
   if( callback )
     InputHandler::windowEventCallbacks.push_back( callback );
-  InputHandler::logger->trace( "RegisterWindowEvent()~" );
+  InputHandler::logger->trace( fmt::runtime( "RegisterWindowEvent()~" ) );
 }
 }  // namespace SFG
