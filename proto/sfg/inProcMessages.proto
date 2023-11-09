@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package SFG.Proto;
+
+message MsgContent {
+  string username = 1;
+  string msgText = 2;
+}
+
+message SendMessageRequest {
+  MsgContent msg = 1;
+}
+message SendMessageResponse {
+  bool success = 1;
+  string errorMsg = 2;
+}
