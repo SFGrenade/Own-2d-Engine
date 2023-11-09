@@ -1,4 +1,4 @@
-#include "globals.h"
+#include "_globals/misc.h"
 
 std::vector< std::string > str_split( std::string s, std::string delim ) {
   std::vector< std::string > ret;
@@ -11,4 +11,10 @@ std::vector< std::string > str_split( std::string s, std::string delim ) {
   }
   ret.push_back( s );
   return ret;
+}
+
+std::string getThreadId() {
+  std::stringstream ret;
+  ret << std::this_thread::get_id();
+  return ret.str();
 }
