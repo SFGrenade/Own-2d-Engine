@@ -1,5 +1,8 @@
-// Include our overall Objects
+#include <span>
+#include <string_view>
+#include <vector>
 
+// Include our overall Objects
 #include "_globals/misc.h"
 #include "_globals/moreChrono.h"
 #include "confighandler/confighandler.h"
@@ -248,8 +251,16 @@ void InitializeLoggers() {
   normalFileSink->set_level( SFG::ConfigHandler::get_Logging_LogFileLevel() );
   spdlog::sinks_init_list normalSinkList = { normalFileSink, consoleSink };
 
-  std::vector< std::string > allLoggerNames
-      = { "ConfigHandler", "FontHandler", "GraphicsHandler", "InputHandler", "LogicHandler", "NetworkHandler", "Timer", "ScriptHandler", "LogScript", "Window" };
+  std::vector< std::string > allLoggerNames = { "ConfigHandler",
+                                                "FontHandler",
+                                                "GraphicsHandler",
+                                                "InputHandler",
+                                                "LogicHandler",
+                                                "NetworkHandler",
+                                                "Timer",
+                                                "ScriptHandler",
+                                                "LogScript",
+                                                "Window" };
   for( auto name : allLoggerNames ) {
     spdlogger logger = std::make_shared< spdlog::logger >( name, normalSinkList.begin(), normalSinkList.end() );
     logger->set_level( spdlog::level::trace );
@@ -274,8 +285,10 @@ void InitializeComponents() {
 }
 
 void InitializeNetwork() {
-  SFG::NetworkHandler::SetReqRepInfo( fmt::format( fmt::runtime( "tcp://{:s}" ), SFG::ConfigHandler::get_Network_Host() ), SFG::ConfigHandler::get_Network_PortReqRep() );
-  SFG::NetworkHandler::SetPubSubInfo( fmt::format( fmt::runtime( "tcp://{:s}" ), SFG::ConfigHandler::get_Network_Host() ), SFG::ConfigHandler::get_Network_PortPubSub() );
+  SFG::NetworkHandler::SetReqRepInfo( fmt::format( fmt::runtime( "tcp://{:s}" ), SFG::ConfigHandler::get_Network_Host() ),
+                                      SFG::ConfigHandler::get_Network_PortReqRep() );
+  SFG::NetworkHandler::SetPubSubInfo( fmt::format( fmt::runtime( "tcp://{:s}" ), SFG::ConfigHandler::get_Network_Host() ),
+                                      SFG::ConfigHandler::get_Network_PortPubSub() );
   SFG::NetworkHandler::InitializeNetwork();
 }
 
@@ -347,25 +360,30 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   backgroundColor.b = static_cast< uint8_t >( std::stoi( bgCol[2] ) );
   backgroundColor.a = static_cast< uint8_t >( std::stoi( bgCol[3] ) );
   graphicsHandler->RegisterDrawEvent( []( std::shared_ptr< SDL_Renderer > /*windowRenderer*/ ) { SFG::ScriptHandler::UpdateScriptsFrame(); } );
-  graphicsHandler->RegisterDrawEvent( [&performanceString, &makeNewPerformanceTexture, &performanceTexture, &performanceTextureRect, foregroundColor, backgroundColor]( std::shared_ptr< SDL_Renderer > windowRenderer ) {
-    if( makeNewPerformanceTexture ) {
-      SDL_Surface *textSurface
-          = TTF_RenderUTF8_Shaded_Wrapped( SFG::FontHandler::GetFont( SFG::FontType::Console ).get(), performanceString.c_str(), foregroundColor, backgroundColor, 0 );
-      if( performanceTexture ) {
-        SDL_DestroyTexture( performanceTexture );
-      }
-      performanceTexture = SDL_CreateTextureFromSurface( windowRenderer.get(), textSurface );
-      performanceTextureRect.w = textSurface->w;
-      performanceTextureRect.h = textSurface->h;
-      SDL_FreeSurface( textSurface );
-      makeNewPerformanceTexture = false;
-    }
-    if( performanceTexture ) {
-      if( SDL_RenderCopy( windowRenderer.get(), performanceTexture, NULL, &performanceTextureRect ) != 0 ) {
-        spdlog::error( fmt::runtime( "graphicsHandler->draw - Error when SDL_RenderCopy: {:s}" ), SDL_GetError() );
-      }
-    }
-  } );
+  graphicsHandler->RegisterDrawEvent(
+      [&performanceString, &makeNewPerformanceTexture, &performanceTexture, &performanceTextureRect, foregroundColor, backgroundColor](
+          std::shared_ptr< SDL_Renderer > windowRenderer ) {
+        if( makeNewPerformanceTexture ) {
+          SDL_Surface *textSurface = TTF_RenderUTF8_Shaded_Wrapped( SFG::FontHandler::GetFont( SFG::FontType::Console ).get(),
+                                                                    performanceString.c_str(),
+                                                                    foregroundColor,
+                                                                    backgroundColor,
+                                                                    0 );
+          if( performanceTexture ) {
+            SDL_DestroyTexture( performanceTexture );
+          }
+          performanceTexture = SDL_CreateTextureFromSurface( windowRenderer.get(), textSurface );
+          performanceTextureRect.w = textSurface->w;
+          performanceTextureRect.h = textSurface->h;
+          SDL_FreeSurface( textSurface );
+          makeNewPerformanceTexture = false;
+        }
+        if( performanceTexture ) {
+          if( SDL_RenderCopy( windowRenderer.get(), performanceTexture, NULL, &performanceTextureRect ) != 0 ) {
+            spdlog::error( fmt::runtime( "graphicsHandler->draw - Error when SDL_RenderCopy: {:s}" ), SDL_GetError() );
+          }
+        }
+      } );
   graphicsHandler->SetQuitFlag( quitPtr );
 
   SFG::InputHandler::RegisterQuitEvent( [&quit]() { quit = true; } );

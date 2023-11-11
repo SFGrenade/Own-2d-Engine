@@ -2,6 +2,7 @@
 #include <csignal>
 #include <cstdint>
 #include <iostream>
+#include <span>
 #include <sstream>
 #include <string_view>
 #include <vector>
@@ -40,10 +41,7 @@ class ThreadServer {
 zmq::context_t ThreadServer::threadNetworkContext_ = zmq::context_t( 0 );
 
 ThreadServer::ThreadServer( std::string const& host, bool server )
-  : logger_( spdlog::get( "TSrv" ) ),
-    network_( host, server, &ThreadServer::threadNetworkContext_ ),
-    thread_( nullptr ),
-    loop_( false ) {
+    : logger_( spdlog::get( "TSrv" ) ), network_( host, server, &ThreadServer::threadNetworkContext_ ), thread_( nullptr ), loop_( false ) {
   logger_->trace( fmt::runtime( "[thread {:s}] ThreadServer(std::string const& host = \"{:s}\", bool server = {})" ), getThreadId(), host, server );
   network_.subscribe( new SFG::Proto::InterThreadFunctionCall(), [this]( google::protobuf::Message const& message ) {
     this->onInterThreadFunctionCall( static_cast< SFG::Proto::InterThreadFunctionCall const& >( message ) );
@@ -101,19 +99,23 @@ void ThreadServer::stopThreadServer() {
   logger_->trace( fmt::runtime( "[thread {:s}] stopThreadServer()~" ), getThreadId() );
 }
 void ThreadServer::sendFunctionCall( std::function< void() > functionToSend ) {
-  logger_->trace( fmt::runtime( "[thread {:s}] sendFunctionCall(std::function< void() > functionToSend = {:p})" ), getThreadId(), static_cast< void* >( functionToSend.target< void(*)() >() ) );
+  logger_->trace( fmt::runtime( "[thread {:s}] sendFunctionCall(std::function< void() > functionToSend = {:p})" ),
+                  getThreadId(),
+                  static_cast< void* >( functionToSend.target< void ( * )() >() ) );
 
   SFG::Proto::InterThreadFunctionCall* msg = new SFG::Proto::InterThreadFunctionCall();
-  msg->set_functionpointer( reinterpret_cast< int64_t >( functionToSend.target< void(*)() >() ) );
+  msg->set_functionpointer( reinterpret_cast< int64_t >( functionToSend.target< void ( * )() >() ) );
   network_.sendMessage( msg );
 
   logger_->trace( fmt::runtime( "[thread {:s}] sendFunctionCall()~" ), getThreadId() );
 }
 void ThreadServer::onInterThreadFunctionCall( SFG::Proto::InterThreadFunctionCall const& msg ) {
-  void( *functionToCall )() = reinterpret_cast< void(*)() >( msg.functionpointer() );
-  logger_->trace( fmt::runtime( "[thread {:s}] onInterThreadFunctionCall(SFG::Proto::InterThreadFunctionCall const& msg = {:p})" ), getThreadId(), static_cast< void* >( functionToCall ) );
+  void ( *functionToCall )() = reinterpret_cast< void ( * )() >( msg.functionpointer() );
+  logger_->trace( fmt::runtime( "[thread {:s}] onInterThreadFunctionCall(SFG::Proto::InterThreadFunctionCall const& msg = {:p})" ),
+                  getThreadId(),
+                  static_cast< void* >( functionToCall ) );
 
-  if ( functionToCall != nullptr ) {
+  if( functionToCall != nullptr ) {
     functionToCall();
   } else {
     stopThreadServer();
@@ -136,8 +138,7 @@ class TestClass {
   private:
   spdlogger logger_;
 };
-TestClass::TestClass()
-  : logger_( spdlog::get( "TSrv" ) ) {
+TestClass::TestClass() : logger_( spdlog::get( "TSrv" ) ) {
   logger_->trace( fmt::runtime( "[thread {:s}] TestClass()" ), getThreadId() );
   logger_->trace( fmt::runtime( "[thread {:s}] TestClass()~" ), getThreadId() );
 }
@@ -210,22 +211,20 @@ void InitializeLoggers() {
 #pragma region Other Misc
 
 template < typename TypeObject, typename TypeFunction, typename... TypeArgs >
-void TestStuff( ThreadServer* threadPeer, TypeObject* objSelf, TypeFunction( TypeObject::*objFunction )( TypeArgs... ), TypeArgs... args ) {
-  threadPeer->sendFunctionCall( [objSelf, objFunction, args...]() {
-    objSelf->*objFunction( args... );
-  } );
+void TestStuff( ThreadServer* threadPeer, TypeObject* objSelf, TypeFunction ( TypeObject::*objFunction )( TypeArgs... ), TypeArgs... args ) {
+  threadPeer->sendFunctionCall( [objSelf, objFunction, args...]() { objSelf->*objFunction( args... ); } );
 }
 
 #pragma endregion Other Misc
 
-int main( int const argc, char const *const *argv ) {
+int main( int const argc, char const* const* argv ) {
   int better_main( std::span< std::string_view const > ) noexcept;
   std::vector< std::string_view > args( argv, std::next( argv, static_cast< std::ptrdiff_t >( argc ) ) );
   return better_main( args );
 }
 
 void MyThreadFunction() {
-  ThreadServer *myServer = new ThreadServer( "inproc://example", true );
+  ThreadServer* myServer = new ThreadServer( "inproc://example", true );
   myServer->startThreadServer();
   myServer->waitForThreadServer();
   delete myServer;
@@ -242,9 +241,9 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
 
   spdlog::trace( fmt::runtime( "[thread {:s}] Constructing Server" ), getThreadId() );
-  ThreadServer *myServer = new ThreadServer( "inproc://example", false );
+  ThreadServer* myServer = new ThreadServer( "inproc://example", false );
 
-  TestClass *myTestClass = new TestClass();
+  TestClass* myTestClass = new TestClass();
 
   signalCallback = [myServer]( int32_t signal ) {
     spdlog::trace( fmt::runtime( "[thread {:s}] signalCallback( signal: {} )" ), getThreadId(), signal );
