@@ -5,7 +5,7 @@
 
 // Including our headers
 #include "_globals/spdlogInclude.h"
-#include "logichandler/timer.h"
+#include "logic/timer.h"
 
 namespace SFG {
 class LogicHandler {

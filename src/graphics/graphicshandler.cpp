@@ -1,5 +1,6 @@
-#include "graphicshandler/graphicshandler.h"
-#include "performance/performance.h"
+#include "graphics/graphicshandler.h"
+
+#include "logic/performance.h"
 
 namespace SFG {
 GraphicsHandler::GraphicsHandler( std::shared_ptr< SDL_Window > window )

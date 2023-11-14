@@ -5,15 +5,15 @@
 // Include our overall Objects
 #include "_globals/misc.h"
 #include "_globals/moreChrono.h"
-#include "confighandler/confighandler.h"
-#include "fonthandler/fonthandler.h"
-#include "inputhandler/inputhandler.h"
-#include "logichandler/logichandler.h"
-#include "networkhandler/networkhandler.h"
-#include "performance/performance.h"
-#include "scripthandler/CustomScripts/logscript.h"
-#include "scripthandler/scripthandler.h"
-#include "window/window.h"
+#include "graphics/window.h"
+#include "input/confighandler.h"
+#include "input/fonthandler.h"
+#include "input/inputhandler.h"
+#include "logic/CustomScripts/logscript.h"
+#include "logic/logichandler.h"
+#include "logic/performance.h"
+#include "logic/scripthandler.h"
+#include "network/networkhandler.h"
 
 #pragma region Debug Output
 

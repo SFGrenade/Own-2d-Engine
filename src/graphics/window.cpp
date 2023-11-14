@@ -1,5 +1,6 @@
-#include "confighandler/confighandler.h"
-#include "window/window.h"
+#include "graphics/window.h"
+
+#include "input/confighandler.h"
 
 #define SDL_IMG_INIT_EVERYTHING ( IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP )
 
@@ -64,7 +65,12 @@ bool Window::InitializeSDL() {
     Window::logger->trace( fmt::runtime( "InitializeSDL()~" ) );
     return false;
   }
-  if( ( Mix_Init( SDL_MIX_INIT_MP3_OGG ) != SDL_MIX_INIT_MP3_OGG ) || Mix_OpenAudio( ConfigHandler::get_Audio_SampleRate(), ConfigHandler::get_Audio_Format(), ConfigHandler::get_Audio_Channels(), ConfigHandler::get_Audio_ChunkSize() ) < 0 ) {
+  if( ( Mix_Init( SDL_MIX_INIT_MP3_OGG ) != SDL_MIX_INIT_MP3_OGG )
+      || Mix_OpenAudio( ConfigHandler::get_Audio_SampleRate(),
+                        ConfigHandler::get_Audio_Format(),
+                        ConfigHandler::get_Audio_Channels(),
+                        ConfigHandler::get_Audio_ChunkSize() )
+             < 0 ) {
     Window::logger->error( fmt::runtime( "SDL_mixer initialize error! {:s}" ), Mix_GetError() );
     Window::logger->trace( fmt::runtime( "InitializeSDL()~" ) );
     return false;

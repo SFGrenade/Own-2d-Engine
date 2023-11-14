@@ -27,7 +27,7 @@ class ThreadServer {
   void sendFunctionCall( std::function< void() > functionToSend );
 
   private:
-  void onInterThreadFunctionCall( SFG::Proto::InterThreadFunctionCall const& msg );
+  void onInterThreadFunctionCall( SFG::Proto::Test::InterThreadFunctionCall const& msg );
 
   private:
   spdlogger logger_;
@@ -43,8 +43,8 @@ zmq::context_t ThreadServer::threadNetworkContext_ = zmq::context_t( 0 );
 ThreadServer::ThreadServer( std::string const& host, bool server )
     : logger_( spdlog::get( "TSrv" ) ), network_( host, server, &ThreadServer::threadNetworkContext_ ), thread_( nullptr ), loop_( false ) {
   logger_->trace( fmt::runtime( "[thread {:s}] ThreadServer(std::string const& host = \"{:s}\", bool server = {})" ), getThreadId(), host, server );
-  network_.subscribe( new SFG::Proto::InterThreadFunctionCall(), [this]( google::protobuf::Message const& message ) {
-    this->onInterThreadFunctionCall( static_cast< SFG::Proto::InterThreadFunctionCall const& >( message ) );
+  network_.subscribe( new SFG::Proto::Test::InterThreadFunctionCall(), [this]( google::protobuf::Message const& message ) {
+    this->onInterThreadFunctionCall( static_cast< SFG::Proto::Test::InterThreadFunctionCall const& >( message ) );
   } );
   logger_->trace( fmt::runtime( "[thread {:s}] ThreadServer()~" ), getThreadId() );
 }
@@ -103,15 +103,15 @@ void ThreadServer::sendFunctionCall( std::function< void() > functionToSend ) {
                   getThreadId(),
                   static_cast< void* >( functionToSend.target< void ( * )() >() ) );
 
-  SFG::Proto::InterThreadFunctionCall* msg = new SFG::Proto::InterThreadFunctionCall();
+  SFG::Proto::Test::InterThreadFunctionCall* msg = new SFG::Proto::Test::InterThreadFunctionCall();
   msg->set_functionpointer( reinterpret_cast< int64_t >( functionToSend.target< void ( * )() >() ) );
   network_.sendMessage( msg );
 
   logger_->trace( fmt::runtime( "[thread {:s}] sendFunctionCall()~" ), getThreadId() );
 }
-void ThreadServer::onInterThreadFunctionCall( SFG::Proto::InterThreadFunctionCall const& msg ) {
+void ThreadServer::onInterThreadFunctionCall( SFG::Proto::Test::InterThreadFunctionCall const& msg ) {
   void ( *functionToCall )() = reinterpret_cast< void ( * )() >( msg.functionpointer() );
-  logger_->trace( fmt::runtime( "[thread {:s}] onInterThreadFunctionCall(SFG::Proto::InterThreadFunctionCall const& msg = {:p})" ),
+  logger_->trace( fmt::runtime( "[thread {:s}] onInterThreadFunctionCall(SFG::Proto::Test::InterThreadFunctionCall const& msg = {:p})" ),
                   getThreadId(),
                   static_cast< void* >( functionToCall ) );
 

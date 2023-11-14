@@ -1,7 +1,7 @@
-#include "scripthandler/scripthandler.h"
+#include "logic/scripthandler.h"
 
-#include "scripthandler/CustomScripts/logscript.h"
-#include "scripthandler/script.h"
+#include "logic/CustomScripts/logscript.h"
+#include "logic/script.h"
 
 namespace SFG {
 spdlogger ScriptHandler::logger = nullptr;

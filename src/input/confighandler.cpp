@@ -1,6 +1,7 @@
-#include "confighandler/confighandler.h"
+#include "input/confighandler.h"
 
 #include <SimpleIni.h>
+
 #include "_globals/sdlInclude.h"
 
 namespace SFG {
@@ -38,8 +39,10 @@ void ConfigHandler::InitializeNoLog() {
     throw new std::runtime_error( "Error reading config file at \"" + configPath + "\"" );
   }
 
-  ConfigHandler::config_Logging_StdOutLevel = static_cast< spdlog::level::level_enum >( ini.GetLongValue( "Logging", "StdOutLevel", static_cast< int >( spdlog::level::warn ) ) );
-  ConfigHandler::config_Logging_LogFileLevel = static_cast< spdlog::level::level_enum >( ini.GetLongValue( "Logging", "LogFileLevel", static_cast< int >( spdlog::level::trace ) ) );
+  ConfigHandler::config_Logging_StdOutLevel
+      = static_cast< spdlog::level::level_enum >( ini.GetLongValue( "Logging", "StdOutLevel", static_cast< int >( spdlog::level::warn ) ) );
+  ConfigHandler::config_Logging_LogFileLevel
+      = static_cast< spdlog::level::level_enum >( ini.GetLongValue( "Logging", "LogFileLevel", static_cast< int >( spdlog::level::trace ) ) );
   ConfigHandler::config_Font_PixelSize = static_cast< int >( ini.GetLongValue( "Font", "PixelSize", 18 ) );
   ConfigHandler::config_Input_StopGameKey = static_cast< SDL_Keycode >( ini.GetLongValue( "Input", "StopGameKey", SDLK_ESCAPE ) );
   ConfigHandler::config_Logic_LogicInterval = static_cast< double >( ini.GetDoubleValue( "Logic", "LogicInterval", 50.0 ) );
@@ -58,25 +61,59 @@ void ConfigHandler::InitializeNoLog() {
   ConfigHandler::config_Rendering_PerformanceStringTextColor = ini.GetValue( "Rendering", "PerformanceStringTextColor", "255 255 255 255" );
   ConfigHandler::config_Rendering_PerformanceStringBackgroundColor = ini.GetValue( "Rendering", "PerformanceStringBackgroundColor", "0 0 0 0" );
 
-  ini.SetLongValue( "Logging", "StdOutLevel", static_cast< long >( ConfigHandler::config_Logging_StdOutLevel ), R"(either of trace = 0, debug = 1, info = 2, warn = 3, err = 4, critical = 5, off = 6)" );
-  ini.SetLongValue( "Logging", "LogFileLevel", static_cast< long >( ConfigHandler::config_Logging_LogFileLevel ), R"(either of trace = 0, debug = 1, info = 2, warn = 3, err = 4, critical = 5, off = 6)" );
+  ini.SetLongValue( "Logging",
+                    "StdOutLevel",
+                    static_cast< long >( ConfigHandler::config_Logging_StdOutLevel ),
+                    R"(either of trace = 0, debug = 1, info = 2, warn = 3, err = 4, critical = 5, off = 6)" );
+  ini.SetLongValue( "Logging",
+                    "LogFileLevel",
+                    static_cast< long >( ConfigHandler::config_Logging_LogFileLevel ),
+                    R"(either of trace = 0, debug = 1, info = 2, warn = 3, err = 4, critical = 5, off = 6)" );
   ini.SetLongValue( "Font", "PixelSize", static_cast< long >( ConfigHandler::config_Font_PixelSize ), R"(Size of the displayed text, in pixels)" );
-  ini.SetLongValue( "Input", "StopGameKey", static_cast< long >( ConfigHandler::config_Input_StopGameKey ), R"(See https://wiki.libsdl.org/SDL2/SDLKeycodeLookup for the number)" );
-  ini.SetDoubleValue( "Logic", "LogicInterval", static_cast< double >( ConfigHandler::config_Logic_LogicInterval ), R"(How many times per second will the LogicUpdate be called?)" );
-  ini.SetDoubleValue( "Logic", "NetworkInterval", static_cast< double >( ConfigHandler::config_Logic_NetworkInterval ), R"(How many times per second will the network loop be run?)" );
-  ini.SetDoubleValue( "Logic", "PerformanceInterval", static_cast< double >( ConfigHandler::config_Logic_PerformanceInterval ), R"(How many times per second will the performance be evaluated?)" );
+  ini.SetLongValue( "Input",
+                    "StopGameKey",
+                    static_cast< long >( ConfigHandler::config_Input_StopGameKey ),
+                    R"(See https://wiki.libsdl.org/SDL2/SDLKeycodeLookup for the number)" );
+  ini.SetDoubleValue( "Logic",
+                      "LogicInterval",
+                      static_cast< double >( ConfigHandler::config_Logic_LogicInterval ),
+                      R"(How many times per second will the LogicUpdate be called?)" );
+  ini.SetDoubleValue( "Logic",
+                      "NetworkInterval",
+                      static_cast< double >( ConfigHandler::config_Logic_NetworkInterval ),
+                      R"(How many times per second will the network loop be run?)" );
+  ini.SetDoubleValue( "Logic",
+                      "PerformanceInterval",
+                      static_cast< double >( ConfigHandler::config_Logic_PerformanceInterval ),
+                      R"(How many times per second will the performance be evaluated?)" );
   ini.SetValue( "Network", "Host", ConfigHandler::config_Network_Host.c_str(), R"(Server address)" );
   ini.SetLongValue( "Network", "PortReqRep", static_cast< long >( ConfigHandler::config_Network_PortReqRep ), R"(Port of the request-reply service)" );
   ini.SetLongValue( "Network", "PortPubSub", static_cast< long >( ConfigHandler::config_Network_PortPubSub ), R"(Port of the publish-subscribe service)" );
   ini.SetLongValue( "Window", "Width", static_cast< long >( ConfigHandler::config_Window_Width ), R"(Width of the window, in pixels)" );
   ini.SetLongValue( "Window", "Height", static_cast< long >( ConfigHandler::config_Window_Height ), R"(Height of the window, in pixels)" );
   ini.SetLongValue( "Audio", "SampleRate", static_cast< long >( ConfigHandler::config_Audio_SampleRate ), R"(Like the sample rate of audio files)" );
-  ini.SetLongValue( "Audio", "Format", static_cast< long >( ConfigHandler::config_Audio_Format ), R"(SDL_mixer.h - `MIX_DEFAULT_FORMAT` - defaults to `AUDIO_S16LSB`, which is 0x8010)", true );
+  ini.SetLongValue( "Audio",
+                    "Format",
+                    static_cast< long >( ConfigHandler::config_Audio_Format ),
+                    R"(SDL_mixer.h - `MIX_DEFAULT_FORMAT` - defaults to `AUDIO_S16LSB`, which is 0x8010)",
+                    true );
   ini.SetLongValue( "Audio", "Channels", static_cast< long >( ConfigHandler::config_Audio_Channels ), R"(1 = mono, 2 = stereo, ...)" );
-  ini.SetLongValue( "Audio", "ChunkSize", static_cast< long >( ConfigHandler::config_Audio_ChunkSize ), R"(Audio buffer size in sample frames (samples divided by channel count), 2048 is a good default)" );
-  ini.SetValue( "Rendering", "Renderer", ConfigHandler::config_Rendering_Renderer.c_str(), R"(nothing for the first available or check log file for a list of available renderers)" );
-  ini.SetValue( "Rendering", "PerformanceStringTextColor", ConfigHandler::config_Rendering_PerformanceStringTextColor.c_str(), R"(Red Green Blue Alpha (each 0 - 255))" );
-  ini.SetValue( "Rendering", "PerformanceStringBackgroundColor", ConfigHandler::config_Rendering_PerformanceStringBackgroundColor.c_str(), R"(Red Green Blue Alpha (each 0 - 255))" );
+  ini.SetLongValue( "Audio",
+                    "ChunkSize",
+                    static_cast< long >( ConfigHandler::config_Audio_ChunkSize ),
+                    R"(Audio buffer size in sample frames (samples divided by channel count), 2048 is a good default)" );
+  ini.SetValue( "Rendering",
+                "Renderer",
+                ConfigHandler::config_Rendering_Renderer.c_str(),
+                R"(nothing for the first available or check log file for a list of available renderers)" );
+  ini.SetValue( "Rendering",
+                "PerformanceStringTextColor",
+                ConfigHandler::config_Rendering_PerformanceStringTextColor.c_str(),
+                R"(Red Green Blue Alpha (each 0 - 255))" );
+  ini.SetValue( "Rendering",
+                "PerformanceStringBackgroundColor",
+                ConfigHandler::config_Rendering_PerformanceStringBackgroundColor.c_str(),
+                R"(Red Green Blue Alpha (each 0 - 255))" );
 
   rc = ini.SaveFile( configPath.c_str() );
   if( rc != SI_OK ) {
@@ -106,8 +143,10 @@ void ConfigHandler::Initialize() {
   ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Audio_Channels = {:d}" ), ConfigHandler::config_Audio_Channels );
   ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Audio_ChunkSize = {:d}" ), ConfigHandler::config_Audio_ChunkSize );
   ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Rendering_Renderer = \"{:s}\"" ), ConfigHandler::config_Rendering_Renderer );
-  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Rendering_PerformanceStringTextColor = \"{:s}\"" ), ConfigHandler::config_Rendering_PerformanceStringTextColor );
-  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Rendering_PerformanceStringBackgroundColor = \"{:s}\"" ), ConfigHandler::config_Rendering_PerformanceStringBackgroundColor );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Rendering_PerformanceStringTextColor = \"{:s}\"" ),
+                                ConfigHandler::config_Rendering_PerformanceStringTextColor );
+  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Rendering_PerformanceStringBackgroundColor = \"{:s}\"" ),
+                                ConfigHandler::config_Rendering_PerformanceStringBackgroundColor );
 
   ConfigHandler::logger->trace( fmt::runtime( "Initialize()~" ) );
 }

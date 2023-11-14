@@ -4,7 +4,7 @@
 
 // Including our headers
 #include "_globals/spdlogInclude.h"
-#include "scripthandler/script.h"
+#include "logic/script.h"
 
 namespace SFG {
 class ScriptHandler {

@@ -1,4 +1,4 @@
-#include "logichandler/timer.h"
+#include "logic/timer.h"
 
 namespace SFG {
 Timer::Timer( TimerCallback callback, std::chrono::nanoseconds interval, bool returnInterval )

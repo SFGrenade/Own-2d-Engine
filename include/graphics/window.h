@@ -5,7 +5,7 @@
 // Including our headers
 #include "_globals/sdlInclude.h"
 #include "_globals/spdlogInclude.h"
-#include "graphicshandler/graphicshandler.h"
+#include "graphics/graphicshandler.h"
 
 namespace SFG {
 class Window {

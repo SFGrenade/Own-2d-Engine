@@ -1,4 +1,4 @@
-#include "networkhandler/networkhandler.h"
+#include "network/networkhandler.h"
 
 namespace SFG {
 spdlogger NetworkHandler::logger = nullptr;

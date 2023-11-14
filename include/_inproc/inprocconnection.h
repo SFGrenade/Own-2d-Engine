@@ -17,10 +17,10 @@ class InProcConnection {
 
   void run();
 
-  void sendInProcTestThis( std::string const& t1, std::string const& t2 );
+  // void sendInProcTestThis( std::string const& t1, std::string const& t2 );
 
   private:
-  void onInProcTestThis( SFG::Proto::InProc::TestThis const& msg );
+  // void onInProcTestThis( SFG::Proto::InProc::TestThis const& msg );
 
   private:
   spdlogger logger_;

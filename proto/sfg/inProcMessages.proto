@@ -2,7 +2,23 @@ syntax = "proto3";
 
 package SFG.Proto.InProc;
 
-message TestThis {
-  string username = 1;
-  string msgText = 2;
+// Main/Input thread
+message Stop_Thread_Request {
+  // To all other threads
 }
+
+// Graphics thread
+message Run_UpdateFrame_Request {
+  // To Logic thread
+  // via inproc message to not have inter-thread function calls
+}
+
+// Logic thread
+// ToDo: there will probably be messages to Network here
+message Update_PerformanceString_Request {
+  // To Graphics thread
+  string performance = 1;
+}
+
+// Network thread
+// ToDo: there will probably be messages to Graphics/Logic here

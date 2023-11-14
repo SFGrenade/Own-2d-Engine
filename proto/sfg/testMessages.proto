@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package SFG.Proto;
+package SFG.Proto.Test;
 
 message InterThreadFunctionCall {
   fixed64 functionPointer = 1;

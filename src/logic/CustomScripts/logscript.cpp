@@ -1,4 +1,4 @@
-#include "scripthandler/CustomScripts/logscript.h"
+#include "logic/CustomScripts/logscript.h"
 
 namespace SFG {
 LogScript::LogScript() : logger( spdlog::get( "LogScript" ) ) {

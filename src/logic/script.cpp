@@ -1,4 +1,4 @@
-#include "scripthandler/script.h"
+#include "logic/script.h"
 
 namespace SFG {
 Script::Script() {}
