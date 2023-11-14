@@ -26,28 +26,38 @@ void InputHandler::CheckInputs() {
   // todo: too many log lines
   // InputHandler::logger->trace( fmt::runtime( "CheckInputs()" ) );
   while( SDL_PollEvent( &InputHandler::sdlEvent ) != 0 ) {
-    if( InputHandler::quitEventCallbacks.size() && InputHandler::sdlEvent.type == SDL_QUIT ) {
-      for( auto callback : InputHandler::quitEventCallbacks )
-        callback();
-    } else if( InputHandler::windowEventCallbacks.size() && InputHandler::sdlEvent.type == SDL_WINDOWEVENT ) {
-      for( auto callback : InputHandler::windowEventCallbacks )
-        callback( InputHandler::sdlEvent.window );
-    } else if( InputHandler::keyDownCallbacks.size() && InputHandler::sdlEvent.type == SDL_KEYDOWN ) {
-      for( auto callback : InputHandler::keyDownCallbacks )
-        callback( InputHandler::sdlEvent.key );
-    } else if( InputHandler::keyUpCallbacks.size() && InputHandler::sdlEvent.type == SDL_KEYUP ) {
-      for( auto callback : InputHandler::keyUpCallbacks )
-        callback( InputHandler::sdlEvent.key );
-    } else if( InputHandler::mouseButtonCallbacks.size()
-               && ( InputHandler::sdlEvent.type == SDL_MOUSEBUTTONDOWN || InputHandler::sdlEvent.type == SDL_MOUSEBUTTONUP ) ) {
-      for( auto callback : InputHandler::mouseButtonCallbacks )
-        callback( InputHandler::sdlEvent.button );
-    } else if( InputHandler::mouseMotionCallbacks.size() && InputHandler::sdlEvent.type == SDL_MOUSEMOTION ) {
-      for( auto callback : InputHandler::mouseMotionCallbacks )
-        callback( InputHandler::sdlEvent.motion );
-    } else if( InputHandler::mouseWheelCallbacks.size() && InputHandler::sdlEvent.type == SDL_MOUSEWHEEL ) {
-      for( auto callback : InputHandler::mouseWheelCallbacks )
-        callback( InputHandler::sdlEvent.wheel );
+    switch( InputHandler::sdlEvent.type ) {
+      case SDL_QUIT:
+        for( auto callback : InputHandler::quitEventCallbacks )
+          callback();
+        break;
+      case SDL_WINDOWEVENT:
+        for( auto callback : InputHandler::windowEventCallbacks )
+          callback( InputHandler::sdlEvent.window );
+        break;
+      case SDL_KEYDOWN:
+        for( auto callback : InputHandler::keyDownCallbacks )
+          callback( InputHandler::sdlEvent.key );
+        break;
+      case SDL_KEYUP:
+        for( auto callback : InputHandler::keyUpCallbacks )
+          callback( InputHandler::sdlEvent.key );
+        break;
+      case SDL_MOUSEBUTTONDOWN:
+      case SDL_MOUSEBUTTONUP:
+        for( auto callback : InputHandler::mouseButtonCallbacks )
+          callback( InputHandler::sdlEvent.button );
+        break;
+      case SDL_MOUSEMOTION:
+        for( auto callback : InputHandler::mouseMotionCallbacks )
+          callback( InputHandler::sdlEvent.motion );
+        break;
+      case SDL_MOUSEWHEEL:
+        for( auto callback : InputHandler::mouseWheelCallbacks )
+          callback( InputHandler::sdlEvent.wheel );
+        break;
+      default:
+        break;
     }
   }
   // todo: too many log lines

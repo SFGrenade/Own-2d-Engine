@@ -402,7 +402,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
         // 50 hz network timer
         SFG::NetworkHandler::RunNetwork();
       },
-      std::chrono::duration_cast< std::chrono::nanoseconds >( 1.0s / SFG::ConfigHandler::get_Logic_NetworkInterval() ),
+      std::chrono::duration_cast< std::chrono::nanoseconds >( 0.02s ),
       false );
   SFG::LogicHandler::AddTimer(
       [&performanceString, &makeNewPerformanceTexture]( std::optional< std::chrono::secondsLongDouble > /*interval*/ ) {

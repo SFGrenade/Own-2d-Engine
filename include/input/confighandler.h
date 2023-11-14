@@ -17,7 +17,6 @@ class ConfigHandler {
   static int config_Font_PixelSize;
   static SDL_Keycode config_Input_StopGameKey;
   static double config_Logic_LogicInterval;
-  static double config_Logic_NetworkInterval;
   static double config_Logic_PerformanceInterval;
   static std::string config_Network_Host;
   static uint16_t config_Network_PortReqRep;
@@ -42,7 +41,6 @@ class ConfigHandler {
   static int get_Font_PixelSize();
   static SDL_Keycode get_Input_StopGameKey();
   static double get_Logic_LogicInterval();
-  static double get_Logic_NetworkInterval();
   static double get_Logic_PerformanceInterval();
   static std::string get_Network_Host();
   static uint16_t get_Network_PortReqRep();

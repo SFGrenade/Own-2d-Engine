@@ -12,7 +12,6 @@ spdlog::level::level_enum ConfigHandler::config_Logging_LogFileLevel;
 int ConfigHandler::config_Font_PixelSize;
 SDL_Keycode ConfigHandler::config_Input_StopGameKey;
 double ConfigHandler::config_Logic_LogicInterval;
-double ConfigHandler::config_Logic_NetworkInterval;
 double ConfigHandler::config_Logic_PerformanceInterval;
 std::string ConfigHandler::config_Network_Host;
 uint16_t ConfigHandler::config_Network_PortReqRep;
@@ -46,7 +45,6 @@ void ConfigHandler::InitializeNoLog() {
   ConfigHandler::config_Font_PixelSize = static_cast< int >( ini.GetLongValue( "Font", "PixelSize", 18 ) );
   ConfigHandler::config_Input_StopGameKey = static_cast< SDL_Keycode >( ini.GetLongValue( "Input", "StopGameKey", SDLK_ESCAPE ) );
   ConfigHandler::config_Logic_LogicInterval = static_cast< double >( ini.GetDoubleValue( "Logic", "LogicInterval", 50.0 ) );
-  ConfigHandler::config_Logic_NetworkInterval = static_cast< double >( ini.GetDoubleValue( "Logic", "NetworkInterval", 50.0 ) );
   ConfigHandler::config_Logic_PerformanceInterval = static_cast< double >( ini.GetDoubleValue( "Logic", "PerformanceInterval", 1.0 ) );
   ConfigHandler::config_Network_Host = ini.GetValue( "Network", "Host", "127.0.0.1" );
   ConfigHandler::config_Network_PortReqRep = static_cast< uint16_t >( ini.GetLongValue( "Network", "PortReqRep", 13337 ) );
@@ -78,10 +76,6 @@ void ConfigHandler::InitializeNoLog() {
                       "LogicInterval",
                       static_cast< double >( ConfigHandler::config_Logic_LogicInterval ),
                       R"(How many times per second will the LogicUpdate be called?)" );
-  ini.SetDoubleValue( "Logic",
-                      "NetworkInterval",
-                      static_cast< double >( ConfigHandler::config_Logic_NetworkInterval ),
-                      R"(How many times per second will the network loop be run?)" );
   ini.SetDoubleValue( "Logic",
                       "PerformanceInterval",
                       static_cast< double >( ConfigHandler::config_Logic_PerformanceInterval ),
@@ -131,7 +125,6 @@ void ConfigHandler::Initialize() {
   ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Font_PixelSize = {:d}" ), ConfigHandler::config_Font_PixelSize );
   ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Input_StopGameKey = {:d}" ), ConfigHandler::config_Input_StopGameKey );
   ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Logic_LogicInterval = {:f}" ), ConfigHandler::config_Logic_LogicInterval );
-  ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Logic_NetworkInterval = {:f}" ), ConfigHandler::config_Logic_NetworkInterval );
   ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Logic_PerformanceInterval = {:f}" ), ConfigHandler::config_Logic_PerformanceInterval );
   ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Network_Host = \"{:s}\"" ), ConfigHandler::config_Network_Host );
   ConfigHandler::logger->debug( fmt::runtime( "Initialize -     config_Network_PortReqRep = {:d}" ), ConfigHandler::config_Network_PortReqRep );
@@ -175,10 +168,6 @@ SDL_Keycode ConfigHandler::get_Input_StopGameKey() {
 
 double ConfigHandler::get_Logic_LogicInterval() {
   return config_Logic_LogicInterval;
-}
-
-double ConfigHandler::get_Logic_NetworkInterval() {
-  return config_Logic_NetworkInterval;
 }
 
 double ConfigHandler::get_Logic_PerformanceInterval() {

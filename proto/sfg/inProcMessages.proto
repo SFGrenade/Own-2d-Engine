@@ -2,23 +2,75 @@ syntax = "proto3";
 
 package SFG.Proto.InProc;
 
+enum Log_Level {
+  Trace = 0;
+  Debug = 1;
+  Info = 2;
+  Warn = 3;
+  Err = 4;
+  Critical = 5;
+  Off = 6;
+}
+
 // Main/Input thread
 message Stop_Thread_Request {
   // To all other threads
 }
+message Get_Config_Reply {
+  // To other threads
+  Log_Level logging_std_out_level = 1;
+  Log_Level logging_log_file_level = 2;
+  int32 font_pixel_size = 3;
+  sint32 input_stop_game_Key = 4;
+  double logic_logic_interval = 5;
+  double logic_performance_interval = 6;
+  string network_host = 7;
+  uint32 network_port_req_rep = 8;  // uint16
+  uint32 network_port_pub_sub = 9;  // uint16
+  int32 window_width = 10;
+  int32 window_height = 11;
+  uint32 audio_sample_rate = 12;
+  uint32 audio_format = 13;  // uint16
+  uint32 audio_channels = 14;
+  uint32 audio_chunksize = 15;
+  string rendering_renderer = 16;
+  string rendering_performance_string_text_color = 17;
+  string rendering_performance_string_background_color = 18;
+}
+message List_Renderers_Request {
+  // To Graphics thread
+}
 
 // Graphics thread
+message List_Renderers_Reply {
+  // To Main/Input thread
+  repeated string renderers = 1;
+}
 message Run_UpdateFrame_Request {
   // To Logic thread
-  // via inproc message to not have inter-thread function calls
 }
 
 // Logic thread
 // ToDo: there will probably be messages to Network here
-message Update_PerformanceString_Request {
+message Update_Performance_String_Request {
   // To Graphics thread
   string performance = 1;
+}
+message Get_Performance_Counters_Request {
+  // To other threads
 }
 
 // Network thread
 // ToDo: there will probably be messages to Graphics/Logic here
+
+// Any thread
+message Get_Config_Request {
+  // To Main/Input thread
+}
+message Get_Performance_Counters_Reply {
+  // To Logic thread
+  optional uint64 counter_graphics = 1;
+  optional uint64 counter_input = 2;
+  optional uint64 counter_logic = 3;
+  optional uint64 counter_network = 4;
+}
