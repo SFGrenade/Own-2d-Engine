@@ -21,7 +21,7 @@ Graphics::Graphics()
       get_config_callbacks_(),
       list_renderers_callbacks_(),
       get_performance_counters_callbacks_(),
-      update_performance_string_callbacks_() {
+      update_performance_information_callbacks_() {
   this->logger_->trace( fmt::runtime( "[thread {:s}] Graphics()" ), getThreadId() );
 
   add_Get_Performance_Counters_callback( [this]( SFG::Proto::InProc::Get_Performance_Counters_Request const& ) {
@@ -58,9 +58,9 @@ Graphics::Graphics()
     for( auto callback : this->get_performance_counters_callbacks_ )
       callback( static_cast< SFG::Proto::InProc::Get_Performance_Counters_Request const& >( message ) );
   } );
-  network_Logic_Receive_.subscribe( new SFG::Proto::InProc::Update_Performance_String_Request(), [this]( google::protobuf::Message const& message ) {
-    for( auto callback : this->update_performance_string_callbacks_ )
-      callback( static_cast< SFG::Proto::InProc::Update_Performance_String_Request const& >( message ) );
+  network_Logic_Receive_.subscribe( new SFG::Proto::InProc::Update_Performance_Information_Request(), [this]( google::protobuf::Message const& message ) {
+    for( auto callback : this->update_performance_information_callbacks_ )
+      callback( static_cast< SFG::Proto::InProc::Update_Performance_Information_Request const& >( message ) );
   } );
 
   this->logger_->trace( fmt::runtime( "[thread {:s}] Graphics()~" ), getThreadId() );
@@ -146,12 +146,13 @@ void Graphics::add_Get_Performance_Counters_callback( std::function< void( SFG::
   this->logger_->trace( fmt::runtime( "[thread {:s}] add_Get_Performance_Counters_callback()~" ), getThreadId() );
 }
 
-void Graphics::add_Update_Performance_String_callback( std::function< void( SFG::Proto::InProc::Update_Performance_String_Request const& ) > callback ) {
-  this->logger_->trace( fmt::runtime( "[thread {:s}] add_Update_Performance_String_callback( callback )" ), getThreadId() );
+void Graphics::add_Update_Performance_Information_callback(
+    std::function< void( SFG::Proto::InProc::Update_Performance_Information_Request const& ) > callback ) {
+  this->logger_->trace( fmt::runtime( "[thread {:s}] add_Update_Performance_Information_callback( callback )" ), getThreadId() );
 
   if( callback )
-    update_performance_string_callbacks_.push_back( callback );
+    update_performance_information_callbacks_.push_back( callback );
 
-  this->logger_->trace( fmt::runtime( "[thread {:s}] add_Update_Performance_String_callback()~" ), getThreadId() );
+  this->logger_->trace( fmt::runtime( "[thread {:s}] add_Update_Performance_Information_callback()~" ), getThreadId() );
 }
 }  // namespace SFG
