@@ -19,9 +19,14 @@ Graphics::Graphics()
       performanceLoops_( 0 ),
       stop_thread_callbacks_(),
       get_config_callbacks_(),
+      set_window_size_callbacks_(),
+      initialize_sdl_and_window_callbacks_(),
       list_renderers_callbacks_(),
-      get_performance_counters_callbacks_(),
-      update_performance_information_callbacks_() {
+      set_renderer_callbacks_(),
+      show_window_and_start_draw_callbacks_(),
+      stop_draw_callbacks_(),
+      update_performance_information_callbacks_(),
+      get_performance_counters_callbacks_() {
   this->logger_->trace( fmt::runtime( "[thread {:s}] Graphics()" ), getThreadId() );
 
   add_Get_Performance_Counters_callback( [this]( SFG::Proto::InProc::Get_Performance_Counters_Request const& ) {
@@ -50,17 +55,37 @@ Graphics::Graphics()
     for( auto callback : this->get_config_callbacks_ )
       callback( static_cast< SFG::Proto::InProc::Get_Config_Reply const& >( message ) );
   } );
+  network_Input_Receive_.subscribe( new SFG::Proto::InProc::Set_Window_Size_Request(), [this]( google::protobuf::Message const& message ) {
+    for( auto callback : this->set_window_size_callbacks_ )
+      callback( static_cast< SFG::Proto::InProc::Set_Window_Size_Request const& >( message ) );
+  } );
+  network_Input_Receive_.subscribe( new SFG::Proto::InProc::Initialize_SDL_And_Window_Request(), [this]( google::protobuf::Message const& message ) {
+    for( auto callback : this->initialize_sdl_and_window_callbacks_ )
+      callback( static_cast< SFG::Proto::InProc::Initialize_SDL_And_Window_Request const& >( message ) );
+  } );
   network_Input_Receive_.subscribe( new SFG::Proto::InProc::List_Renderers_Request(), [this]( google::protobuf::Message const& message ) {
     for( auto callback : this->list_renderers_callbacks_ )
       callback( static_cast< SFG::Proto::InProc::List_Renderers_Request const& >( message ) );
   } );
-  network_Logic_Receive_.subscribe( new SFG::Proto::InProc::Get_Performance_Counters_Request(), [this]( google::protobuf::Message const& message ) {
-    for( auto callback : this->get_performance_counters_callbacks_ )
-      callback( static_cast< SFG::Proto::InProc::Get_Performance_Counters_Request const& >( message ) );
+  network_Input_Receive_.subscribe( new SFG::Proto::InProc::Set_Renderer_Request(), [this]( google::protobuf::Message const& message ) {
+    for( auto callback : this->set_renderer_callbacks_ )
+      callback( static_cast< SFG::Proto::InProc::Set_Renderer_Request const& >( message ) );
+  } );
+  network_Input_Receive_.subscribe( new SFG::Proto::InProc::Show_Window_And_Start_Draw_Request(), [this]( google::protobuf::Message const& message ) {
+    for( auto callback : this->show_window_and_start_draw_callbacks_ )
+      callback( static_cast< SFG::Proto::InProc::Show_Window_And_Start_Draw_Request const& >( message ) );
+  } );
+  network_Input_Receive_.subscribe( new SFG::Proto::InProc::Stop_Draw_Request(), [this]( google::protobuf::Message const& message ) {
+    for( auto callback : this->stop_draw_callbacks_ )
+      callback( static_cast< SFG::Proto::InProc::Stop_Draw_Request const& >( message ) );
   } );
   network_Logic_Receive_.subscribe( new SFG::Proto::InProc::Update_Performance_Information_Request(), [this]( google::protobuf::Message const& message ) {
     for( auto callback : this->update_performance_information_callbacks_ )
       callback( static_cast< SFG::Proto::InProc::Update_Performance_Information_Request const& >( message ) );
+  } );
+  network_Logic_Receive_.subscribe( new SFG::Proto::InProc::Get_Performance_Counters_Request(), [this]( google::protobuf::Message const& message ) {
+    for( auto callback : this->get_performance_counters_callbacks_ )
+      callback( static_cast< SFG::Proto::InProc::Get_Performance_Counters_Request const& >( message ) );
   } );
 
   this->logger_->trace( fmt::runtime( "[thread {:s}] Graphics()~" ), getThreadId() );
@@ -128,6 +153,24 @@ void Graphics::add_Get_Config_callback( std::function< void( SFG::Proto::InProc:
   this->logger_->trace( fmt::runtime( "[thread {:s}] add_Get_Config_callback()~" ), getThreadId() );
 }
 
+void Graphics::add_Set_Window_Size_callback( std::function< void( SFG::Proto::InProc::Set_Window_Size_Request const& ) > callback ) {
+  this->logger_->trace( fmt::runtime( "[thread {:s}] add_Set_Window_Size_callback( callback )" ), getThreadId() );
+
+  if( callback )
+    set_window_size_callbacks_.push_back( callback );
+
+  this->logger_->trace( fmt::runtime( "[thread {:s}] add_Set_Window_Size_callback()~" ), getThreadId() );
+}
+
+void Graphics::add_Initialize_SDL_And_Window_callback( std::function< void( SFG::Proto::InProc::Initialize_SDL_And_Window_Request const& ) > callback ) {
+  this->logger_->trace( fmt::runtime( "[thread {:s}] add_Initialize_SDL_And_Window_callback( callback )" ), getThreadId() );
+
+  if( callback )
+    initialize_sdl_and_window_callbacks_.push_back( callback );
+
+  this->logger_->trace( fmt::runtime( "[thread {:s}] add_Initialize_SDL_And_Window_callback()~" ), getThreadId() );
+}
+
 void Graphics::add_List_Renderers_callback( std::function< void( SFG::Proto::InProc::List_Renderers_Request const& ) > callback ) {
   this->logger_->trace( fmt::runtime( "[thread {:s}] add_List_Renderers_callback( callback )" ), getThreadId() );
 
@@ -137,13 +180,31 @@ void Graphics::add_List_Renderers_callback( std::function< void( SFG::Proto::InP
   this->logger_->trace( fmt::runtime( "[thread {:s}] add_List_Renderers_callback()~" ), getThreadId() );
 }
 
-void Graphics::add_Get_Performance_Counters_callback( std::function< void( SFG::Proto::InProc::Get_Performance_Counters_Request const& ) > callback ) {
-  this->logger_->trace( fmt::runtime( "[thread {:s}] add_Get_Performance_Counters_callback( callback )" ), getThreadId() );
+void Graphics::add_Set_Renderer_callback( std::function< void( SFG::Proto::InProc::Set_Renderer_Request const& ) > callback ) {
+  this->logger_->trace( fmt::runtime( "[thread {:s}] add_Set_Renderer_callback( callback )" ), getThreadId() );
 
   if( callback )
-    get_performance_counters_callbacks_.push_back( callback );
+    set_renderer_callbacks_.push_back( callback );
 
-  this->logger_->trace( fmt::runtime( "[thread {:s}] add_Get_Performance_Counters_callback()~" ), getThreadId() );
+  this->logger_->trace( fmt::runtime( "[thread {:s}] add_Set_Renderer_callback()~" ), getThreadId() );
+}
+
+void Graphics::add_Show_Window_And_Start_Draw_callback( std::function< void( SFG::Proto::InProc::Show_Window_And_Start_Draw_Request const& ) > callback ) {
+  this->logger_->trace( fmt::runtime( "[thread {:s}] add_Show_Window_And_Start_Draw_callback( callback )" ), getThreadId() );
+
+  if( callback )
+    show_window_and_start_draw_callbacks_.push_back( callback );
+
+  this->logger_->trace( fmt::runtime( "[thread {:s}] add_Show_Window_And_Start_Draw_callback()~" ), getThreadId() );
+}
+
+void Graphics::add_Stop_Draw_callback( std::function< void( SFG::Proto::InProc::Stop_Draw_Request const& ) > callback ) {
+  this->logger_->trace( fmt::runtime( "[thread {:s}] add_Stop_Draw_callback( callback )" ), getThreadId() );
+
+  if( callback )
+    stop_draw_callbacks_.push_back( callback );
+
+  this->logger_->trace( fmt::runtime( "[thread {:s}] add_Stop_Draw_callback()~" ), getThreadId() );
 }
 
 void Graphics::add_Update_Performance_Information_callback(
@@ -154,5 +215,14 @@ void Graphics::add_Update_Performance_Information_callback(
     update_performance_information_callbacks_.push_back( callback );
 
   this->logger_->trace( fmt::runtime( "[thread {:s}] add_Update_Performance_Information_callback()~" ), getThreadId() );
+}
+
+void Graphics::add_Get_Performance_Counters_callback( std::function< void( SFG::Proto::InProc::Get_Performance_Counters_Request const& ) > callback ) {
+  this->logger_->trace( fmt::runtime( "[thread {:s}] add_Get_Performance_Counters_callback( callback )" ), getThreadId() );
+
+  if( callback )
+    get_performance_counters_callbacks_.push_back( callback );
+
+  this->logger_->trace( fmt::runtime( "[thread {:s}] add_Get_Performance_Counters_callback()~" ), getThreadId() );
 }
 }  // namespace SFG

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <optional>
 
 // Including our headers
 #include "_globals/moreChrono.h"
