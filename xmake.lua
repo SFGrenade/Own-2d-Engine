@@ -50,7 +50,7 @@ if is_mode("release") then
     add_defines("NDEBUG")
 
     if is_plat("windows") then
-        add_cxflags("/Qpar")
+        add_cxflags("/Oy")
     else
         add_cxflags("-fomit-frame-pointer")
     end
@@ -78,6 +78,7 @@ target("Own-2d-Engine")
     add_includedirs("include")
 
     add_headerfiles("include/_globals/*.h")
+    add_headerfiles("include/confighandler/*.h")
     add_headerfiles("include/graphics/*.h")
     add_headerfiles("include/input/*.h")
     add_headerfiles("include/logic/*.h")
@@ -88,6 +89,7 @@ target("Own-2d-Engine")
 
     add_files("src/*.cpp")
     add_files("src/_globals/*.cpp")
+    add_files("src/confighandler/*.cpp")
     add_files("src/graphics/*.cpp")
     add_files("src/input/*.cpp")
     add_files("src/logic/*.cpp")
@@ -126,6 +128,7 @@ target("Own-2d-Engine-Server")
 
     add_headerfiles("include/_server/*.h")
     add_headerfiles("include/_globals/*.h")
+    add_headerfiles("include/confighandler/*.h")
     add_headerfiles("include/graphics/*.h")
     add_headerfiles("include/input/*.h")
     add_headerfiles("include/logic/*.h")
@@ -136,6 +139,7 @@ target("Own-2d-Engine-Server")
 
     add_files("src/_server/*.cpp")
     add_files("src/_globals/*.cpp")
+    add_files("src/confighandler/*.cpp")
     add_files("src/graphics/*.cpp")
     add_files("src/input/*.cpp")
     add_files("src/logic/*.cpp")
@@ -162,6 +166,7 @@ target("Own-2d-Engine-Test")
     add_includedirs("include")
 
     add_headerfiles("include/_globals/*.h")
+    add_headerfiles("include/confighandler/*.h")
     add_headerfiles("include/graphics/*.h")
     add_headerfiles("include/input/*.h")
     add_headerfiles("include/logic/*.h")
@@ -172,6 +177,7 @@ target("Own-2d-Engine-Test")
 
     add_files("src/_test/*.cpp")
     add_files("src/_globals/*.cpp")
+    add_files("src/confighandler/*.cpp")
     add_files("src/graphics/*.cpp")
     add_files("src/input/*.cpp")
     add_files("src/logic/*.cpp")
