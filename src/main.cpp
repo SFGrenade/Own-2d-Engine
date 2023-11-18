@@ -1,22 +1,27 @@
 #include <span>
 #include <string_view>
 #include <vector>
+#include <zmq.hpp>
 
 // Include our overall Objects
 #include "_globals/misc.h"
 #include "_globals/moreChrono.h"
+#include "confighandler/confighandler.h"
+#include "graphics/_graphics.h"
+#include "graphics/fonthandler.h"
 #include "graphics/window.h"
-#include "input/confighandler.h"
-#include "input/fonthandler.h"
+#include "input/_input.h"
 #include "input/inputhandler.h"
 #include "logic/CustomScripts/logscript.h"
+#include "logic/_logic.h"
 #include "logic/logichandler.h"
 #include "logic/performance.h"
 #include "logic/scripthandler.h"
+#include "network/_network.h"
 #include "network/networkhandler.h"
 
 #pragma region Debug Output
-
+/*
 constexpr std::string const GetRendererFlags( uint32_t const rendererFlags ) {
   std::string ret = "";
   if( rendererFlags & SDL_RENDERER_SOFTWARE ) {
@@ -228,7 +233,7 @@ int CheckAndSelectRenderer( std::string_view const cliSelection ) {
   }
   return ret;
 }
-
+*/
 #pragma endregion
 
 #pragma region Initialization
@@ -247,33 +252,36 @@ void InitializeLoggers() {
   spdlog::register_logger( mainLogger );
   spdlog::set_default_logger( mainLogger );
 
-  auto normalFileSink = std::make_shared< spdlog::sinks::basic_file_sink_mt >( "log.log", false );
-  normalFileSink->set_level( SFG::ConfigHandler::get_Logging_LogFileLevel() );
-  spdlog::sinks_init_list normalSinkList = { normalFileSink, consoleSink };
-
-  std::vector< std::string > allLoggerNames = { "ConfigHandler",
-                                                "FontHandler",
-                                                "GraphicsHandler",
-                                                "InputHandler",
-                                                "LogicHandler",
-                                                "NetworkHandler",
-                                                "Timer",
-                                                "ScriptHandler",
-                                                "LogScript",
-                                                "Window" };
+  std::vector< std::string > allLoggerNames = {
+      "Graphics",
+      "GraphicsHandler",
+      "Window",
+      "Input",
+      "ConfigHandler",
+      "FontHandler",
+      "InputHandler",
+      "Logic",
+      "LogicHandler",
+      "LogScript",
+      "ScriptHandler",
+      "Timer",
+      "Network",
+      "NetworkHandler",
+  };
   for( auto name : allLoggerNames ) {
-    spdlogger logger = std::make_shared< spdlog::logger >( name, normalSinkList.begin(), normalSinkList.end() );
+    spdlogger logger = std::make_shared< spdlog::logger >( name, truncatedSinkList.begin(), truncatedSinkList.end() );
     logger->set_level( spdlog::level::trace );
     logger->flush_on( spdlog::level::trace );
     spdlog::register_logger( logger );
   }
   // spdlog::get("LogScript")->set_level(spdlog::level::warn);
+  spdlog::set_pattern( "[%Y-%m-%d %H:%M:%S.%e] [thread %t] [%n] [%l] %v" );
 }
 
 void InitializeConfig() {
   SFG::ConfigHandler::InitializeNoLog();
 }
-
+/*
 void InitializeComponents() {
   SFG::ConfigHandler::Initialize();
   SFG::FontHandler::Initialize();
@@ -306,15 +314,15 @@ void UninitializeComponents() {
   SFG::FontHandler::Destroy();
   SFG::ConfigHandler::Destroy();
 }
-
+*/
 #pragma endregion
 
-int main( int const argc, char const *const *argv ) {
+int main( int const argc, char const* const* argv ) {
   int better_main( std::span< std::string_view const > ) noexcept;
   std::vector< std::string_view > args( argv, std::next( argv, static_cast< std::ptrdiff_t >( argc ) ) );
   return better_main( args );
 }
-
+/*
 int better_main( std::span< std::string_view const > args ) noexcept {
   InitializeConfig();
   InitializeLoggers();
@@ -359,7 +367,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   backgroundColor.g = static_cast< uint8_t >( std::stoi( bgCol[1] ) );
   backgroundColor.b = static_cast< uint8_t >( std::stoi( bgCol[2] ) );
   backgroundColor.a = static_cast< uint8_t >( std::stoi( bgCol[3] ) );
-  graphicsHandler->RegisterDrawEvent( []( std::shared_ptr< SDL_Renderer > /*windowRenderer*/ ) { SFG::ScriptHandler::UpdateScriptsFrame(); } );
+  graphicsHandler->RegisterDrawEvent( []( std::shared_ptr< SDL_Renderer > ) { SFG::ScriptHandler::UpdateScriptsFrame(); } );
   graphicsHandler->RegisterDrawEvent(
       [&performanceString, &makeNewPerformanceTexture, &performanceTexture, &performanceTextureRect, foregroundColor, backgroundColor](
           std::shared_ptr< SDL_Renderer > windowRenderer ) {
@@ -387,25 +395,25 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   graphicsHandler->SetQuitFlag( quitPtr );
 
   SFG::InputHandler::RegisterQuitEvent( [&quit]() { quit = true; } );
-  SFG::InputHandler::RegisterWindowEvent( [&quit]( SDL_WindowEvent &window ) { quit |= window.event == SDL_WINDOWEVENT_CLOSE; } );
-  SFG::InputHandler::RegisterKeyDownEvent( [&quit]( SDL_KeyboardEvent &key ) { quit |= key.keysym.sym == SFG::ConfigHandler::get_Input_StopGameKey(); } );
+  SFG::InputHandler::RegisterWindowEvent( [&quit]( SDL_WindowEvent const& window ) { quit |= window.event == SDL_WINDOWEVENT_CLOSE; } );
+  SFG::InputHandler::RegisterKeyDownEvent( [&quit]( SDL_KeyboardEvent const& key ) { quit |= key.keysym.sym == SFG::ConfigHandler::get_Input_StopGameKey(); } );
 
   SFG::LogicHandler::AddTimer(
-      []( std::optional< std::chrono::secondsLongDouble > /*interval*/ ) {
+      []( std::optional< std::chrono::secondsLongDouble > ) {
         // 50 hz test timer
         SFG::ScriptHandler::UpdateScriptsLogicFrame();
       },
       std::chrono::duration_cast< std::chrono::nanoseconds >( 1.0s / SFG::ConfigHandler::get_Logic_LogicInterval() ),
       false );
   SFG::LogicHandler::AddTimer(
-      []( std::optional< std::chrono::secondsLongDouble > /*interval*/ ) {
+      []( std::optional< std::chrono::secondsLongDouble > ) {
         // 50 hz network timer
         SFG::NetworkHandler::RunNetwork();
       },
       std::chrono::duration_cast< std::chrono::nanoseconds >( 0.02s ),
       false );
   SFG::LogicHandler::AddTimer(
-      [&performanceString, &makeNewPerformanceTexture]( std::optional< std::chrono::secondsLongDouble > /*interval*/ ) {
+      [&performanceString, &makeNewPerformanceTexture]( std::optional< std::chrono::secondsLongDouble > ) {
         performanceString = fmt::format( fmt::runtime( R"(Performance (per second):
 {:>20d} Frames drawn
 {:>20d} Input checks
@@ -443,5 +451,56 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   UninitializeComponents();
 
   spdlog::trace( fmt::runtime( "better_main()~" ) );
+  return EXIT_SUCCESS;
+}
+*/
+int better_main( std::span< std::string_view const > args ) noexcept {
+  zmq::context_t global_inproc_context_( 0 );
+  zmq::context_t* cntxPtr = &global_inproc_context_;
+
+  InitializeConfig();
+  InitializeLoggers();
+
+  spdlog::trace( fmt::runtime( "better_main(args = {:c} \"{:s}\" {:c})" ), '{', fmt::join( args, "\", \"" ), '}' );
+
+  SFG::Graphics graphicsModule( cntxPtr );
+  SFG::Logic logicModule( cntxPtr );
+  SFG::Network networkModule( cntxPtr );
+  SFG::Input inputModule( cntxPtr );
+
+  std::thread graphicsThread( [&]() {
+    graphicsModule.start();
+    while( graphicsModule.isRunning() ) {
+      graphicsModule.run();
+    }
+  } );
+  std::thread logicThread( [&]() {
+    logicModule.start();
+    while( logicModule.isRunning() ) {
+      logicModule.run();
+    }
+  } );
+  std::thread networkThread( [&]() {
+    networkModule.start();
+    while( networkModule.isRunning() ) {
+      networkModule.run();
+    }
+  } );
+  // as long as the constructor of graphics and the inputs are gotten in the same thread, it's a-ok
+  // the ctor includes SDL_CreateWindow, and the inputs for a window has to be gotten in the same thread it was created in
+  // std::thread inputThread( [&]() {
+  inputModule.start();
+  while( inputModule.isRunning() ) {
+    inputModule.run();
+  }
+  // } );
+
+  graphicsThread.join();
+  logicThread.join();
+  networkThread.join();
+  // inputThread.join();
+
+  spdlog::trace( fmt::runtime( "better_main()~" ) );
+  global_inproc_context_.shutdown();
   return EXIT_SUCCESS;
 }

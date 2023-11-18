@@ -8,36 +8,36 @@
 #include "_globals/spdlogInclude.h"
 
 namespace SFG {
-typedef std::function< void( SDL_KeyboardEvent& key ) > KeyCallback;
-typedef std::function< void( SDL_MouseButtonEvent& button ) > MouseButtonCallback;
-typedef std::function< void( SDL_MouseMotionEvent& motion ) > MouseMotionCallback;
-typedef std::function< void( SDL_MouseWheelEvent& wheel ) > MouseWheelCallback;
+typedef std::function< void( SDL_KeyboardEvent const& key ) > KeyCallback;
+typedef std::function< void( SDL_MouseButtonEvent const& button ) > MouseButtonCallback;
+typedef std::function< void( SDL_MouseMotionEvent const& motion ) > MouseMotionCallback;
+typedef std::function< void( SDL_MouseWheelEvent const& wheel ) > MouseWheelCallback;
 typedef std::function< void() > QuitEventCallback;
-typedef std::function< void( SDL_WindowEvent& window ) > WindowEventCallback;
+typedef std::function< void( SDL_WindowEvent const& window ) > WindowEventCallback;
 
 class InputHandler {
-  private:
-  static spdlogger logger;
-  static SDL_Event sdlEvent;
-  static std::vector< KeyCallback > keyDownCallbacks;
-  static std::vector< KeyCallback > keyUpCallbacks;
-  static std::vector< MouseButtonCallback > mouseButtonCallbacks;
-  static std::vector< MouseMotionCallback > mouseMotionCallbacks;
-  static std::vector< MouseWheelCallback > mouseWheelCallbacks;
-  static std::vector< QuitEventCallback > quitEventCallbacks;
-  static std::vector< WindowEventCallback > windowEventCallbacks;
-
   public:
-  static void Initialize();
-  static void Destroy();
+  InputHandler();
+  ~InputHandler();
 
-  static void CheckInputs();
-  static void RegisterKeyDownEvent( KeyCallback callback );
-  static void RegisterKeyUpEvent( KeyCallback callback );
-  static void RegisterMouseButtonEvent( MouseButtonCallback callback );
-  static void RegisterMouseMotionEvent( MouseMotionCallback callback );
-  static void RegisterMouseWheelEvent( MouseWheelCallback callback );
-  static void RegisterQuitEvent( QuitEventCallback callback );
-  static void RegisterWindowEvent( WindowEventCallback callback );
+  void CheckInputs();
+  void RegisterKeyDownEvent( KeyCallback callback );
+  void RegisterKeyUpEvent( KeyCallback callback );
+  void RegisterMouseButtonEvent( MouseButtonCallback callback );
+  void RegisterMouseMotionEvent( MouseMotionCallback callback );
+  void RegisterMouseWheelEvent( MouseWheelCallback callback );
+  void RegisterQuitEvent( QuitEventCallback callback );
+  void RegisterWindowEvent( WindowEventCallback callback );
+
+  private:
+  spdlogger logger_;
+  SDL_Event sdlEvent_;
+  std::vector< KeyCallback > keyDownCallbacks_;
+  std::vector< KeyCallback > keyUpCallbacks_;
+  std::vector< MouseButtonCallback > mouseButtonCallbacks_;
+  std::vector< MouseMotionCallback > mouseMotionCallbacks_;
+  std::vector< MouseWheelCallback > mouseWheelCallbacks_;
+  std::vector< QuitEventCallback > quitEventCallbacks_;
+  std::vector< WindowEventCallback > windowEventCallbacks_;
 };
 }  // namespace SFG

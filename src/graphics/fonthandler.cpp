@@ -1,6 +1,6 @@
-#include "input/fonthandler.h"
+#include "graphics/fonthandler.h"
 
-#include "input/confighandler.h"
+#include "confighandler/confighandler.h"
 
 namespace SFG {
 spdlogger FontHandler::logger = nullptr;

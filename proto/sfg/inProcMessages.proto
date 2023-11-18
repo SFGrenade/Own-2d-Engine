@@ -16,66 +16,8 @@ enum Log_Level {
 message Stop_Thread_Request {
   // To all other threads
 }
-message Get_Config_Reply {
-  // To other threads
-  Log_Level logging_std_out_level = 1;
-  Log_Level logging_log_file_level = 2;
-  int32 font_pixel_size = 3;
-  sint32 input_stop_game_Key = 4;
-  double logic_logic_interval = 5;
-  double logic_performance_interval = 6;
-  string network_host = 7;
-  uint32 network_port_req_rep = 8;  // uint16
-  uint32 network_port_pub_sub = 9;  // uint16
-  int32 window_width = 10;
-  int32 window_height = 11;
-  uint32 audio_sample_rate = 12;
-  uint32 audio_format = 13;  // uint16
-  uint32 audio_channels = 14;
-  uint32 audio_chunksize = 15;
-  string rendering_renderer = 16;
-  string rendering_performance_string_text_color = 17;
-  string rendering_performance_string_background_color = 18;
-}
-message Set_Window_Size_Request {
-  // To Graphics thread
-  uint32 width = 1;
-  uint32 height = 2;
-}
-message Initialize_SDL_And_Window_Request {
-  // To Graphics thread
-}
-message List_Renderers_Request {
-  // To Graphics thread
-}
-message Set_Renderer_Request {
-  // To Graphics thread
-  string renderer = 1;
-}
-message Show_Window_And_Start_Draw_Request {
-  // To Graphics thread
-}
-message Start_Logic_Request {
-  // To Logic thread
-}
-message Start_Network_Request {
-  // To Network thread
-}
-message Stop_Draw_Request {
-  // To Graphics thread
-}
-message Stop_Logic_Request {
-  // To Logic thread
-}
-message Stop_Network_Request {
-  // To Network thread
-}
 
 // Graphics thread
-message List_Renderers_Reply {
-  // To Main/Input thread
-  repeated string renderers = 1;
-}
 message Run_UpdateFrame_Request {
   // To Logic thread
 }
@@ -94,9 +36,6 @@ message Get_Performance_Counters_Request {
 // ToDo: there will probably be messages to Graphics/Logic here
 
 // Any thread
-message Get_Config_Request {
-  // To Main/Input thread
-}
 message Get_Performance_Counters_Reply {
   // To Logic thread
   optional uint64 counter_graphics = 1;

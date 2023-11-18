@@ -1,4 +1,4 @@
-#include "input/confighandler.h"
+#include "confighandler/confighandler.h"
 
 #include <SimpleIni.h>
 

@@ -42,46 +42,46 @@ zmq::context_t ThreadServer::threadNetworkContext_ = zmq::context_t( 0 );
 
 ThreadServer::ThreadServer( std::string const& host, bool server )
     : logger_( spdlog::get( "TSrv" ) ), network_( host, server, &ThreadServer::threadNetworkContext_ ), thread_( nullptr ), loop_( false ) {
-  logger_->trace( fmt::runtime( "[thread {:s}] ThreadServer(std::string const& host = \"{:s}\", bool server = {})" ), getThreadId(), host, server );
+  logger_->trace( fmt::runtime( "ThreadServer(std::string const& host = \"{:s}\", bool server = {})" ), host, server );
   network_.subscribe( new SFG::Proto::Test::InterThreadFunctionCall(), [this]( google::protobuf::Message const& message ) {
     this->onInterThreadFunctionCall( static_cast< SFG::Proto::Test::InterThreadFunctionCall const& >( message ) );
   } );
-  logger_->trace( fmt::runtime( "[thread {:s}] ThreadServer()~" ), getThreadId() );
+  logger_->trace( fmt::runtime( "ThreadServer()~" ) );
 }
 ThreadServer::~ThreadServer() {
-  logger_->trace( fmt::runtime( "[thread {:s}] ~ThreadServer()" ), getThreadId() );
+  logger_->trace( fmt::runtime( "~ThreadServer()" ) );
   if( thread_ ) {
-    logger_->trace( fmt::runtime( "[thread {:s}] ~ThreadServer - deleting thread" ), getThreadId() );
+    logger_->trace( fmt::runtime( "~ThreadServer - deleting thread" ) );
     if( thread_->joinable() ) {
       thread_->join();
     }
     delete thread_;
     thread_ = nullptr;
   }
-  logger_->trace( fmt::runtime( "[thread {:s}] ~ThreadServer()~" ), getThreadId() );
+  logger_->trace( fmt::runtime( "~ThreadServer()~" ) );
 }
 void ThreadServer::startThreadServer() {
-  logger_->trace( fmt::runtime( "[thread {:s}] startThreadServer()" ), getThreadId() );
+  logger_->trace( fmt::runtime( "startThreadServer()" ) );
 
   loop_ = true;
 
   thread_ = new std::thread( [this]() {
-    this->logger_->trace( fmt::runtime( "[thread {:s}] thread_()" ), getThreadId() );
+    this->logger_->trace( fmt::runtime( "thread_()" ) );
     while( this->loop_ ) {
       try {
         this->network_.run();
       } catch( std::exception const& e ) {
-        this->logger_->error( fmt::runtime( "[thread {:s}] thread_ - reqRep error: {:s}" ), getThreadId(), e.what() );
+        this->logger_->error( fmt::runtime( "thread_ - reqRep error: {:s}" ), e.what() );
       }
       std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
     }
-    this->logger_->trace( fmt::runtime( "[thread {:s}] thread_()~" ), getThreadId() );
+    this->logger_->trace( fmt::runtime( "thread_()~" ) );
   } );
 
-  logger_->trace( fmt::runtime( "[thread {:s}] startThreadServer()~" ), getThreadId() );
+  logger_->trace( fmt::runtime( "startThreadServer()~" ) );
 }
 void ThreadServer::waitForThreadServer() {
-  logger_->trace( fmt::runtime( "[thread {:s}] waitForThreadServer()" ), getThreadId() );
+  logger_->trace( fmt::runtime( "waitForThreadServer()" ) );
 
   if( thread_ ) {
     if( thread_->joinable() ) {
@@ -89,30 +89,28 @@ void ThreadServer::waitForThreadServer() {
     }
   }
 
-  logger_->trace( fmt::runtime( "[thread {:s}] waitForThreadServer()~" ), getThreadId() );
+  logger_->trace( fmt::runtime( "waitForThreadServer()~" ) );
 }
 void ThreadServer::stopThreadServer() {
-  logger_->trace( fmt::runtime( "[thread {:s}] stopThreadServer()" ), getThreadId() );
+  logger_->trace( fmt::runtime( "stopThreadServer()" ) );
 
   loop_ = false;
 
-  logger_->trace( fmt::runtime( "[thread {:s}] stopThreadServer()~" ), getThreadId() );
+  logger_->trace( fmt::runtime( "stopThreadServer()~" ) );
 }
 void ThreadServer::sendFunctionCall( std::function< void() > functionToSend ) {
-  logger_->trace( fmt::runtime( "[thread {:s}] sendFunctionCall(std::function< void() > functionToSend = {:p})" ),
-                  getThreadId(),
+  logger_->trace( fmt::runtime( "sendFunctionCall(std::function< void() > functionToSend = {:p})" ),
                   static_cast< void* >( functionToSend.target< void ( * )() >() ) );
 
   SFG::Proto::Test::InterThreadFunctionCall* msg = new SFG::Proto::Test::InterThreadFunctionCall();
   msg->set_functionpointer( reinterpret_cast< int64_t >( functionToSend.target< void ( * )() >() ) );
   network_.sendMessage( msg );
 
-  logger_->trace( fmt::runtime( "[thread {:s}] sendFunctionCall()~" ), getThreadId() );
+  logger_->trace( fmt::runtime( "sendFunctionCall()~" ) );
 }
 void ThreadServer::onInterThreadFunctionCall( SFG::Proto::Test::InterThreadFunctionCall const& msg ) {
   void ( *functionToCall )() = reinterpret_cast< void ( * )() >( msg.functionpointer() );
-  logger_->trace( fmt::runtime( "[thread {:s}] onInterThreadFunctionCall(SFG::Proto::Test::InterThreadFunctionCall const& msg = {:p})" ),
-                  getThreadId(),
+  logger_->trace( fmt::runtime( "onInterThreadFunctionCall(SFG::Proto::Test::InterThreadFunctionCall const& msg = {:p})" ),
                   static_cast< void* >( functionToCall ) );
 
   if( functionToCall != nullptr ) {
@@ -121,7 +119,7 @@ void ThreadServer::onInterThreadFunctionCall( SFG::Proto::Test::InterThreadFunct
     stopThreadServer();
   }
 
-  logger_->trace( fmt::runtime( "[thread {:s}] onInterThreadFunctionCall()~" ), getThreadId() );
+  logger_->trace( fmt::runtime( "onInterThreadFunctionCall()~" ) );
 }
 
 #pragma endregion ThreadServer
@@ -139,16 +137,16 @@ class TestClass {
   spdlogger logger_;
 };
 TestClass::TestClass() : logger_( spdlog::get( "TSrv" ) ) {
-  logger_->trace( fmt::runtime( "[thread {:s}] TestClass()" ), getThreadId() );
-  logger_->trace( fmt::runtime( "[thread {:s}] TestClass()~" ), getThreadId() );
+  logger_->trace( fmt::runtime( "TestClass()" ) );
+  logger_->trace( fmt::runtime( "TestClass()~" ) );
 }
 TestClass::~TestClass() {
-  logger_->trace( fmt::runtime( "[thread {:s}] ~TestClass()" ), getThreadId() );
-  logger_->trace( fmt::runtime( "[thread {:s}] ~TestClass()~" ), getThreadId() );
+  logger_->trace( fmt::runtime( "~TestClass()" ) );
+  logger_->trace( fmt::runtime( "~TestClass()~" ) );
 }
 void TestClass::doStuff( int num ) {
-  logger_->trace( fmt::runtime( "[thread {:s}] doStuff(int num = {:d})" ), getThreadId(), num );
-  logger_->trace( fmt::runtime( "[thread {:s}] doStuff()~" ), getThreadId() );
+  logger_->trace( fmt::runtime( "doStuff(int num = {:d})" ), num );
+  logger_->trace( fmt::runtime( "doStuff()~" ) );
 }
 
 #pragma endregion ThreadServer
@@ -164,18 +162,18 @@ void signalHandler( int sigNum ) {
 }
 
 void InitializeSignalHandler() noexcept {
-  spdlog::trace( fmt::runtime( "[thread {:s}] InitializeSignalHandler()" ), getThreadId() );
+  spdlog::trace( fmt::runtime( "InitializeSignalHandler()" ) );
 
   std::set_terminate( []() {
-    spdlog::trace( fmt::runtime( "[thread {:s}] terminateCallback()" ), getThreadId() );
-    spdlog::trace( fmt::runtime( "[thread {:s}] terminateCallback()~" ), getThreadId() );
+    spdlog::trace( fmt::runtime( "terminateCallback()" ) );
+    spdlog::trace( fmt::runtime( "terminateCallback()~" ) );
   } );
   for( int i = 0; i <= NSIG; i++ ) {
     auto retCode = signal( i, signalHandler );
-    spdlog::debug( fmt::runtime( "[thread {:s}] Installing handler for {}: {}" ), getThreadId(), i, SIG_ERR != retCode );
+    spdlog::debug( fmt::runtime( "Installing handler for {}: {}" ), i, SIG_ERR != retCode );
   }
 
-  spdlog::trace( fmt::runtime( "[thread {:s}] InitializeSignalHandler()~" ), getThreadId() );
+  spdlog::trace( fmt::runtime( "InitializeSignalHandler()~" ) );
 }
 
 void InitializeLoggers() {
@@ -192,10 +190,6 @@ void InitializeLoggers() {
   spdlog::register_logger( mainLogger );
   spdlog::set_default_logger( mainLogger );
 
-  // auto normalFileSink = std::make_shared< spdlog::sinks::basic_file_sink_mt >( "log_test.log", false );
-  // normalFileSink->set_level( spdlog::level::trace );
-  // spdlog::sinks_init_list normalSinkList = { normalFileSink, consoleSink };
-
   std::vector< std::string > allLoggerNames = { "TSrv" };
   for( auto name : allLoggerNames ) {
     spdlogger logger = std::make_shared< spdlog::logger >( name, truncatedSinkList.begin(), truncatedSinkList.end() );
@@ -204,6 +198,7 @@ void InitializeLoggers() {
     spdlog::register_logger( logger );
   }
   // spdlog::get("LogScript")->set_level(spdlog::level::warn);
+  spdlog::set_pattern( "[%Y-%m-%d %H:%M:%S.%e] [thread %t] [%n] [%l] %v" );
 }
 
 #pragma endregion Initialization
@@ -232,7 +227,7 @@ void MyThreadFunction() {
 
 int better_main( std::span< std::string_view const > args ) noexcept {
   InitializeLoggers();
-  spdlog::trace( fmt::runtime( "[thread {:s}] better_main(args = {:c} \"{:s}\" {:c})" ), getThreadId(), '{', fmt::join( args, "\", \"" ), '}' );
+  spdlog::trace( fmt::runtime( "better_main(args = {:c} \"{:s}\" {:c})" ), '{', fmt::join( args, "\", \"" ), '}' );
 
   InitializeSignalHandler();
 
@@ -240,27 +235,27 @@ int better_main( std::span< std::string_view const > args ) noexcept {
 
   std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
 
-  spdlog::trace( fmt::runtime( "[thread {:s}] Constructing Server" ), getThreadId() );
+  spdlog::trace( fmt::runtime( "Constructing Server" ) );
   ThreadServer* myServer = new ThreadServer( "inproc://example", false );
 
   TestClass* myTestClass = new TestClass();
 
   signalCallback = [myServer]( int32_t signal ) {
-    spdlog::trace( fmt::runtime( "[thread {:s}] signalCallback( signal: {} )" ), getThreadId(), signal );
+    spdlog::trace( fmt::runtime( "signalCallback( signal: {} )" ), signal );
     myServer->stopThreadServer();
     // delete myServer;
-    spdlog::trace( fmt::runtime( "[thread {:s}] signalCallback()~" ), getThreadId() );
+    spdlog::trace( fmt::runtime( "signalCallback()~" ) );
   };
 
-  spdlog::trace( fmt::runtime( "[thread {:s}] Calling Server::startServer" ), getThreadId() );
+  spdlog::trace( fmt::runtime( "Calling Server::startServer" ) );
   myServer->startThreadServer();
-  spdlog::trace( fmt::runtime( "[thread {:s}] Called Server::startServer" ), getThreadId() );
+  spdlog::trace( fmt::runtime( "Called Server::startServer" ) );
 
   std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
 
   myServer->sendFunctionCall( []() {
-    spdlog::trace( fmt::runtime( "[thread {:s}] test sendFunctionCall()" ), getThreadId() );
-    spdlog::trace( fmt::runtime( "[thread {:s}] test sendFunctionCall()~" ), getThreadId() );
+    spdlog::trace( fmt::runtime( "test sendFunctionCall()" ) );
+    spdlog::trace( fmt::runtime( "test sendFunctionCall()~" ) );
   } );
 
   std::thread otherThingieThread( [myServer, myTestClass]() {
@@ -271,12 +266,12 @@ int better_main( std::span< std::string_view const > args ) noexcept {
     myServer->stopThreadServer();
   } );
 
-  spdlog::trace( fmt::runtime( "[thread {:s}] Waiting for Server to stop" ), getThreadId() );
+  spdlog::trace( fmt::runtime( "Waiting for Server to stop" ) );
   myServer->waitForThreadServer();
 
-  spdlog::trace( fmt::runtime( "[thread {:s}] Cleaning up Server" ), getThreadId() );
+  spdlog::trace( fmt::runtime( "Cleaning up Server" ) );
   delete myServer;
 
-  spdlog::trace( fmt::runtime( "[thread {:s}] better_main()~" ), getThreadId() );
+  spdlog::trace( fmt::runtime( "better_main()~" ) );
   return EXIT_SUCCESS;
 }

@@ -47,18 +47,15 @@ void InitializeLoggers() {
   spdlog::register_logger( mainLogger );
   spdlog::set_default_logger( mainLogger );
 
-  auto normalFileSink = std::make_shared< spdlog::sinks::basic_file_sink_mt >( "log_server.log", false );
-  normalFileSink->set_level( spdlog::level::trace );
-  spdlog::sinks_init_list normalSinkList = { normalFileSink, consoleSink };
-
   std::vector< std::string > allLoggerNames = { "Server" };
   for( auto name : allLoggerNames ) {
-    spdlogger logger = std::make_shared< spdlog::logger >( name, normalSinkList.begin(), normalSinkList.end() );
+    spdlogger logger = std::make_shared< spdlog::logger >( name, truncatedSinkList.begin(), truncatedSinkList.end() );
     logger->set_level( spdlog::level::trace );
     logger->flush_on( spdlog::level::trace );
     spdlog::register_logger( logger );
   }
   // spdlog::get("LogScript")->set_level(spdlog::level::warn);
+  spdlog::set_pattern( "[%Y-%m-%d %H:%M:%S.%e] [thread %t] [%n] [%l] %v" );
 }
 
 #pragma endregion

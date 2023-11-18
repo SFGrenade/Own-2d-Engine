@@ -10,27 +10,28 @@
 namespace SFG {
 class Window {
   private:
-  static spdlogger logger;
-  static int xPos;
-  static int yPos;
-  static int width;
-  static int height;
-  static std::string windowTitle;
-  static std::shared_ptr< SDL_Window > window;
-  static std::shared_ptr< GraphicsHandler > graphicsHandler;
-
-  static void deleteGraphicsHandler( GraphicsHandler* ptr );
-  static void deleteWindow( SDL_Window* ptr );
+  void deleteGraphicsHandler( GraphicsHandler* ptr );
+  void deleteWindow( SDL_Window* ptr );
 
   public:
-  static void SetSize( int width, int height );
-  static void Initialize();
-  static void Destroy();
+  Window();
+  ~Window();
+  void SetSize( int width, int height );
 
-  static bool InitializeSDL();
-  static bool InitializeWindow();
-  static bool ShowWindow();
-  static std::shared_ptr< SDL_Window > GetSdlWindow();
-  static std::shared_ptr< GraphicsHandler > GetGraphicsHandler();
+  bool InitializeSDL();
+  bool InitializeWindow();
+  bool ShowWindow();
+  std::shared_ptr< SDL_Window > GetSdlWindow();
+  std::shared_ptr< GraphicsHandler > GetGraphicsHandler();
+
+  private:
+  spdlogger logger_;
+  int xPos_;
+  int yPos_;
+  int width_;
+  int height_;
+  std::string windowTitle_;
+  std::shared_ptr< SDL_Window > window_;
+  std::shared_ptr< GraphicsHandler > graphicsHandler_;
 };
 }  // namespace SFG

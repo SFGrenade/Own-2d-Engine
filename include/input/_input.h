@@ -10,16 +10,18 @@
 #include "inProcMessages.pb.h"
 
 namespace SFG {
+class InputHandler;
+
 class Input {
   public:
-  Input();
+  Input( zmq::context_t* contextToUse );
   ~Input();
 
   void start();
-  void join();
+  void run();
+  bool isRunning();
 
   void add_Stop_Thread_callback( std::function< void( SFG::Proto::InProc::Stop_Thread_Request const& ) > callback );
-  void add_Get_Config_callback( std::function< void( SFG::Proto::InProc::Get_Config_Reply const& ) > callback );
   void add_Get_Performance_Counters_callback( std::function< void( SFG::Proto::InProc::Get_Performance_Counters_Request const& ) > callback );
 
   private:
@@ -30,12 +32,12 @@ class Input {
   ZmqPb::PubSub network_Logic_Receive_;
   ZmqPb::PubSub network_Network_Receive_;
   std::unique_ptr< std::thread > workerThread_;
-  bool workerThreadIsRunning_;
+  bool isRunning_;
 
-  private:
+  InputHandler* inputHandler_;
   uint64_t performanceLoops_;
+
   std::vector< std::function< void( SFG::Proto::InProc::Stop_Thread_Request const& ) > > stop_thread_callbacks_;
-  std::vector< std::function< void( SFG::Proto::InProc::Get_Config_Reply const& ) > > get_config_callbacks_;
   std::vector< std::function< void( SFG::Proto::InProc::Get_Performance_Counters_Request const& ) > > get_performance_counters_callbacks_;
 };
 }  // namespace SFG
