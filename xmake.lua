@@ -29,7 +29,7 @@ add_requires("spdlog")
 add_requireconfs("spdlog", {configs = {fmt_external = true}})
 add_defines("SPDLOG_FMT_EXTERNAL")
 add_requires("simpleini")
-add_requires("zmqpb")
+add_requires("zmqpb master")
 
 set_warnings("allextra")
 
