@@ -11,30 +11,30 @@
 
 namespace SFG {
 class NetworkHandler {
-  private:
-  static spdlogger logger;
-  static std::string hostReqRep;
-  static uint16_t portReqRep;
-  static std::string hostPubSub;
-  static uint16_t portPubSub;
-  static ZmqPb::ReqRep* rrNetwork;
-  static ZmqPb::PubSub* psNetwork;
-
   public:
-  static void SetReqRepInfo( std::string const& host, uint16_t port );
-  static void SetPubSubInfo( std::string const& host, uint16_t port );
+  NetworkHandler();
+  ~NetworkHandler();
 
-  static void Initialize();
-  static void InitializeNetwork();
-  static void Destroy();
+  void SetReqRepInfo( std::string const& host, uint16_t port );
+  void SetPubSubInfo( std::string const& host, uint16_t port );
+  void InitializeNetwork();
 
-  static void RunNetwork();
+  void RunNetwork();
 
-  static void SendMessageRequest( std::string const& username, std::string const& messageContent );
-  static void RequestAllMessage();
+  void SendMessageRequest( std::string const& username, std::string const& messageContent );
+  void RequestAllMessage();
 
   private:
-  static void onSendMessageResponse( SFG::Proto::SendMessageResponse const& msg );
-  static void onAllMessages( SFG::Proto::AllMessages const& msg );
+  void onSendMessageResponse( SFG::Proto::SendMessageResponse const& msg );
+  void onAllMessages( SFG::Proto::AllMessages const& msg );
+
+  private:
+  spdlogger logger_;
+  std::string hostReqRep_;
+  uint16_t portReqRep_;
+  std::string hostPubSub_;
+  uint16_t portPubSub_;
+  ZmqPb::ReqRep* rrNetwork_;
+  ZmqPb::PubSub* psNetwork_;
 };
 }  // namespace SFG

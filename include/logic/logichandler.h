@@ -10,21 +10,19 @@
 namespace SFG {
 class LogicHandler {
   private:
-  static spdlogger logger;
-  static std::vector< std::shared_ptr< Timer > > timers;
-  static std::shared_ptr< bool > quitFlag;
-  static std::thread logicThread;
-
-  static void deleteTimer( Timer* ptr );
-  static void UpdateLogic();
+  void deleteTimer( Timer* ptr );
 
   public:
-  static void Initialize();
-  static void Destroy();
+  LogicHandler();
+  ~LogicHandler();
 
-  static void SetQuitFlag( std::shared_ptr< bool > quitFlag );
-  static void StartLogic();
-  static void StopLogic();
-  static void AddTimer( TimerCallback callback, std::chrono::nanoseconds interval, bool returnInterval );
+  void StartLogic();
+  void UpdateLogic();
+  void AddTimer( TimerCallback callback, std::chrono::nanoseconds interval, bool returnInterval );
+
+  private:
+  spdlogger logger_;
+  std::chrono::time_point< std::chrono::high_resolution_clock > old_;
+  std::vector< std::shared_ptr< Timer > > timers_;
 };
 }  // namespace SFG

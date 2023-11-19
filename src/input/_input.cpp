@@ -16,14 +16,12 @@ Input::Input( zmq::context_t* contextToUse )
       network_Input_Receive_( "inproc://input", false, contextToUse ),
       network_Logic_Receive_( "inproc://logic", false, contextToUse ),
       network_Network_Receive_( "inproc://network", false, contextToUse ),
-      workerThread_( nullptr ),
       isRunning_( false ),
       inputHandler_( new InputHandler() ),
       performanceLoops_( 0 ),
       stop_thread_callbacks_(),
       get_performance_counters_callbacks_() {
-  this->logger_->trace( fmt::runtime( "Input()" ) );
-  this->logger_->trace( fmt::runtime( "Input - using context at {:p}" ), static_cast< void* >( contextToUse ) );
+  this->logger_->trace( fmt::runtime( "Input( contextToUse = {:p} )" ), static_cast< void* >( contextToUse ) );
 
   this->inputHandler_->RegisterQuitEvent( [this]() {
     this->logger_->trace( fmt::runtime( "QuitEvent()" ) );
@@ -55,17 +53,17 @@ Input::Input( zmq::context_t* contextToUse )
   } );
 
   add_Get_Performance_Counters_callback( [this]( SFG::Proto::InProc::Get_Performance_Counters_Request const& ) {
-    this->logger_->trace( fmt::runtime( "Get_Performance_Counters_callback()" ) );
+    // this->logger_->trace( fmt::runtime( "Get_Performance_Counters_callback( msg )" ) );
 
     SFG::Proto::InProc::Get_Performance_Counters_Reply* repMsg = new SFG::Proto::InProc::Get_Performance_Counters_Reply();
     repMsg->set_counter_input( this->performanceLoops_ );
     this->network_Input_Send_.sendMessage( repMsg );
     this->performanceLoops_ = 0;
 
-    this->logger_->trace( fmt::runtime( "Get_Performance_Counters_callback()~" ) );
+    // this->logger_->trace( fmt::runtime( "Get_Performance_Counters_callback()~" ) );
   } );
   add_Stop_Thread_callback( [this]( SFG::Proto::InProc::Stop_Thread_Request const& ) {
-    this->logger_->trace( fmt::runtime( "Stop_Thread_callback()" ) );
+    this->logger_->trace( fmt::runtime( "Stop_Thread_callback( msg )" ) );
 
     this->isRunning_ = false;
 
@@ -82,6 +80,7 @@ Input::Input( zmq::context_t* contextToUse )
   } );
 
   EmptySubscribe< SFG::Proto::InProc::Run_UpdateFrame_Request >( network_Graphics_Receive_ );
+  EmptySubscribe< SFG::Proto::InProc::Update_Performance_Information_Request >( network_Logic_Receive_ );
   EmptySubscribe< SFG::Proto::InProc::Get_Performance_Counters_Reply >( network_Graphics_Receive_ );
   EmptySubscribe< SFG::Proto::InProc::Get_Performance_Counters_Reply >( network_Input_Receive_ );
   EmptySubscribe< SFG::Proto::InProc::Get_Performance_Counters_Reply >( network_Logic_Receive_ );
@@ -92,9 +91,6 @@ Input::Input( zmq::context_t* contextToUse )
 
 Input::~Input() {
   this->logger_->trace( fmt::runtime( "~Input()" ) );
-
-  if( this->inputHandler_ )
-    delete this->inputHandler_;
 
   this->logger_->trace( fmt::runtime( "~Input()~" ) );
 }

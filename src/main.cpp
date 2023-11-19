@@ -15,7 +15,6 @@
 #include "logic/CustomScripts/logscript.h"
 #include "logic/_logic.h"
 #include "logic/logichandler.h"
-#include "logic/performance.h"
 #include "logic/scripthandler.h"
 #include "network/_network.h"
 #include "network/networkhandler.h"
@@ -276,6 +275,15 @@ void InitializeLoggers() {
   }
   // spdlog::get("LogScript")->set_level(spdlog::level::warn);
   spdlog::set_pattern( "[%Y-%m-%d %H:%M:%S.%e] [thread %t] [%n] [%l] %v" );
+
+  auto performanceFileSink = std::make_shared< spdlog::sinks::basic_file_sink_mt >( "performance.csv", true );
+  performanceFileSink->set_level( SFG::ConfigHandler::get_Logging_LogFileLevel() );
+  spdlog::sinks_init_list performanceSinkList = { performanceFileSink };
+  spdlogger performanceLogger = std::make_shared< spdlog::logger >( "Performance", performanceSinkList.begin(), performanceSinkList.end() );
+  performanceLogger->set_level( spdlog::level::trace );
+  performanceLogger->flush_on( spdlog::level::trace );
+  spdlog::register_logger( performanceLogger );
+  performanceLogger->set_pattern( "%v" );
 }
 
 void InitializeConfig() {
@@ -327,7 +335,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   InitializeConfig();
   InitializeLoggers();
 
-  spdlog::trace( fmt::runtime( "better_main(args = {:c} \"{:s}\" {:c})" ), '{', fmt::join( args, "\", \"" ), '}' );
+  spdlog::trace( fmt::runtime( "better_main( args = {:c}\"{:s}\"{:c} )" ), '{', fmt::join( args, "\", \"" ), '}' );
 
   bool quit = false;
   auto quitFlagDeleteFunction = []( bool * ) {};  // since quitFlag is on the stack
@@ -461,7 +469,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   InitializeConfig();
   InitializeLoggers();
 
-  spdlog::trace( fmt::runtime( "better_main(args = {:c} \"{:s}\" {:c})" ), '{', fmt::join( args, "\", \"" ), '}' );
+  spdlog::trace( fmt::runtime( "better_main( args = {:c}\"{:s}\"{:c} )" ), '{', fmt::join( args, "\", \"" ), '}' );
 
   SFG::Graphics graphicsModule( cntxPtr );
   SFG::Logic logicModule( cntxPtr );

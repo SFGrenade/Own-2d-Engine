@@ -6,7 +6,6 @@
 #include "_globals/misc.h"
 #include "_globals/zmq.h"
 #include "confighandler/confighandler.h"
-#include "graphics/fonthandler.h"
 #include "graphics/window.h"
 
 namespace SFG {
@@ -17,15 +16,13 @@ Graphics::Graphics( zmq::context_t* contextToUse )
       network_Input_Receive_( "inproc://input", false, contextToUse ),
       network_Logic_Receive_( "inproc://logic", false, contextToUse ),
       network_Network_Receive_( "inproc://network", false, contextToUse ),
-      workerThread_( nullptr ),
       isRunning_( false ),
-      window_( new SFG::Window() ),
+      window_( std::shared_ptr< SFG::Window >( new SFG::Window() ) ),
       performanceLoops_( 0 ),
       stop_thread_callbacks_(),
       update_performance_information_callbacks_(),
       get_performance_counters_callbacks_() {
-  this->logger_->trace( fmt::runtime( "Graphics()" ) );
-  this->logger_->trace( fmt::runtime( "Graphics - using context at {:p}" ), static_cast< void* >( contextToUse ) );
+  this->logger_->trace( fmt::runtime( "Graphics( contextToUse = {:p} )" ), static_cast< void* >( contextToUse ) );
 
   /* Initialize SDL to get the backend renderer */
   this->window_->InitializeSDL();
@@ -53,8 +50,8 @@ Graphics::Graphics( zmq::context_t* contextToUse )
     }
   }
   /* Destroy and create a new window */
-  delete this->window_;
-  this->window_ = new SFG::Window();
+  this->window_.reset();
+  this->window_ = std::shared_ptr< SFG::Window >( new SFG::Window() );
   this->window_->SetSize( SFG::ConfigHandler::get_Window_Width(), SFG::ConfigHandler::get_Window_Height() );
   this->window_->InitializeSDL();
   this->window_->InitializeWindow();
@@ -73,21 +70,21 @@ Graphics::Graphics( zmq::context_t* contextToUse )
     this->logger_->trace( fmt::runtime( "Stop_Thread_callback()~" ) );
   } );
   add_Update_Performance_Information_callback( [this]( SFG::Proto::InProc::Update_Performance_Information_Request const& msg ) {
-    this->logger_->trace( fmt::runtime( "Update_Performance_Information_callback()" ) );
+    // this->logger_->trace( fmt::runtime( "Update_Performance_Information_callback()" ) );
 
     this->window_->GetGraphicsHandler()->SetDebugString( msg.performance() );
 
-    this->logger_->trace( fmt::runtime( "Update_Performance_Information_callback()~" ) );
+    // this->logger_->trace( fmt::runtime( "Update_Performance_Information_callback()~" ) );
   } );
   add_Get_Performance_Counters_callback( [this]( SFG::Proto::InProc::Get_Performance_Counters_Request const& ) {
-    this->logger_->trace( fmt::runtime( "Get_Performance_Counters_callback()" ) );
+    // this->logger_->trace( fmt::runtime( "Get_Performance_Counters_callback()" ) );
 
     SFG::Proto::InProc::Get_Performance_Counters_Reply* repMsg = new SFG::Proto::InProc::Get_Performance_Counters_Reply();
     repMsg->set_counter_graphics( this->performanceLoops_ );
     network_Graphics_Send_.sendMessage( repMsg );
     this->performanceLoops_ = 0;
 
-    this->logger_->trace( fmt::runtime( "Get_Performance_Counters_callback()~" ) );
+    // this->logger_->trace( fmt::runtime( "Get_Performance_Counters_callback()~" ) );
   } );
 
   network_Input_Receive_.subscribe( new SFG::Proto::InProc::Stop_Thread_Request(), [this]( google::protobuf::Message const& message ) {
@@ -114,9 +111,6 @@ Graphics::Graphics( zmq::context_t* contextToUse )
 
 Graphics::~Graphics() {
   this->logger_->trace( fmt::runtime( "~Graphics()" ) );
-
-  if( this->window_ )
-    delete this->window_;
 
   this->logger_->trace( fmt::runtime( "~Graphics()~" ) );
 }

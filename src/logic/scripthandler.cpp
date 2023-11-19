@@ -4,46 +4,59 @@
 #include "logic/script.h"
 
 namespace SFG {
-spdlogger ScriptHandler::logger = nullptr;
-std::vector< std::shared_ptr< Script > > ScriptHandler::scripts = std::vector< std::shared_ptr< Script > >();
+void ScriptHandler::deleteScript( Script* ptr ) {
+  this->logger_->trace( fmt::runtime( "deleteScript( ptr = {} )" ), static_cast< void* >( ptr ) );
 
-void ScriptHandler::deleteScript( Script* script ) {
-  script->End();
-  delete script;
+  ptr->End();
+  delete ptr;
+
+  this->logger_->trace( fmt::runtime( "deleteScript()~" ) );
 }
 
-void ScriptHandler::Initialize() {
-  ScriptHandler::logger = spdlog::get( "ScriptHandler" );
-  ScriptHandler::logger->trace( fmt::runtime( "Initialize()" ) );
-  ScriptHandler::logger->trace( fmt::runtime( "Initialize()~" ) );
+ScriptHandler::ScriptHandler() : logger_( spdlog::get( "ScriptHandler" ) ), scripts_() {
+  this->logger_->trace( fmt::runtime( "ScriptHandler()" ) );
+
+  this->logger_->trace( fmt::runtime( "ScriptHandler()~" ) );
+}
+
+ScriptHandler::~ScriptHandler() {
+  this->logger_->trace( fmt::runtime( "~ScriptHandler()" ) );
+
+  this->scripts_.clear();
+
+  this->logger_->trace( fmt::runtime( "~ScriptHandler()~" ) );
 }
 
 void ScriptHandler::UpdateScriptsFrame() {
-  for( std::shared_ptr< Script > script : ScriptHandler::scripts ) {
+  // this->logger_->trace( fmt::runtime( "UpdateScriptsFrame()" ) );
+
+  for( std::shared_ptr< Script > script : this->scripts_ ) {
     script->UpdateFrame();
   }
+
+  // this->logger_->trace( fmt::runtime( "UpdateScriptsFrame()~" ) );
 }
 
 void ScriptHandler::UpdateScriptsLogicFrame() {
-  for( std::shared_ptr< Script > script : ScriptHandler::scripts ) {
+  // this->logger_->trace( fmt::runtime( "UpdateScriptsLogicFrame()" ) );
+
+  for( std::shared_ptr< Script > script : this->scripts_ ) {
     script->UpdateLogicFrame();
   }
-}
 
-void ScriptHandler::Destroy() {
-  ScriptHandler::logger->trace( fmt::runtime( "Destroy()" ) );
-  ScriptHandler::scripts.clear();
-  ScriptHandler::logger->trace( fmt::runtime( "Destroy()~" ) );
+  // this->logger_->trace( fmt::runtime( "UpdateScriptsLogicFrame()~" ) );
 }
 
 template < class T >
 std::shared_ptr< T > ScriptHandler::AddScript() {
   static_assert( std::is_base_of< Script, T >::value, "Class need to be inherited from `SFG::Script`!" );
-  ScriptHandler::logger->trace( fmt::runtime( "AddScript()" ) );
-  std::shared_ptr< T > script = std::shared_ptr< T >( new T(), deleteScript );
-  ScriptHandler::scripts.push_back( script );
+  this->logger_->trace( fmt::runtime( "AddScript()" ) );
+
+  std::shared_ptr< T > script = std::shared_ptr< T >( new T(), [this]( Script* ptr ) { this->deleteScript( ptr ); } );
+  this->scripts_.push_back( script );
   script->Start();
-  ScriptHandler::logger->trace( fmt::runtime( "AddScript()~" ) );
+
+  this->logger_->trace( fmt::runtime( "AddScript()~" ) );
   return script;
 }
 }  // namespace SFG

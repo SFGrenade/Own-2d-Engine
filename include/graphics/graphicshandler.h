@@ -9,6 +9,8 @@
 #include "_globals/spdlogInclude.h"
 
 namespace SFG {
+class FontHandler;
+
 typedef std::function< void( std::shared_ptr< SDL_Renderer > windowRenderer ) > DrawCallback;
 
 class GraphicsHandler {
@@ -26,11 +28,12 @@ class GraphicsHandler {
   void SetDebugString( std::string debugString );
 
   private:
-  spdlogger logger;
-  std::vector< DrawCallback > drawCallbacks;
-  int rendererIndex;
-  std::shared_ptr< SDL_Window > window;
-  std::shared_ptr< SDL_Renderer > windowRenderer;
+  spdlogger logger_;
+  std::shared_ptr< FontHandler > fontHandler_;
+  std::vector< DrawCallback > drawCallbacks_;
+  int rendererIndex_;
+  std::shared_ptr< SDL_Window > window_;
+  std::shared_ptr< SDL_Renderer > windowRenderer_;
   SDL_Texture* debugInfo_texture_;
   SDL_Rect debugInfo_textureRect_;
   SDL_Color debugInfo_foregroundColor_;

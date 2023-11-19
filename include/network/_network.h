@@ -1,7 +1,6 @@
 #pragma once
 
 #include <functional>
-#include <thread>
 #include <vector>
 #include <zmqPb/pubsub.hpp>
 
@@ -10,6 +9,8 @@
 #include "inProcMessages.pb.h"
 
 namespace SFG {
+class NetworkHandler;
+
 class Network {
   public:
   Network( zmq::context_t* contextToUse );
@@ -29,9 +30,9 @@ class Network {
   ZmqPb::PubSub network_Input_Receive_;
   ZmqPb::PubSub network_Logic_Receive_;
   ZmqPb::PubSub network_Network_Receive_;
-  std::unique_ptr< std::thread > workerThread_;
   bool isRunning_;
 
+  std::shared_ptr< NetworkHandler > networkHandler_;
   uint64_t performanceLoops_;
 
   std::vector< std::function< void( SFG::Proto::InProc::Stop_Thread_Request const& ) > > stop_thread_callbacks_;

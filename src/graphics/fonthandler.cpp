@@ -3,46 +3,50 @@
 #include "confighandler/confighandler.h"
 
 namespace SFG {
-spdlogger FontHandler::logger = nullptr;
-std::map< FontType, std::shared_ptr< TTF_Font > > FontHandler::fonts = std::map< FontType, std::shared_ptr< TTF_Font > >();
-
 void FontHandler::deleteFont( TTF_Font* ptr ) {
-  FontHandler::logger->trace( fmt::runtime( "Deleting font '{:s}'/'{:s}'" ), TTF_FontFaceFamilyName( ptr ), TTF_FontFaceStyleName( ptr ) );
+  this->logger_->trace( fmt::runtime( "deleteFont( ptr = {:p} )" ), static_cast< void* >( ptr ) );
+
   TTF_CloseFont( ptr );
+
+  this->logger_->trace( fmt::runtime( "deleteFont()~" ) );
 }
 
-void FontHandler::Initialize() {
-  FontHandler::logger = spdlog::get( "FontHandler" );
-  FontHandler::logger->trace( fmt::runtime( "Initialize()" ) );
+FontHandler::FontHandler() : logger_( spdlog::get( "FontHandler" ) ), fonts_() {
+  this->logger_->trace( fmt::runtime( "FontHandler()" ) );
+
   if( TTF_Init() != 0 ) {
-    FontHandler::logger->error( fmt::runtime( "Initialize - Error when TTF_Init: {:s}" ), TTF_GetError() );
+    this->logger_->error( fmt::runtime( "FontHandler - Error when TTF_Init: {:s}" ), TTF_GetError() );
   }
 
-  FontHandler::fonts[FontType::Console]
+  this->fonts_[FontType::Console]
       = std::shared_ptr< TTF_Font >( TTF_OpenFont( "./Resources/Fonts/NotoSansMono-Regular.ttf", ConfigHandler::get_Font_PixelSize() ),
-                                     FontHandler::deleteFont );
-  if( FontHandler::fonts[FontType::Console].get() == nullptr ) {
-    FontHandler::logger->error( fmt::runtime( "Initialize - Error when creating font `Console`: {:s}" ), TTF_GetError() );
+                                     [this]( TTF_Font* ptr ) { this->deleteFont( ptr ); } );
+  if( this->fonts_[FontType::Console].get() == nullptr ) {
+    this->logger_->error( fmt::runtime( "FontHandler - Error when creating font `Console`: {:s}" ), TTF_GetError() );
   }
-  FontHandler::fonts[FontType::Ui]
-      = std::shared_ptr< TTF_Font >( TTF_OpenFont( "./Resources/Fonts/NotoSerif-Regular.ttf", ConfigHandler::get_Font_PixelSize() ), FontHandler::deleteFont );
-  if( FontHandler::fonts[FontType::Ui].get() == nullptr ) {
-    FontHandler::logger->error( fmt::runtime( "Initialize - Error when creating font `Ui`: {:s}" ), TTF_GetError() );
+  this->fonts_[FontType::Ui] = std::shared_ptr< TTF_Font >( TTF_OpenFont( "./Resources/Fonts/NotoSerif-Regular.ttf", ConfigHandler::get_Font_PixelSize() ),
+                                                            [this]( TTF_Font* ptr ) { this->deleteFont( ptr ); } );
+  if( this->fonts_[FontType::Ui].get() == nullptr ) {
+    this->logger_->error( fmt::runtime( "FontHandler - Error when creating font `Ui`: {:s}" ), TTF_GetError() );
   }
-  FontHandler::logger->trace( fmt::runtime( "Initialize()~" ) );
+
+  this->logger_->trace( fmt::runtime( "FontHandler()~" ) );
 }
 
-void FontHandler::Destroy() {
-  FontHandler::logger->trace( fmt::runtime( "Destroy()" ) );
-  FontHandler::fonts.clear();
+FontHandler::~FontHandler() {
+  this->logger_->trace( fmt::runtime( "~FontHandler()" ) );
+
+  this->fonts_.clear();
 
   TTF_Quit();
-  FontHandler::logger->trace( fmt::runtime( "Destroy()~" ) );
+
+  this->logger_->trace( fmt::runtime( "~FontHandler()~" ) );
 }
 
 std::shared_ptr< TTF_Font > FontHandler::GetFont( FontType type ) {
-  FontHandler::logger->trace( fmt::runtime( "GetFont(FontType type = {:d})" ), static_cast< int >( type ) );
-  FontHandler::logger->trace( fmt::runtime( "GetFont()~" ) );
-  return FontHandler::fonts[type];
+  // this->logger_->trace( fmt::runtime( "GetFont( type = {:d} )" ), static_cast< int >( type ) );
+
+  // this->logger_->trace( fmt::runtime( "GetFont()~" ) );
+  return this->fonts_[type];
 }
 }  // namespace SFG

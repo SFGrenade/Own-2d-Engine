@@ -9,16 +9,19 @@
 namespace SFG {
 class ScriptHandler {
   private:
-  static spdlogger logger;
-  static std::vector< std::shared_ptr< Script > > scripts;
-  static void deleteScript( Script* script );
+  void deleteScript( Script* script );
 
   public:
-  static void Initialize();
-  static void UpdateScriptsFrame();
-  static void UpdateScriptsLogicFrame();
-  static void Destroy();
+  ScriptHandler();
+  ~ScriptHandler();
+
+  void UpdateScriptsFrame();
+  void UpdateScriptsLogicFrame();
   template < class T >
-  static std::shared_ptr< T > AddScript();
+  std::shared_ptr< T > AddScript();
+
+  private:
+  spdlogger logger_;
+  std::vector< std::shared_ptr< Script > > scripts_;
 };
 }  // namespace SFG

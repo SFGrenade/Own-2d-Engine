@@ -42,14 +42,17 @@ zmq::context_t ThreadServer::threadNetworkContext_ = zmq::context_t( 0 );
 
 ThreadServer::ThreadServer( std::string const& host, bool server )
     : logger_( spdlog::get( "TSrv" ) ), network_( host, server, &ThreadServer::threadNetworkContext_ ), thread_( nullptr ), loop_( false ) {
-  logger_->trace( fmt::runtime( "ThreadServer(std::string const& host = \"{:s}\", bool server = {})" ), host, server );
+  logger_->trace( fmt::runtime( "ThreadServer( host = \"{:s}\", bool server = {} )" ), host, server );
+
   network_.subscribe( new SFG::Proto::Test::InterThreadFunctionCall(), [this]( google::protobuf::Message const& message ) {
     this->onInterThreadFunctionCall( static_cast< SFG::Proto::Test::InterThreadFunctionCall const& >( message ) );
   } );
+
   logger_->trace( fmt::runtime( "ThreadServer()~" ) );
 }
 ThreadServer::~ThreadServer() {
   logger_->trace( fmt::runtime( "~ThreadServer()" ) );
+
   if( thread_ ) {
     logger_->trace( fmt::runtime( "~ThreadServer - deleting thread" ) );
     if( thread_->joinable() ) {
@@ -58,6 +61,7 @@ ThreadServer::~ThreadServer() {
     delete thread_;
     thread_ = nullptr;
   }
+
   logger_->trace( fmt::runtime( "~ThreadServer()~" ) );
 }
 void ThreadServer::startThreadServer() {
@@ -99,8 +103,7 @@ void ThreadServer::stopThreadServer() {
   logger_->trace( fmt::runtime( "stopThreadServer()~" ) );
 }
 void ThreadServer::sendFunctionCall( std::function< void() > functionToSend ) {
-  logger_->trace( fmt::runtime( "sendFunctionCall(std::function< void() > functionToSend = {:p})" ),
-                  static_cast< void* >( functionToSend.target< void ( * )() >() ) );
+  logger_->trace( fmt::runtime( "sendFunctionCall( functionToSend = {:p} )" ), static_cast< void* >( functionToSend.target< void ( * )() >() ) );
 
   SFG::Proto::Test::InterThreadFunctionCall* msg = new SFG::Proto::Test::InterThreadFunctionCall();
   msg->set_functionpointer( reinterpret_cast< int64_t >( functionToSend.target< void ( * )() >() ) );
@@ -110,8 +113,7 @@ void ThreadServer::sendFunctionCall( std::function< void() > functionToSend ) {
 }
 void ThreadServer::onInterThreadFunctionCall( SFG::Proto::Test::InterThreadFunctionCall const& msg ) {
   void ( *functionToCall )() = reinterpret_cast< void ( * )() >( msg.functionpointer() );
-  logger_->trace( fmt::runtime( "onInterThreadFunctionCall(SFG::Proto::Test::InterThreadFunctionCall const& msg = {:p})" ),
-                  static_cast< void* >( functionToCall ) );
+  logger_->trace( fmt::runtime( "onInterThreadFunctionCall( msg = {:p} )" ), static_cast< void* >( functionToCall ) );
 
   if( functionToCall != nullptr ) {
     functionToCall();
@@ -138,14 +140,17 @@ class TestClass {
 };
 TestClass::TestClass() : logger_( spdlog::get( "TSrv" ) ) {
   logger_->trace( fmt::runtime( "TestClass()" ) );
+
   logger_->trace( fmt::runtime( "TestClass()~" ) );
 }
 TestClass::~TestClass() {
   logger_->trace( fmt::runtime( "~TestClass()" ) );
+
   logger_->trace( fmt::runtime( "~TestClass()~" ) );
 }
 void TestClass::doStuff( int num ) {
-  logger_->trace( fmt::runtime( "doStuff(int num = {:d})" ), num );
+  logger_->trace( fmt::runtime( "doStuff( num = {:d} )" ), num );
+
   logger_->trace( fmt::runtime( "doStuff()~" ) );
 }
 
@@ -227,7 +232,7 @@ void MyThreadFunction() {
 
 int better_main( std::span< std::string_view const > args ) noexcept {
   InitializeLoggers();
-  spdlog::trace( fmt::runtime( "better_main(args = {:c} \"{:s}\" {:c})" ), '{', fmt::join( args, "\", \"" ), '}' );
+  spdlog::trace( fmt::runtime( "better_main( args = {:c}\"{:s}\"{:c} )" ), '{', fmt::join( args, "\", \"" ), '}' );
 
   InitializeSignalHandler();
 
@@ -242,8 +247,10 @@ int better_main( std::span< std::string_view const > args ) noexcept {
 
   signalCallback = [myServer]( int32_t signal ) {
     spdlog::trace( fmt::runtime( "signalCallback( signal: {} )" ), signal );
+
     myServer->stopThreadServer();
     // delete myServer;
+
     spdlog::trace( fmt::runtime( "signalCallback()~" ) );
   };
 
@@ -255,6 +262,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
 
   myServer->sendFunctionCall( []() {
     spdlog::trace( fmt::runtime( "test sendFunctionCall()" ) );
+
     spdlog::trace( fmt::runtime( "test sendFunctionCall()~" ) );
   } );
 

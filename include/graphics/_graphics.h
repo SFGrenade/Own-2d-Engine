@@ -1,7 +1,6 @@
 #pragma once
 
 #include <functional>
-#include <thread>
 #include <vector>
 #include <zmqPb/pubsub.hpp>
 
@@ -32,10 +31,9 @@ class Graphics {
   ZmqPb::PubSub network_Input_Receive_;
   ZmqPb::PubSub network_Logic_Receive_;
   ZmqPb::PubSub network_Network_Receive_;
-  std::unique_ptr< std::thread > workerThread_;
   bool isRunning_;
 
-  Window* window_;
+  std::shared_ptr< Window > window_;
   uint64_t performanceLoops_;
 
   std::vector< std::function< void( SFG::Proto::InProc::Stop_Thread_Request const& ) > > stop_thread_callbacks_;

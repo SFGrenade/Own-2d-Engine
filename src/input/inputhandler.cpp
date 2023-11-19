@@ -65,7 +65,7 @@ void InputHandler::CheckInputs() {
 }
 
 void InputHandler::RegisterKeyDownEvent( KeyCallback callback ) {
-  this->logger_->trace( fmt::runtime( "RegisterKeyDownEvent(KeyCallback callback)" ) );
+  this->logger_->trace( fmt::runtime( "RegisterKeyDownEvent( callback )" ) );
 
   if( callback )
     this->keyDownCallbacks_.push_back( callback );
@@ -74,7 +74,7 @@ void InputHandler::RegisterKeyDownEvent( KeyCallback callback ) {
 }
 
 void InputHandler::RegisterKeyUpEvent( KeyCallback callback ) {
-  this->logger_->trace( fmt::runtime( "RegisterKeyUpEvent(KeyCallback callback)" ) );
+  this->logger_->trace( fmt::runtime( "RegisterKeyUpEvent( callback )" ) );
 
   if( callback )
     this->keyUpCallbacks_.push_back( callback );
@@ -83,7 +83,7 @@ void InputHandler::RegisterKeyUpEvent( KeyCallback callback ) {
 }
 
 void InputHandler::RegisterMouseButtonEvent( MouseButtonCallback callback ) {
-  this->logger_->trace( fmt::runtime( "RegisterMouseButtonEvent(MouseButtonCallback callback)" ) );
+  this->logger_->trace( fmt::runtime( "RegisterMouseButtonEvent( callback )" ) );
 
   if( callback )
     this->mouseButtonCallbacks_.push_back( callback );
@@ -92,7 +92,7 @@ void InputHandler::RegisterMouseButtonEvent( MouseButtonCallback callback ) {
 }
 
 void InputHandler::RegisterMouseMotionEvent( MouseMotionCallback callback ) {
-  this->logger_->trace( fmt::runtime( "RegisterMouseMotionEvent(MouseMotionCallback callback)" ) );
+  this->logger_->trace( fmt::runtime( "RegisterMouseMotionEvent( callback )" ) );
 
   if( callback )
     this->mouseMotionCallbacks_.push_back( callback );
@@ -101,7 +101,7 @@ void InputHandler::RegisterMouseMotionEvent( MouseMotionCallback callback ) {
 }
 
 void InputHandler::RegisterMouseWheelEvent( MouseWheelCallback callback ) {
-  this->logger_->trace( fmt::runtime( "RegisterMouseWheelEvent(MouseWheelCallback callback)" ) );
+  this->logger_->trace( fmt::runtime( "RegisterMouseWheelEvent( callback )" ) );
 
   if( callback )
     this->mouseWheelCallbacks_.push_back( callback );
@@ -110,7 +110,7 @@ void InputHandler::RegisterMouseWheelEvent( MouseWheelCallback callback ) {
 }
 
 void InputHandler::RegisterQuitEvent( QuitEventCallback callback ) {
-  this->logger_->trace( fmt::runtime( "RegisterQuitEvent(QuitEventCallback callback)" ) );
+  this->logger_->trace( fmt::runtime( "RegisterQuitEvent( callback )" ) );
 
   if( callback )
     this->quitEventCallbacks_.push_back( callback );
@@ -119,7 +119,7 @@ void InputHandler::RegisterQuitEvent( QuitEventCallback callback ) {
 }
 
 void InputHandler::RegisterWindowEvent( WindowEventCallback callback ) {
-  this->logger_->trace( fmt::runtime( "RegisterWindowEvent(WindowEventCallback callback)" ) );
+  this->logger_->trace( fmt::runtime( "RegisterWindowEvent( callback )" ) );
 
   if( callback )
     this->windowEventCallbacks_.push_back( callback );

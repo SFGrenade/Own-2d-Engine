@@ -6,22 +6,25 @@
 
 namespace SFG {
 void GraphicsHandler::deleteRenderer( SDL_Renderer* ptr ) {
-  logger->trace( fmt::runtime( "deleteRenderer(SDL_Renderer* ptr = {:p})" ), static_cast< void* >( ptr ) );
+  this->logger_->trace( fmt::runtime( "deleteRenderer( ptr = {:p} )" ), static_cast< void* >( ptr ) );
+
   SDL_DestroyRenderer( ptr );
-  logger->trace( fmt::runtime( "deleteRenderer()~" ) );
+
+  this->logger_->trace( fmt::runtime( "deleteRenderer()~" ) );
 }
 
 GraphicsHandler::GraphicsHandler( std::shared_ptr< SDL_Window > window )
-    : logger( spdlog::get( "GraphicsHandler" ) ),
-      drawCallbacks(),
-      rendererIndex( 0 ),
-      window( window ),
-      windowRenderer( nullptr ),
+    : logger_( spdlog::get( "GraphicsHandler" ) ),
+      fontHandler_( new FontHandler() ),
+      drawCallbacks_(),
+      rendererIndex_( 0 ),
+      window_( window ),
+      windowRenderer_( nullptr ),
       debugInfo_texture_( nullptr ),
       debugInfo_textureRect_(),
       debugInfo_foregroundColor_(),
       debugInfo_backgroundColor_() {
-  logger->trace( fmt::runtime( "GraphicsHandler(std::shared_ptr<SDL_Window> window = {:p})" ), static_cast< void* >( window.get() ) );
+  this->logger_->trace( fmt::runtime( "GraphicsHandler( window = {:p} )" ), static_cast< void* >( window.get() ) );
 
   std::vector< std::string > fgCol = str_split( SFG::ConfigHandler::get_Rendering_PerformanceStringTextColor(), " " );
   std::vector< std::string > bgCol = str_split( SFG::ConfigHandler::get_Rendering_PerformanceStringBackgroundColor(), " " );
@@ -34,82 +37,87 @@ GraphicsHandler::GraphicsHandler( std::shared_ptr< SDL_Window > window )
   debugInfo_backgroundColor_.b = static_cast< uint8_t >( std::stoi( bgCol[2] ) );
   debugInfo_backgroundColor_.a = static_cast< uint8_t >( std::stoi( bgCol[3] ) );
 
-  logger->trace( fmt::runtime( "GraphicsHandler()~" ) );
+  this->logger_->trace( fmt::runtime( "GraphicsHandler()~" ) );
 }
 
 GraphicsHandler::~GraphicsHandler() {
-  logger->trace( fmt::runtime( "~GraphicsHandler()" ) );
+  this->logger_->trace( fmt::runtime( "~GraphicsHandler()" ) );
 
   if( debugInfo_texture_ )
     SDL_DestroyTexture( debugInfo_texture_ );
 
-  logger->trace( fmt::runtime( "~GraphicsHandler()~" ) );
+  this->logger_->trace( fmt::runtime( "~GraphicsHandler()~" ) );
 }
 
 void GraphicsHandler::SetRendererIndex( int index ) {
-  logger->trace( fmt::runtime( "SetRendererIndex(int index = {:d})" ), index );
+  this->logger_->trace( fmt::runtime( "SetRendererIndex( index = {:d} )" ), index );
 
   if( index >= 0 ) {
-    this->rendererIndex = index;
+    this->rendererIndex_ = index;
   }
 
-  logger->trace( fmt::runtime( "SetRendererIndex()~" ) );
+  this->logger_->trace( fmt::runtime( "SetRendererIndex()~" ) );
 }
 
 void GraphicsHandler::StartDraw() {
-  logger->trace( fmt::runtime( "StartDraw()" ) );
+  this->logger_->trace( fmt::runtime( "StartDraw()" ) );
 
-  this->windowRenderer = std::shared_ptr< SDL_Renderer >( SDL_CreateRenderer( this->window.get(), this->rendererIndex, 0 ),
-                                                          [this]( SDL_Renderer* ptr ) { this->deleteRenderer( ptr ); } );
-  if( this->windowRenderer.get() == nullptr ) {
-    this->logger->error( fmt::runtime( "Draw - Error when SDL_CreateRenderer: {:s}" ), SDL_GetError() );
+  this->windowRenderer_ = std::shared_ptr< SDL_Renderer >( SDL_CreateRenderer( this->window_.get(), this->rendererIndex_, 0 ),
+                                                           [this]( SDL_Renderer* ptr ) { this->deleteRenderer( ptr ); } );
+  if( this->windowRenderer_.get() == nullptr ) {
+    this->logger_->error( fmt::runtime( "Draw - Error when SDL_CreateRenderer: {:s}" ), SDL_GetError() );
   }
-  if( SDL_SetRenderDrawColor( this->windowRenderer.get(), 0, 0, 0, 255 ) != 0 ) {
-    this->logger->error( fmt::runtime( "Draw - Error when SDL_SetRenderDrawColor: {:s}" ), SDL_GetError() );
+  if( SDL_SetRenderDrawColor( this->windowRenderer_.get(), 0, 0, 0, 255 ) != 0 ) {
+    this->logger_->error( fmt::runtime( "Draw - Error when SDL_SetRenderDrawColor: {:s}" ), SDL_GetError() );
   }
 
-  logger->trace( fmt::runtime( "StartDraw()~" ) );
+  this->logger_->trace( fmt::runtime( "StartDraw()~" ) );
 }
 
 void GraphicsHandler::Draw() {
-  // logger->trace( fmt::runtime( "Draw()" ) );
+  // this->logger_->trace( fmt::runtime( "Draw()" ) );
 
-  if( SDL_RenderClear( this->windowRenderer.get() ) != 0 ) {
-    this->logger->error( fmt::runtime( "Draw - Error when SDL_RenderClear: {:s}" ), SDL_GetError() );
+  if( SDL_RenderClear( this->windowRenderer_.get() ) != 0 ) {
+    this->logger_->error( fmt::runtime( "Draw - Error when SDL_RenderClear: {:s}" ), SDL_GetError() );
   }
-  for( auto callback : this->drawCallbacks ) {
-    callback( this->windowRenderer );
+  for( auto callback : this->drawCallbacks_ ) {
+    callback( this->windowRenderer_ );
   }
-  SDL_RenderPresent( this->windowRenderer.get() );
+  if( this->debugInfo_texture_ ) {
+    if( SDL_RenderCopy( this->windowRenderer_.get(), this->debugInfo_texture_, NULL, &this->debugInfo_textureRect_ ) != 0 ) {
+      spdlog::error( fmt::runtime( "Draw - Error when SDL_RenderCopy: {:s}" ), SDL_GetError() );
+    }
+  }
+  SDL_RenderPresent( this->windowRenderer_.get() );
 
-  // logger->trace( fmt::runtime( "Draw()~" ) );
+  // this->logger_->trace( fmt::runtime( "Draw()~" ) );
 }
 
 void GraphicsHandler::RegisterDrawEvent( DrawCallback callback ) {
-  logger->trace( fmt::runtime( "RegisterDrawEvent(DrawCallback callback)" ) );
+  this->logger_->trace( fmt::runtime( "RegisterDrawEvent( callback )" ) );
 
   if( callback ) {
-    drawCallbacks.push_back( callback );
+    this->drawCallbacks_.push_back( callback );
   }
 
-  logger->trace( fmt::runtime( "RegisterDrawEvent()~" ) );
+  this->logger_->trace( fmt::runtime( "RegisterDrawEvent()~" ) );
 }
 
 void GraphicsHandler::SetDebugString( std::string debugString ) {
-  logger->trace( fmt::runtime( "SetDebugString(std::string debugString = \"{:s}\")" ), debugString );
+  // this->logger_->trace( fmt::runtime( "SetDebugString( debugString = \"{:s}\" )" ), debugString );
 
-  SDL_Surface* textSurface = TTF_RenderUTF8_Shaded_Wrapped( SFG::FontHandler::GetFont( SFG::FontType::Console ).get(),
+  SDL_Surface* textSurface = TTF_RenderUTF8_Shaded_Wrapped( this->fontHandler_->GetFont( SFG::FontType::Console ).get(),
                                                             debugString.c_str(),
-                                                            debugInfo_foregroundColor_,
-                                                            debugInfo_backgroundColor_,
+                                                            this->debugInfo_foregroundColor_,
+                                                            this->debugInfo_backgroundColor_,
                                                             0 );
-  if( debugInfo_texture_ )
-    SDL_DestroyTexture( debugInfo_texture_ );
-  debugInfo_texture_ = SDL_CreateTextureFromSurface( windowRenderer.get(), textSurface );
-  debugInfo_textureRect_.w = textSurface->w;
-  debugInfo_textureRect_.h = textSurface->h;
+  if( this->debugInfo_texture_ )
+    SDL_DestroyTexture( this->debugInfo_texture_ );
+  this->debugInfo_texture_ = SDL_CreateTextureFromSurface( this->windowRenderer_.get(), textSurface );
+  this->debugInfo_textureRect_.w = textSurface->w;
+  this->debugInfo_textureRect_.h = textSurface->h;
   SDL_FreeSurface( textSurface );
 
-  logger->trace( fmt::runtime( "SetDebugString()~" ) );
+  // this->logger_->trace( fmt::runtime( "SetDebugString()~" ) );
 }
 }  // namespace SFG

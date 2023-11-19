@@ -68,7 +68,7 @@ int main( int const argc, char const *const *argv ) {
 
 int better_main( std::span< std::string_view const > args ) noexcept {
   InitializeLoggers();
-  spdlog::trace( fmt::runtime( "better_main(args = {:c} \"{:s}\" {:c})" ), '{', fmt::join( args, "\", \"" ), '}' );
+  spdlog::trace( fmt::runtime( "better_main( args = {:c}\"{:s}\"{:c} )" ), '{', fmt::join( args, "\", \"" ), '}' );
 
   InitializeSignalHandler();
 
