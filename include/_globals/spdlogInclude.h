@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _GLOBALS_SPDLOGINCLUDE_H_
+#define _GLOBALS_SPDLOGINCLUDE_H_
 
 // Including FMT headers
 #include <fmt/chrono.h>
@@ -14,3 +15,5 @@
 #include <spdlog/spdlog.h>
 
 typedef std::shared_ptr< spdlog::logger > spdlogger;
+
+#endif /* _GLOBALS_SPDLOGINCLUDE_H_ */
