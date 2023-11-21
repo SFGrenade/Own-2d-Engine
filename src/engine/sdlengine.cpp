@@ -4,6 +4,7 @@
 #include <thread>
 
 #include "_globals/moreChrono.h"
+#include "_globals/scopedmutex.h"
 #include "engine/sdlwindow.h"
 
 SFG::Engine::SdlEngine::SdlEngine( uint32_t sdlInitFlags, IMG_InitFlags imgInitFlags, MIX_InitFlags mixInitFlags )
@@ -14,10 +15,12 @@ SFG::Engine::SdlEngine::SdlEngine( uint32_t sdlInitFlags, IMG_InitFlags imgInitF
       windowIdsToDestroyMutex_(),
       closedWindowIds_(),
       closedWindowIdsMutex_() {
-  this->logger_->trace( fmt::runtime( "SdlEngine( sdlInitFlags = 0b{:0>32b}, imgInitFlags = 0b{:0>32b}, mixInitFlags = 0b{:0>32b} )" ),
-                        sdlInitFlags,
-                        static_cast< uint32_t >( imgInitFlags ),
-                        static_cast< uint32_t >( mixInitFlags ) );
+  ScopedLog( this->logger_,
+             fmt::format( fmt::runtime( "SdlEngine( sdlInitFlags = 0b{:0>32b}, imgInitFlags = 0b{:0>32b}, mixInitFlags = 0b{:0>32b} )" ),
+                          sdlInitFlags,
+                          static_cast< uint32_t >( imgInitFlags ),
+                          static_cast< uint32_t >( mixInitFlags ) ),
+             fmt::format( fmt::runtime( "SdlEngine()~" ) ) );
 
   if( SDL_Init( sdlInitFlags ) != 0 ) {
     throw new std::runtime_error( std::string( "SDL_Init error: " ) + std::string( SDL_GetError() ) );
@@ -31,29 +34,24 @@ SFG::Engine::SdlEngine::SdlEngine( uint32_t sdlInitFlags, IMG_InitFlags imgInitF
   if( TTF_Init() != 0 ) {
     throw new std::runtime_error( std::string( "TTF_Init error: " ) + std::string( TTF_GetError() ) );
   }
-
-  this->logger_->trace( fmt::runtime( "SdlEngine()~" ) );
 }
 
 SFG::Engine::SdlEngine::~SdlEngine() {
-  this->logger_->trace( fmt::runtime( "~SdlEngine()" ) );
+  ScopedLog( this->logger_, fmt::format( fmt::runtime( "~SdlEngine()" ) ), fmt::format( fmt::runtime( "~SdlEngine()~" ) ) );
+  ScopedMutex( &( this->windowsMutex_ ) );
+  ScopedMutex( &( this->windowIdsToDestroyMutex_ ) );
+  ScopedMutex( &( this->closedWindowIdsMutex_ ) );
 
-  this->windowsMutex_.lock();
-  for( std::pair< uint32_t, SFG::Engine::SdlWindow* > window : this->windows_ ) {
-    delete window.second;
+  for( SFG::Engine::SdlWindow* window : this->windows_ ) {
+    delete window;
   }
   this->windows_.clear();
-  this->windowsMutex_.unlock();
-  this->closedWindowIdsMutex_.lock();
   this->closedWindowIds_.clear();
-  this->closedWindowIdsMutex_.unlock();
 
   TTF_Quit();
   Mix_Quit();
   IMG_Quit();
   SDL_Quit();
-
-  this->logger_->trace( fmt::runtime( "~SdlEngine()~" ) );
 }
 
 SFG::Engine::SdlWindow* SFG::Engine::SdlEngine::add_window( std::string const& title,
@@ -61,14 +59,19 @@ SFG::Engine::SdlWindow* SFG::Engine::SdlEngine::add_window( std::string const& t
                                                             uint32_t height,
                                                             SDL_WindowFlags flags,
                                                             uint32_t x,
-                                                            uint32_t y ) {
-  this->logger_->trace( fmt::runtime( "add_window( title: \"{:s}\", width: {:d}, height: {:d}, flags: 0b{:0>32b}, x: {:d}, y: {:d} )" ),
-                        title,
-                        width,
-                        height,
-                        static_cast< uint32_t >( flags ),
-                        x,
-                        y );
+                                                            uint32_t y,
+                                                            bool initialize ) {
+  ScopedLog( this->logger_,
+             fmt::format( fmt::runtime(
+                              "add_window( title = \"{:s}\", width = {:d}, height = {:d}, flags = 0b{:0>32b}, x = {:d}, y = {:d}, initialize = {} )" ),
+                          title,
+                          width,
+                          height,
+                          static_cast< uint32_t >( flags ),
+                          x,
+                          y,
+                          initialize ),
+             fmt::format( fmt::runtime( "add_window()~" ) ) );
 
   SFG::Engine::SdlWindow* ret = new SFG::Engine::SdlWindow( this );
   ret->set_title( title );
@@ -78,29 +81,25 @@ SFG::Engine::SdlWindow* SFG::Engine::SdlEngine::add_window( std::string const& t
   ret->set_height( height );
   ret->set_flags( flags );
 
-  uint32_t window_id = ret->initialize_sdl_window();
-
-  this->logger_->trace( fmt::runtime( "add_window - window_id = {:d}" ), window_id );
   this->windowsMutex_.lock();
-  this->windows_[window_id] = ret;
+  this->windows_.push_back( ret );
   this->windowsMutex_.unlock();
 
-  this->logger_->trace( fmt::runtime( "add_window()~" ) );
+  if( initialize ) {
+    ret->initialize_sdl_window();
+  }
   return ret;
 }
 
 void SFG::Engine::SdlEngine::destroy_window( uint32_t windowId ) {
-  this->logger_->trace( fmt::runtime( "destroy_window( windowId = {:d} )" ), windowId );
+  ScopedLog( this->logger_, fmt::format( fmt::runtime( "destroy_window( windowId = {:d} )" ), windowId ), fmt::format( fmt::runtime( "destroy_window()~" ) ) );
+  ScopedMutex( &( this->windowIdsToDestroyMutex_ ) );
 
-  this->windowIdsToDestroyMutex_.lock();
   this->windowIdsToDestroy_.push( windowId );
-  this->windowIdsToDestroyMutex_.unlock();
-
-  this->logger_->trace( fmt::runtime( "destroy_window()~" ) );
 }
 
 void SFG::Engine::SdlEngine::run_input_loop() {
-  this->logger_->trace( fmt::runtime( "run_input_loop()" ) );
+  ScopedLog( this->logger_, fmt::format( fmt::runtime( "run_input_loop()" ) ), fmt::format( fmt::runtime( "run_input_loop()~" ) ) );
 
   SDL_Event e;
   std::queue< SDL_Event > tempEventQueue;
@@ -112,15 +111,24 @@ void SFG::Engine::SdlEngine::run_input_loop() {
       this->windowIdsToDestroy_.pop();
       this->windowIdsToDestroyMutex_.unlock();
 
+      int32_t windowIdIndex = -1;
       this->windowsMutex_.lock();
-      if( this->windows_.contains( windowId ) ) {
-        delete this->windows_[windowId];
-        this->windows_.erase( windowId );
+      for( size_t i = 0; i < this->windows_.size(); ++i ) {
+        if( this->windows_[i]->get_sdl_window_id() == windowId ) {
+          windowIdIndex = i;
+        }
+      }
+      this->windowsMutex_.unlock();
+
+      if( windowIdIndex != -1 ) {
+        this->windowsMutex_.lock();
+        delete this->windows_[windowIdIndex];
+        this->windows_.erase( this->windows_.begin() + windowIdIndex );
+        this->windowsMutex_.unlock();
         this->closedWindowIdsMutex_.lock();
         this->closedWindowIds_.insert( windowId );
         this->closedWindowIdsMutex_.unlock();
       }
-      this->windowsMutex_.unlock();
 
       this->windowIdsToDestroyMutex_.lock();
     }
@@ -134,27 +142,23 @@ void SFG::Engine::SdlEngine::run_input_loop() {
     this->windowsMutex_.unlock();
 
     while( SDL_PollEvent( &e ) ) {
-      // this->logger_->trace( fmt::runtime( "run_input_loop - event type = {:s}" ), SDL_EventType_to_string( static_cast< SDL_EventType >( e.type ) ) );
-      if( !run_input_loop( e, &done ) ) {
+      if( !run_input_loop( e ) ) {
         SDL_PushEvent( &e );
       }
     }
   }
-
-  this->logger_->trace( fmt::runtime( "run_input_loop()~" ) );
 }
 
-bool SFG::Engine::SdlEngine::run_input_loop( SDL_Event const& e, bool* donePtr ) {
-  this->logger_->trace( fmt::runtime( "run_input_loop( e = {:s}, donePtr = {:p} )" ),
-                        SDL_EventType_to_string( static_cast< SDL_EventType >( e.type ) ),
-                        static_cast< void* >( donePtr ) );
+bool SFG::Engine::SdlEngine::run_input_loop( SDL_Event const& e ) {
+  ScopedLog( this->logger_,
+             fmt::format( fmt::runtime( "run_input_loop( e = {:s} )" ), SDL_EventType_to_string( static_cast< SDL_EventType >( e.type ) ) ),
+             fmt::format( fmt::runtime( "run_input_loop()~" ) ) );
 
   switch( e.type ) {
     case SDL_EventType::SDL_QUIT:
-      // ( *donePtr ) = true;
       this->windowsMutex_.lock();
-      for( std::pair< uint32_t, SFG::Engine::SdlWindow* > window : this->windows_ ) {
-        window.second->add_input( e );
+      for( SFG::Engine::SdlWindow* window : this->windows_ ) {
+        window->add_input( e );
       }
       this->windowsMutex_.unlock();
       return true;
@@ -282,32 +286,29 @@ bool SFG::Engine::SdlEngine::run_input_loop( SDL_Event const& e, bool* donePtr )
       }
       break;
   }
-
-  // this->logger_->trace( fmt::runtime( "run_input_loop()~" ) );
   return true;
 }
 
 bool SFG::Engine::SdlEngine::has_window( uint32_t windowId ) {
-  this->logger_->trace( fmt::runtime( "has_window( windowId = {:d} )" ), windowId );
+  ScopedLog( this->logger_, fmt::format( fmt::runtime( "has_window( windowId = {:d} )" ), windowId ), fmt::format( fmt::runtime( "has_window()~" ) ) );
+  ScopedMutex( &( this->windowsMutex_ ) );
 
-  this->windowsMutex_.lock();
-  bool ret = this->windows_.contains( windowId );
-  this->windowsMutex_.unlock();
-
-  this->logger_->trace( fmt::runtime( "has_window()~" ) );
-  return ret;
+  for( SFG::Engine::SdlWindow* window : this->windows_ ) {
+    if( window->get_sdl_window_id() == windowId ) {
+      return true;
+    }
+  }
+  return false;
 }
 
 SFG::Engine::SdlWindow* SFG::Engine::SdlEngine::get_window( uint32_t windowId ) {
-  this->logger_->trace( fmt::runtime( "get_window( windowId = {:d} )" ), windowId );
+  ScopedLog( this->logger_, fmt::format( fmt::runtime( "get_window( windowId = {:d} )" ), windowId ), fmt::format( fmt::runtime( "get_window()~" ) ) );
+  ScopedMutex( &( this->windowsMutex_ ) );
 
-  SFG::Engine::SdlWindow* ret = nullptr;
-  this->windowsMutex_.lock();
-  if( this->windows_.contains( windowId ) ) {
-    ret = this->windows_[windowId];
+  for( SFG::Engine::SdlWindow* window : this->windows_ ) {
+    if( window->get_sdl_window_id() == windowId ) {
+      return window;
+    }
   }
-  this->windowsMutex_.unlock();
-
-  this->logger_->trace( fmt::runtime( "get_window()~" ) );
-  return ret;
+  return nullptr;
 }

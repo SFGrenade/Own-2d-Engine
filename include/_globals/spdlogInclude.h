@@ -16,4 +16,15 @@
 
 typedef std::shared_ptr< spdlog::logger > spdlogger;
 
+class ScopedLog {
+  public:
+  ScopedLog( spdlogger logger, std::string const& startMessage, std::string const& stopMessage );
+  ~ScopedLog();
+
+  private:
+  spdlogger logger_;
+  std::string startMessage_;
+  std::string stopMessage_;
+};
+
 #endif /* _GLOBALS_SPDLOGINCLUDE_H_ */

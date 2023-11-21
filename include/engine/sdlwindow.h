@@ -18,10 +18,11 @@ class SdlWindow {
   SdlWindow( SdlEngine* sdlEngine );
   ~SdlWindow();
 
-  uint32_t initialize_sdl_window();
+  void initialize_sdl_window();
   void add_input( SDL_Event const& e );
   void run_input_loop();
 
+  uint32_t get_sdl_window_id() const;
   std::string get_title() const;
   void set_title( std::string const& new_title );
   uint32_t get_x() const;
@@ -41,6 +42,7 @@ class SdlWindow {
   std::mutex sdlInputQueueMutex_;
   std::queue< SDL_Event > sdlInputQueue_;
   SDL_Window* sdlWindow_;
+  uint32_t sdlWindowId_;
   std::string title_;
   uint32_t x_;
   uint32_t y_;

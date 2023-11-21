@@ -12,6 +12,7 @@ SFG::Engine::SdlWindow::SdlWindow( SdlEngine* sdlEngine )
       sdlInputQueueMutex_(),
       sdlInputQueue_(),
       sdlWindow_( nullptr ),
+      sdlWindowId_( 0 ),
       title_( "" ),
       x_( SDL_WINDOWPOS_CENTERED ),
       y_( SDL_WINDOWPOS_CENTERED ),
@@ -34,18 +35,18 @@ SFG::Engine::SdlWindow::~SdlWindow() {
   this->logger_->trace( fmt::runtime( "~SdlWindow()~" ) );
 }
 
-uint32_t SFG::Engine::SdlWindow::initialize_sdl_window() {
+void SFG::Engine::SdlWindow::initialize_sdl_window() {
   this->logger_->trace( fmt::runtime( "initialize_sdl_window()" ) );
 
   if( this->sdlWindow_ ) {
     this->logger_->trace( fmt::runtime( "initialize_sdl_window()~" ) );
-    return static_cast< uint32_t >( -1 );
+    return;
   }
   this->sdlWindow_ = SDL_CreateWindow( this->title_.c_str(), this->x_, this->y_, this->width_, this->height_, static_cast< uint32_t >( this->flags_ ) );
+  this->sdlWindowId_ = SDL_GetWindowID( this->sdlWindow_ );
   this->flags_ = static_cast< SDL_WindowFlags >( SDL_GetWindowFlags( this->sdlWindow_ ) );
 
   this->logger_->trace( fmt::runtime( "initialize_sdl_window()~" ) );
-  return SDL_GetWindowID( this->sdlWindow_ );
 }
 
 void SFG::Engine::SdlWindow::add_input( SDL_Event const& e ) {
@@ -143,6 +144,13 @@ void SFG::Engine::SdlWindow::run_input_loop() {
   this->sdlEngine_->destroy_window( SDL_GetWindowID( this->sdlWindow_ ) );
 
   this->logger_->trace( fmt::runtime( "run_input_loop()~" ) );
+}
+
+uint32_t SFG::Engine::SdlWindow::get_sdl_window_id() const {
+  // this->logger_->trace( fmt::runtime( "get_sdl_window_id()" ) );
+
+  // this->logger_->trace( fmt::runtime( "get_sdl_window_id()~" ) );
+  return this->sdlWindowId_;
 }
 
 std::string SFG::Engine::SdlWindow::get_title() const {
