@@ -61,9 +61,9 @@ int better_main( std::span< std::string_view const > args ) noexcept {
     myWindow1Flags = myWindow1->get_flags();
     spdlog::trace( fmt::runtime( "window 1 flags: 0b{:0>32b}" ), static_cast< uint32_t >( myWindow1Flags ) );
 
-    SFG::Engine::SdlWindowRenderer* myWindow1Renderer = myWindow1->initialize_renderer( "direct3d", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
-    myWindow1->set_flags( SDL_WindowFlags::SDL_WINDOW_SHOWN );
+    myWindow1->initialize_renderer( "direct3d", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
 
+    myWindow1->set_flags( SDL_WindowFlags::SDL_WINDOW_SHOWN );
     myWindow1Flags = myWindow1->get_flags();
     spdlog::trace( fmt::runtime( "window 1 flags: 0b{:0>32b}" ), static_cast< uint32_t >( myWindow1Flags ) );
 
@@ -76,9 +76,9 @@ int better_main( std::span< std::string_view const > args ) noexcept {
     myWindow2Flags = myWindow2->get_flags();
     spdlog::trace( fmt::runtime( "window 2 flags: 0b{:0>32b}" ), static_cast< uint32_t >( myWindow2Flags ) );
 
-    SFG::Engine::SdlWindowRenderer* myWindow2Renderer = myWindow2->initialize_renderer( "direct3d11", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
-    myWindow2->set_flags( SDL_WindowFlags::SDL_WINDOW_SHOWN );
+    myWindow2->initialize_renderer( "direct3d11", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
 
+    myWindow2->set_flags( SDL_WindowFlags::SDL_WINDOW_SHOWN );
     myWindow2Flags = myWindow2->get_flags();
     spdlog::trace( fmt::runtime( "window 2 flags: 0b{:0>32b}" ), static_cast< uint32_t >( myWindow2Flags ) );
 
@@ -91,9 +91,9 @@ int better_main( std::span< std::string_view const > args ) noexcept {
     myWindow3Flags = myWindow3->get_flags();
     spdlog::trace( fmt::runtime( "window 3 flags: 0b{:0>32b}" ), static_cast< uint32_t >( myWindow3Flags ) );
 
-    SFG::Engine::SdlWindowRenderer* myWindow3Renderer = myWindow3->initialize_renderer( "software", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
-    myWindow3->set_flags( SDL_WindowFlags::SDL_WINDOW_SHOWN );
+    myWindow3->initialize_renderer( "software", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
 
+    myWindow3->set_flags( SDL_WindowFlags::SDL_WINDOW_SHOWN );
     myWindow3Flags = myWindow3->get_flags();
     spdlog::trace( fmt::runtime( "window 3 flags: 0b{:0>32b}" ), static_cast< uint32_t >( myWindow3Flags ) );
 
@@ -106,9 +106,9 @@ int better_main( std::span< std::string_view const > args ) noexcept {
     myWindow4Flags = myWindow4->get_flags();
     spdlog::trace( fmt::runtime( "window 4 flags: 0b{:0>32b}" ), static_cast< uint32_t >( myWindow4Flags ) );
 
-    SFG::Engine::SdlWindowRenderer* myWindow4Renderer = myWindow4->initialize_renderer( "software", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
-    myWindow4->set_flags( SDL_WindowFlags::SDL_WINDOW_SHOWN );
+    myWindow4->initialize_renderer( "software", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
 
+    myWindow4->set_flags( SDL_WindowFlags::SDL_WINDOW_SHOWN );
     myWindow4Flags = myWindow4->get_flags();
     spdlog::trace( fmt::runtime( "window 4 flags: 0b{:0>32b}" ), static_cast< uint32_t >( myWindow4Flags ) );
 
