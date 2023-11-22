@@ -5,14 +5,17 @@
 
 #include "_globals/moreChrono.h"
 #include "engine/sdlengine.h"
+#include "engine/sdlwindowrenderer.h"
 
 SFG::Engine::SdlWindow::SdlWindow( SdlEngine* sdlEngine )
     : logger_( spdlog::get( "Engine_SdlWindow" ) ),
       sdlEngine_( sdlEngine ),
-      sdlInputQueueMutex_(),
       sdlInputQueue_(),
+      sdlInputQueueMutex_(),
       sdlWindow_( nullptr ),
       sdlWindowId_( 0 ),
+      sdlRenderer_( nullptr ),
+      sdlRendererThread_(),
       title_( "" ),
       x_( SDL_WINDOWPOS_CENTERED ),
       y_( SDL_WINDOWPOS_CENTERED ),
@@ -27,9 +30,14 @@ SFG::Engine::SdlWindow::SdlWindow( SdlEngine* sdlEngine )
 SFG::Engine::SdlWindow::~SdlWindow() {
   this->logger_->trace( fmt::runtime( "~SdlWindow()" ) );
 
-  if( sdlWindow_ ) {
-    SDL_DestroyWindow( sdlWindow_ );
-    sdlWindow_ = nullptr;
+  sdlRendererThread_.join();
+  if( this->sdlRenderer_ ) {
+    delete this->sdlRenderer_;
+    this->sdlRenderer_ = nullptr;
+  }
+  if( this->sdlWindow_ ) {
+    SDL_DestroyWindow( this->sdlWindow_ );
+    this->sdlWindow_ = nullptr;
   }
 
   this->logger_->trace( fmt::runtime( "~SdlWindow()~" ) );
@@ -47,6 +55,37 @@ void SFG::Engine::SdlWindow::initialize_sdl_window() {
   this->flags_ = static_cast< SDL_WindowFlags >( SDL_GetWindowFlags( this->sdlWindow_ ) );
 
   this->logger_->trace( fmt::runtime( "initialize_sdl_window()~" ) );
+}
+
+SFG::Engine::SdlWindowRenderer* SFG::Engine::SdlWindow::initialize_renderer( std::string const& renderer, SDL_RendererFlags flags ) {
+  this->logger_->trace( fmt::runtime( "initialize_renderer( renderer = \"{:s}\", flags = 0b{:0>32b} )" ), renderer, static_cast< uint32_t >( flags ) );
+
+  if( this->sdlRenderer_ ) {
+    this->logger_->trace( fmt::runtime( "initialize_renderer()~" ) );
+    return this->sdlRenderer_;
+  }
+
+  this->sdlRenderer_ = new SFG::Engine::SdlWindowRenderer( this );
+
+  std::string wantedRenderer = renderer;
+  this->sdlRendererThread_ = std::thread( [this, wantedRenderer, flags]() {
+    int32_t rendererIndex = -1;
+    std::vector< std::string > availableRenderers = this->sdlEngine_->get_renderer_names();
+    int32_t i = 0;
+    for( std::string availableRenderer : availableRenderers ) {
+      if( wantedRenderer == availableRenderer ) {
+        rendererIndex = i;
+        break;
+      }
+      ++i;
+    }
+
+    this->sdlRenderer_->initialize_sdl_renderer( rendererIndex, flags );
+    this->sdlRenderer_->run_loop();
+  } );
+
+  this->logger_->trace( fmt::runtime( "initialize_renderer()~" ) );
+  return this->sdlRenderer_;
 }
 
 void SFG::Engine::SdlWindow::add_input( SDL_Event const& e ) {
@@ -78,7 +117,6 @@ void SFG::Engine::SdlWindow::run_input_loop() {
       switch( e.type ) {
         case SDL_EventType::SDL_QUIT:
           done = true;
-          this->sdlEngine_->destroy_window( SDL_GetWindowID( this->sdlWindow_ ) );
           break;
         case SDL_EventType::SDL_WINDOWEVENT:
           this->logger_->trace( fmt::runtime( "run_input_loop - e.window = {:s}" ),
@@ -141,9 +179,17 @@ void SFG::Engine::SdlWindow::run_input_loop() {
       sdlInputQueueMutex_.unlock();
     }
   }
-  this->sdlEngine_->destroy_window( SDL_GetWindowID( this->sdlWindow_ ) );
+  this->sdlRenderer_->signal_quit();
+  this->sdlEngine_->destroy_window( this->sdlWindowId_ );
 
   this->logger_->trace( fmt::runtime( "run_input_loop()~" ) );
+}
+
+SDL_Window* SFG::Engine::SdlWindow::get_sdl_window() const {
+  // this->logger_->trace( fmt::runtime( "get_sdl_window()" ) );
+
+  // this->logger_->trace( fmt::runtime( "get_sdl_window()~" ) );
+  return this->sdlWindow_;
 }
 
 uint32_t SFG::Engine::SdlWindow::get_sdl_window_id() const {
@@ -151,6 +197,13 @@ uint32_t SFG::Engine::SdlWindow::get_sdl_window_id() const {
 
   // this->logger_->trace( fmt::runtime( "get_sdl_window_id()~" ) );
   return this->sdlWindowId_;
+}
+
+SFG::Engine::SdlWindowRenderer* SFG::Engine::SdlWindow::get_renderer() const {
+  // this->logger_->trace( fmt::runtime( "get_renderer()" ) );
+
+  // this->logger_->trace( fmt::runtime( "get_renderer()~" ) );
+  return this->sdlRenderer_;
 }
 
 std::string SFG::Engine::SdlWindow::get_title() const {
@@ -164,6 +217,9 @@ void SFG::Engine::SdlWindow::set_title( std::string const& new_title ) {
   this->logger_->trace( fmt::runtime( "set_title( new_title = \"{:s}\" )" ), new_title );
 
   this->title_ = new_title;
+  if( this->sdlWindow_ ) {
+    SDL_SetWindowTitle( this->sdlWindow_, this->title_.c_str() );
+  }
 
   this->logger_->trace( fmt::runtime( "set_title()~" ) );
 }
@@ -179,6 +235,9 @@ void SFG::Engine::SdlWindow::set_x( uint32_t new_x ) {
   this->logger_->trace( fmt::runtime( "set_x( new_x = {:d} )" ), new_x );
 
   this->x_ = new_x;
+  if( this->sdlWindow_ ) {
+    SDL_SetWindowPosition( this->sdlWindow_, this->x_, this->y_ );
+  }
 
   this->logger_->trace( fmt::runtime( "set_x()~" ) );
 }
@@ -194,6 +253,9 @@ void SFG::Engine::SdlWindow::set_y( uint32_t new_y ) {
   this->logger_->trace( fmt::runtime( "set_y( new_y = {:d} )" ), new_y );
 
   this->y_ = new_y;
+  if( this->sdlWindow_ ) {
+    SDL_SetWindowPosition( this->sdlWindow_, this->x_, this->y_ );
+  }
 
   this->logger_->trace( fmt::runtime( "set_y()~" ) );
 }
@@ -209,6 +271,9 @@ void SFG::Engine::SdlWindow::set_width( uint32_t new_width ) {
   this->logger_->trace( fmt::runtime( "set_width( new_width = {:d} )" ), new_width );
 
   this->width_ = new_width;
+  if( this->sdlWindow_ ) {
+    SDL_SetWindowSize( this->sdlWindow_, this->width_, this->height_ );
+  }
 
   this->logger_->trace( fmt::runtime( "set_width()~" ) );
 }
@@ -224,6 +289,9 @@ void SFG::Engine::SdlWindow::set_height( uint32_t new_height ) {
   this->logger_->trace( fmt::runtime( "set_height( new_height = {:d} )" ), new_height );
 
   this->height_ = new_height;
+  if( this->sdlWindow_ ) {
+    SDL_SetWindowSize( this->sdlWindow_, this->width_, this->height_ );
+  }
 
   this->logger_->trace( fmt::runtime( "set_height()~" ) );
 }

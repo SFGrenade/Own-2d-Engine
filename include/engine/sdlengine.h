@@ -22,6 +22,8 @@ class SdlEngine {
              MIX_InitFlags mixInitFlags = MIX_InitFlags::MIX_INIT_OGG );
   ~SdlEngine();
 
+  std::vector< std::string > get_renderer_names() const;
+
   SFG::Engine::SdlWindow* add_window( std::string const& title,
                                       uint32_t width,
                                       uint32_t height,
@@ -39,6 +41,7 @@ class SdlEngine {
 
   private:
   spdlogger logger_;
+
   std::vector< SFG::Engine::SdlWindow* > windows_;
   std::mutex windowsMutex_;
   std::queue< uint32_t > windowIdsToDestroy_;

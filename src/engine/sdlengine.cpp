@@ -54,6 +54,22 @@ SFG::Engine::SdlEngine::~SdlEngine() {
   SDL_Quit();
 }
 
+std::vector< std::string > SFG::Engine::SdlEngine::get_renderer_names() const {
+  ScopedLog( this->logger_, fmt::format( fmt::runtime( "get_renderer_names()" ) ), fmt::format( fmt::runtime( "get_renderer_names()~" ) ) );
+
+  std::vector< std::string > ret;
+  int32_t numRenderers = SDL_GetNumRenderDrivers();
+  SDL_RendererInfo rendererInfo;
+  for( int i = 0; i < numRenderers; ++i ) {
+    if( SDL_GetRenderDriverInfo( i, &rendererInfo ) != 0 ) {
+      this->logger_->error( "SDL_GetRenderDriverInfo error: {:s}", SDL_GetError() );
+    }
+    ret.push_back( rendererInfo.name );
+  }
+
+  return ret;
+}
+
 SFG::Engine::SdlWindow* SFG::Engine::SdlEngine::add_window( std::string const& title,
                                                             uint32_t width,
                                                             uint32_t height,
@@ -115,7 +131,7 @@ void SFG::Engine::SdlEngine::run_input_loop() {
       this->windowsMutex_.lock();
       for( size_t i = 0; i < this->windows_.size(); ++i ) {
         if( this->windows_[i]->get_sdl_window_id() == windowId ) {
-          windowIdIndex = i;
+          windowIdIndex = static_cast< int32_t >( i );
         }
       }
       this->windowsMutex_.unlock();

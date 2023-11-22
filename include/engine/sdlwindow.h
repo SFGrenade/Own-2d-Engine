@@ -3,6 +3,7 @@
 
 #include <mutex>
 #include <queue>
+#include <thread>
 
 #include "_globals/sdlInclude.h"
 #include "_globals/spdlogInclude.h"
@@ -12,17 +13,21 @@ namespace SFG {
 namespace Engine {
 
 class SdlEngine;
+class SdlWindowRenderer;
 
 class SdlWindow {
   public:
-  SdlWindow( SdlEngine* sdlEngine );
+  SdlWindow( SFG::Engine::SdlEngine* sdlEngine );
   ~SdlWindow();
 
   void initialize_sdl_window();
+  SFG::Engine::SdlWindowRenderer* initialize_renderer( std::string const& renderer, SDL_RendererFlags flags );
   void add_input( SDL_Event const& e );
   void run_input_loop();
 
+  SDL_Window* get_sdl_window() const;
   uint32_t get_sdl_window_id() const;
+  SFG::Engine::SdlWindowRenderer* get_renderer() const;
   std::string get_title() const;
   void set_title( std::string const& new_title );
   uint32_t get_x() const;
@@ -38,11 +43,16 @@ class SdlWindow {
 
   private:
   spdlogger logger_;
-  SdlEngine* sdlEngine_;
-  std::mutex sdlInputQueueMutex_;
+
+  SFG::Engine::SdlEngine* sdlEngine_;
   std::queue< SDL_Event > sdlInputQueue_;
+  std::mutex sdlInputQueueMutex_;
+
   SDL_Window* sdlWindow_;
   uint32_t sdlWindowId_;
+  SFG::Engine::SdlWindowRenderer* sdlRenderer_;
+  std::thread sdlRendererThread_;
+
   std::string title_;
   uint32_t x_;
   uint32_t y_;
