@@ -12,6 +12,13 @@ namespace Engine {
 
 class SdlWindow;
 
+struct DebugInfoStruct {
+  std::string message_;
+  bool drawNew_;
+  SDL_Texture* texture_;
+  SDL_Rect textureRect_;
+};
+
 class SdlWindowRenderer {
   public:
   SdlWindowRenderer( SFG::Engine::SdlWindow* sdlWindow );
@@ -21,13 +28,26 @@ class SdlWindowRenderer {
   void signal_quit();
   void run_loop();
 
+  void set_debugInfo_topLeft( std::string const& debugInfo );
+  void set_debugInfo_topRight( std::string const& debugInfo );
+  void set_debugInfo_bottomLeft( std::string const& debugInfo );
+  void set_debugInfo_bottomRight( std::string const& debugInfo );
+
+  private:
+  void renderDebugInfo( DebugInfoStruct& debugInfo );
+
   private:
   spdlogger logger_;
 
   SFG::Engine::SdlWindow* sdlWindow_;
   bool done_;
   std::mutex doneMutex_;
+  DebugInfoStruct debugInfoTopLeft_;
+  DebugInfoStruct debugInfoTopRight_;
+  DebugInfoStruct debugInfoBottomLeft_;
+  DebugInfoStruct debugInfoBottomRight_;
 
+  TTF_Font* sdlFont_;
   SDL_Renderer* sdlRenderer_;
 };
 
