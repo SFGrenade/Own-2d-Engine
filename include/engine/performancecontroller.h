@@ -6,8 +6,6 @@
 #include "_globals/moreChrono.h"
 #include "_globals/spdlogInclude.h"
 
-#define CACHE_LINE 64
-#define CACHE_ALIGN __declspec( align( CACHE_LINE ) )
 
 namespace SFG {
 namespace Engine {
@@ -29,18 +27,18 @@ class PerformanceController {
   long double getRenderLoops();
 
   private:
-  spdlogger logger_;
+  __declspec( align( 64 ) ) spdlogger logger_;
 
-  CACHE_ALIGN std::atomic< uint64_t > counterInputLoops_;
-  CACHE_ALIGN std::chrono::high_resolution_clock::time_point counterInputLoopsTimePoint_;
-  CACHE_ALIGN std::atomic< uint64_t > counterLogicLoops_;
-  CACHE_ALIGN std::chrono::high_resolution_clock::time_point counterLogicLoopsTimePoint_;
-  CACHE_ALIGN std::atomic< uint64_t > counterNetworkLoops_;
-  CACHE_ALIGN std::chrono::high_resolution_clock::time_point counterNetworkLoopsTimePoint_;
-  CACHE_ALIGN std::atomic< uint64_t > counterRenderLoops_;
-  CACHE_ALIGN std::chrono::high_resolution_clock::time_point counterRenderLoopsTimePoint_;
+  __declspec( align( 64 ) ) std::atomic< uint64_t > counterInputLoops_;
+  __declspec( align( 64 ) ) std::chrono::high_resolution_clock::time_point counterInputLoopsTimePoint_;
+  __declspec( align( 64 ) ) std::atomic< uint64_t > counterLogicLoops_;
+  __declspec( align( 64 ) ) std::chrono::high_resolution_clock::time_point counterLogicLoopsTimePoint_;
+  __declspec( align( 64 ) ) std::atomic< uint64_t > counterNetworkLoops_;
+  __declspec( align( 64 ) ) std::chrono::high_resolution_clock::time_point counterNetworkLoopsTimePoint_;
+  __declspec( align( 64 ) ) std::atomic< uint64_t > counterRenderLoops_;
+  __declspec( align( 64 ) ) std::chrono::high_resolution_clock::time_point counterRenderLoopsTimePoint_;
 
-  SFG::Engine::SdlWindow* sdlWindow_;
+  __declspec( align( 64 ) ) SFG::Engine::SdlWindow* sdlWindow_;
 };
 
 }  // namespace Engine

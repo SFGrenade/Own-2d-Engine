@@ -13,10 +13,10 @@ namespace Engine {
 class SdlWindow;
 
 struct DebugInfoStruct {
-  std::string message_;
-  bool drawNew_;
-  SDL_Texture* texture_;
-  SDL_Rect textureRect_;
+  __declspec( align( 64 ) ) std::string message_;
+  __declspec( align( 64 ) ) bool drawNew_;
+  __declspec( align( 64 ) ) SDL_Texture* texture_;
+  __declspec( align( 64 ) ) SDL_Rect textureRect_;
 };
 
 class SdlWindowRenderer {
@@ -37,18 +37,18 @@ class SdlWindowRenderer {
   void renderDebugInfo( DebugInfoStruct& debugInfo );
 
   private:
-  spdlogger logger_;
+  __declspec( align( 64 ) ) spdlogger logger_;
 
-  SFG::Engine::SdlWindow* sdlWindow_;
-  bool done_;
-  std::mutex doneMutex_;
-  DebugInfoStruct debugInfoTopLeft_;
-  DebugInfoStruct debugInfoTopRight_;
-  DebugInfoStruct debugInfoBottomLeft_;
-  DebugInfoStruct debugInfoBottomRight_;
+  __declspec( align( 64 ) ) SFG::Engine::SdlWindow* sdlWindow_;
+  __declspec( align( 64 ) ) bool done_;
+  __declspec( align( 64 ) ) std::mutex doneMutex_;
+  __declspec( align( 64 ) ) DebugInfoStruct debugInfoTopLeft_;
+  __declspec( align( 64 ) ) DebugInfoStruct debugInfoTopRight_;
+  __declspec( align( 64 ) ) DebugInfoStruct debugInfoBottomLeft_;
+  __declspec( align( 64 ) ) DebugInfoStruct debugInfoBottomRight_;
 
-  TTF_Font* sdlFont_;
-  SDL_Renderer* sdlRenderer_;
+  __declspec( align( 64 ) ) TTF_Font* sdlFont_;
+  __declspec( align( 64 ) ) SDL_Renderer* sdlRenderer_;
 };
 
 }  // namespace Engine

@@ -20,11 +20,11 @@ class LogicController {
   void run_loop();
 
   private:
-  spdlogger logger_;
+  __declspec( align( 64 ) ) spdlogger logger_;
 
-  SFG::Engine::SdlWindow* sdlWindow_;
-  bool done_;
-  std::mutex doneMutex_;
+  __declspec( align( 64 ) ) SFG::Engine::SdlWindow* sdlWindow_;
+  __declspec( align( 64 ) ) bool done_;
+  __declspec( align( 64 ) ) std::mutex doneMutex_;
 };
 
 }  // namespace Engine

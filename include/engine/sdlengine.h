@@ -40,14 +40,14 @@ class SdlEngine {
   SFG::Engine::SdlWindow* get_window( uint32_t windowId );
 
   private:
-  spdlogger logger_;
+  __declspec( align( 64 ) ) spdlogger logger_;
 
-  std::vector< SFG::Engine::SdlWindow* > windows_;
-  std::mutex windowsMutex_;
-  std::queue< uint32_t > windowIdsToDestroy_;
-  std::mutex windowIdsToDestroyMutex_;
-  std::set< uint32_t > closedWindowIds_;
-  std::mutex closedWindowIdsMutex_;
+  __declspec( align( 64 ) ) std::vector< SFG::Engine::SdlWindow* > windows_;
+  __declspec( align( 64 ) ) std::mutex windowsMutex_;
+  __declspec( align( 64 ) ) std::queue< uint32_t > windowIdsToDestroy_;
+  __declspec( align( 64 ) ) std::mutex windowIdsToDestroyMutex_;
+  __declspec( align( 64 ) ) std::set< uint32_t > closedWindowIds_;
+  __declspec( align( 64 ) ) std::mutex closedWindowIdsMutex_;
 };
 
 }  // namespace Engine

@@ -22,9 +22,9 @@ class ScopedLog {
   ~ScopedLog();
 
   private:
-  spdlogger logger_;
-  std::string startMessage_;
-  std::string stopMessage_;
+  __declspec( align( 64 ) ) spdlogger logger_;
+  __declspec( align( 64 ) ) std::string startMessage_;
+  __declspec( align( 64 ) ) std::string stopMessage_;
 };
 
 #endif /* _GLOBALS_SPDLOGINCLUDE_H_ */

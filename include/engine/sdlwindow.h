@@ -48,26 +48,26 @@ class SdlWindow {
   void set_flags( SDL_WindowFlags new_flags );
 
   private:
-  spdlogger logger_;
+  __declspec( align( 64 ) ) spdlogger logger_;
 
-  SFG::Engine::SdlEngine* sdlEngine_;
-  std::queue< SDL_Event > sdlInputQueue_;
-  std::mutex sdlInputQueueMutex_;
+  __declspec( align( 64 ) ) SFG::Engine::SdlEngine* sdlEngine_;
+  __declspec( align( 64 ) ) std::queue< SDL_Event > sdlInputQueue_;
+  __declspec( align( 64 ) ) std::mutex sdlInputQueueMutex_;
 
-  SDL_Window* sdlWindow_;
-  uint32_t sdlWindowId_;
-  SFG::Engine::PerformanceController* performanceController_;
-  SFG::Engine::SdlWindowRenderer* sdlRenderer_;
-  std::thread sdlRendererThread_;
-  SFG::Engine::LogicController* logicController_;
-  std::thread logicControllerThread_;
+  __declspec( align( 64 ) ) SDL_Window* sdlWindow_;
+  __declspec( align( 64 ) ) uint32_t sdlWindowId_;
+  __declspec( align( 64 ) ) SFG::Engine::PerformanceController* performanceController_;
+  __declspec( align( 64 ) ) SFG::Engine::SdlWindowRenderer* sdlRenderer_;
+  __declspec( align( 64 ) ) std::thread sdlRendererThread_;
+  __declspec( align( 64 ) ) SFG::Engine::LogicController* logicController_;
+  __declspec( align( 64 ) ) std::thread logicControllerThread_;
 
-  std::string title_;
-  uint32_t x_;
-  uint32_t y_;
-  uint32_t width_;
-  uint32_t height_;
-  SDL_WindowFlags flags_;
+  __declspec( align( 64 ) ) std::string title_;
+  __declspec( align( 64 ) ) uint32_t x_;
+  __declspec( align( 64 ) ) uint32_t y_;
+  __declspec( align( 64 ) ) uint32_t width_;
+  __declspec( align( 64 ) ) uint32_t height_;
+  __declspec( align( 64 ) ) SDL_WindowFlags flags_;
 };
 
 }  // namespace Engine
