@@ -37,6 +37,7 @@ void SFG::Engine::LogicController::run_loop() {
   std::chrono::high_resolution_clock::time_point timePointStart = std::chrono::high_resolution_clock::now();
   std::chrono::secondsLongDouble secondsPerLoop;
   std::chrono::secondsLongDouble countDown1s = std::chrono::duration_cast< std::chrono::secondsLongDouble >( 1.0s );
+  std::chrono::secondsLongDouble countDownScripts = std::chrono::duration_cast< std::chrono::secondsLongDouble >( 1.0s / 50.0L );
 
   this->doneMutex_.lock();
   while( !this->done_ ) {
@@ -45,6 +46,8 @@ void SFG::Engine::LogicController::run_loop() {
     secondsPerLoop = getDurationSinceLast( timePointStart );
 
     countDown1s -= secondsPerLoop;
+    countDownScripts -= secondsPerLoop;
+
     if( countDown1s.count() <= 0 ) {
       this->sdlWindow_->get_window_renderer()->set_debugInfo_topLeft(
           fmt::format( fmt::runtime( "{:.1F} fps" ), this->sdlWindow_->get_performance_controller()->getRenderLoops() ) );
@@ -56,6 +59,10 @@ void SFG::Engine::LogicController::run_loop() {
           fmt::format( fmt::runtime( "{:.1F} nlps" ), this->sdlWindow_->get_performance_controller()->getNetworkLoops() ) );
 
       countDown1s = std::chrono::duration_cast< std::chrono::secondsLongDouble >( 1.0s );
+    }
+
+    if( countDownScripts.count() <= 0 ) {
+      countDownScripts = std::chrono::duration_cast< std::chrono::secondsLongDouble >( 1.0s / 50.0L );
     }
 
     this->sdlWindow_->get_performance_controller()->incLogicLoops();
