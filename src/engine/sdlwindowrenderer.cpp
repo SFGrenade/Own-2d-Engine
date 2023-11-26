@@ -196,18 +196,19 @@ void SFG::Engine::SdlWindowRenderer::renderDebugInfo( DebugInfoStruct& debugInfo
                                                         this->sdlWindow_->get_width() );
   if( txtsfc == nullptr ) {
     this->logger_->error( fmt::runtime( "renderDebugInfo - Error when TTF_RenderUTF8_Blended_Wrapped: {:s}" ), TTF_GetError() );
+  } else {
+    if( debugInfo.texture_ ) {
+      SDL_DestroyTexture( debugInfo.texture_ );
+    }
+    debugInfo.texture_ = SDL_CreateTextureFromSurface( this->sdlRenderer_, txtsfc );
+    if( !debugInfo.texture_ ) {
+      this->logger_->error( fmt::runtime( "renderDebugInfo - Error when SDL_CreateTextureFromSurface: {:s}" ), SDL_GetError() );
+    }
+    debugInfo.textureRect_.w = txtsfc->w;
+    debugInfo.textureRect_.h = txtsfc->h;
+    SDL_FreeSurface( txtsfc );
+    debugInfo.drawNew_ = false;
   }
-  if( debugInfo.texture_ ) {
-    SDL_DestroyTexture( debugInfo.texture_ );
-  }
-  debugInfo.texture_ = SDL_CreateTextureFromSurface( this->sdlRenderer_, txtsfc );
-  if( !debugInfo.texture_ ) {
-    this->logger_->error( fmt::runtime( "renderDebugInfo - Error when SDL_CreateTextureFromSurface: {:s}" ), SDL_GetError() );
-  }
-  debugInfo.textureRect_.w = txtsfc->w;
-  debugInfo.textureRect_.h = txtsfc->h;
-  SDL_FreeSurface( txtsfc );
-  debugInfo.drawNew_ = false;
 
   this->logger_->trace( fmt::runtime( "renderDebugInfo()~" ) );
 }
