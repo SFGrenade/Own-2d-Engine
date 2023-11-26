@@ -13,7 +13,9 @@ namespace SFG {
 namespace Engine {
 
 class SdlEngine;
+class PerformanceController;
 class SdlWindowRenderer;
+class LogicController;
 
 class SdlWindow {
   public:
@@ -21,13 +23,17 @@ class SdlWindow {
   ~SdlWindow();
 
   void initialize_sdl_window();
-  SFG::Engine::SdlWindowRenderer* initialize_renderer( std::string const& renderer, SDL_RendererFlags flags );
+  SFG::Engine::SdlWindowRenderer* initialize_window_renderer( std::string const& renderer, SDL_RendererFlags flags );
+  SFG::Engine::LogicController* initialize_logic_controller();
   void add_input( SDL_Event const& e );
   void run_input_loop();
 
   SDL_Window* get_sdl_window() const;
   uint32_t get_sdl_window_id() const;
-  SFG::Engine::SdlWindowRenderer* get_renderer() const;
+  SFG::Engine::PerformanceController* get_performance_controller() const;
+  SFG::Engine::SdlWindowRenderer* get_window_renderer() const;
+  SFG::Engine::LogicController* get_logic_controller() const;
+
   std::string get_title() const;
   void set_title( std::string const& new_title );
   uint32_t get_x() const;
@@ -50,8 +56,11 @@ class SdlWindow {
 
   SDL_Window* sdlWindow_;
   uint32_t sdlWindowId_;
+  SFG::Engine::PerformanceController* performanceController_;
   SFG::Engine::SdlWindowRenderer* sdlRenderer_;
   std::thread sdlRendererThread_;
+  SFG::Engine::LogicController* logicController_;
+  std::thread logicControllerThread_;
 
   std::string title_;
   uint32_t x_;

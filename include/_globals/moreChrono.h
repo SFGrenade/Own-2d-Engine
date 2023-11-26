@@ -11,4 +11,6 @@ typedef duration< long double > secondsLongDouble;
 }
 }  // namespace std
 
+std::chrono::secondsLongDouble getDurationSinceLast( std::chrono::high_resolution_clock::time_point& start );
+
 #endif /* _GLOBALS_MORECHRONO_H_ */

@@ -1,9 +1,9 @@
 #include "engine/sdlwindowrenderer.h"
 
-#include <chrono>
 #include <thread>
 
 #include "_globals/moreChrono.h"
+#include "engine/performancecontroller.h"
 #include "engine/sdlwindow.h"
 
 
@@ -13,10 +13,10 @@ SFG::Engine::SdlWindowRenderer::SdlWindowRenderer( SFG::Engine::SdlWindow* sdlWi
       done_( false ),
       doneMutex_(),
       sdlFont_( TTF_OpenFont( R"(./Resources/Fonts/NotoSansMono-Regular.ttf)", 18 ) ),
-      debugInfoTopLeft_( { "Hi 1", true, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
-      debugInfoTopRight_( { "Hi 2", true, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
-      debugInfoBottomLeft_( { "Hi 3", true, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
-      debugInfoBottomRight_( { "Hi 4", true, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
+      debugInfoTopLeft_( { "", true, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
+      debugInfoTopRight_( { "", true, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
+      debugInfoBottomLeft_( { "", true, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
+      debugInfoBottomRight_( { "", true, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
       sdlRenderer_( nullptr ) {
   this->logger_->trace( fmt::runtime( "SdlWindowRenderer( sdlWindow = {:p} )" ), static_cast< void* >( sdlWindow ) );
 
@@ -83,12 +83,6 @@ void SFG::Engine::SdlWindowRenderer::run_loop() {
   while( !this->done_ ) {
     this->doneMutex_.unlock();
 
-    /*
-     * SDL_Rect( 0, 0, 0, 0 )
-     * SDL_Rect( this->sdlWindow_->get_width(), 0, 0, 0 )
-     * SDL_Rect( 0, this->sdlWindow_->get_height(), 0, 0 )
-     * SDL_Rect( this->sdlWindow_->get_width(), this->sdlWindow_->get_height(), 0, 0 )
-     */
     if( this->debugInfoTopLeft_.drawNew_ ) {
       this->renderDebugInfo( this->debugInfoTopLeft_ );
       this->debugInfoTopLeft_.textureRect_.x = 0;
@@ -129,10 +123,11 @@ void SFG::Engine::SdlWindowRenderer::run_loop() {
 
     SDL_RenderPresent( this->sdlRenderer_ );
 
+    this->sdlWindow_->get_performance_controller()->incRenderLoops();
+
     this->doneMutex_.lock();
   }
   this->doneMutex_.unlock();
-  // this->sdlWindow_->destroy_renderer( this->sdlRenderer_ );
 
   this->logger_->trace( fmt::runtime( "run_loop()~" ) );
 }

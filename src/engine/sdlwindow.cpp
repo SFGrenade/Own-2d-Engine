@@ -4,8 +4,11 @@
 #include <thread>
 
 #include "_globals/moreChrono.h"
+#include "engine/logiccontroller.h"
+#include "engine/performancecontroller.h"
 #include "engine/sdlengine.h"
 #include "engine/sdlwindowrenderer.h"
+
 
 SFG::Engine::SdlWindow::SdlWindow( SdlEngine* sdlEngine )
     : logger_( spdlog::get( "Engine_SdlWindow" ) ),
@@ -14,8 +17,11 @@ SFG::Engine::SdlWindow::SdlWindow( SdlEngine* sdlEngine )
       sdlInputQueueMutex_(),
       sdlWindow_( nullptr ),
       sdlWindowId_( 0 ),
+      performanceController_( new SFG::Engine::PerformanceController( this ) ),
       sdlRenderer_( nullptr ),
       sdlRendererThread_(),
+      logicController_( nullptr ),
+      logicControllerThread_(),
       title_( "" ),
       x_( SDL_WINDOWPOS_CENTERED ),
       y_( SDL_WINDOWPOS_CENTERED ),
@@ -34,6 +40,15 @@ SFG::Engine::SdlWindow::~SdlWindow() {
   if( this->sdlRenderer_ ) {
     delete this->sdlRenderer_;
     this->sdlRenderer_ = nullptr;
+  }
+  logicControllerThread_.join();
+  if( this->logicController_ ) {
+    delete this->logicController_;
+    this->logicController_ = nullptr;
+  }
+  if( this->performanceController_ ) {
+    delete this->performanceController_;
+    this->performanceController_ = nullptr;
   }
   if( this->sdlWindow_ ) {
     SDL_DestroyWindow( this->sdlWindow_ );
@@ -57,11 +72,11 @@ void SFG::Engine::SdlWindow::initialize_sdl_window() {
   this->logger_->trace( fmt::runtime( "initialize_sdl_window()~" ) );
 }
 
-SFG::Engine::SdlWindowRenderer* SFG::Engine::SdlWindow::initialize_renderer( std::string const& renderer, SDL_RendererFlags flags ) {
-  this->logger_->trace( fmt::runtime( "initialize_renderer( renderer = \"{:s}\", flags = 0b{:0>32b} )" ), renderer, static_cast< uint32_t >( flags ) );
+SFG::Engine::SdlWindowRenderer* SFG::Engine::SdlWindow::initialize_window_renderer( std::string const& renderer, SDL_RendererFlags flags ) {
+  this->logger_->trace( fmt::runtime( "initialize_window_renderer( renderer = \"{:s}\", flags = 0b{:0>32b} )" ), renderer, static_cast< uint32_t >( flags ) );
 
   if( this->sdlRenderer_ ) {
-    this->logger_->trace( fmt::runtime( "initialize_renderer()~" ) );
+    this->logger_->trace( fmt::runtime( "initialize_window_renderer()~" ) );
     return this->sdlRenderer_;
   }
 
@@ -84,8 +99,24 @@ SFG::Engine::SdlWindowRenderer* SFG::Engine::SdlWindow::initialize_renderer( std
     this->sdlRenderer_->run_loop();
   } );
 
-  this->logger_->trace( fmt::runtime( "initialize_renderer()~" ) );
+  this->logger_->trace( fmt::runtime( "initialize_window_renderer()~" ) );
   return this->sdlRenderer_;
+}
+
+SFG::Engine::LogicController* SFG::Engine::SdlWindow::initialize_logic_controller() {
+  this->logger_->trace( fmt::runtime( "initialize_logic_controller()" ) );
+
+  if( this->logicController_ ) {
+    this->logger_->trace( fmt::runtime( "initialize_logic_controller()~" ) );
+    return this->logicController_;
+  }
+
+  this->logicController_ = new SFG::Engine::LogicController( this );
+
+  this->logicControllerThread_ = std::thread( [this]() { this->logicController_->run_loop(); } );
+
+  this->logger_->trace( fmt::runtime( "initialize_logic_controller()~" ) );
+  return this->logicController_;
 }
 
 void SFG::Engine::SdlWindow::add_input( SDL_Event const& e ) {
@@ -178,8 +209,11 @@ void SFG::Engine::SdlWindow::run_input_loop() {
       hasInputs = !sdlInputQueue_.empty();
       sdlInputQueueMutex_.unlock();
     }
+
+    this->performanceController_->incInputLoops();
   }
   this->sdlRenderer_->signal_quit();
+  this->logicController_->signal_quit();
   this->sdlEngine_->destroy_window( this->sdlWindowId_ );
 
   this->logger_->trace( fmt::runtime( "run_input_loop()~" ) );
@@ -199,11 +233,25 @@ uint32_t SFG::Engine::SdlWindow::get_sdl_window_id() const {
   return this->sdlWindowId_;
 }
 
-SFG::Engine::SdlWindowRenderer* SFG::Engine::SdlWindow::get_renderer() const {
-  // this->logger_->trace( fmt::runtime( "get_renderer()" ) );
+SFG::Engine::PerformanceController* SFG::Engine::SdlWindow::get_performance_controller() const {
+  // this->logger_->trace( fmt::runtime( "get_performance_controller()" ) );
 
-  // this->logger_->trace( fmt::runtime( "get_renderer()~" ) );
+  // this->logger_->trace( fmt::runtime( "get_performance_controller()~" ) );
+  return this->performanceController_;
+}
+
+SFG::Engine::SdlWindowRenderer* SFG::Engine::SdlWindow::get_window_renderer() const {
+  // this->logger_->trace( fmt::runtime( "get_window_renderer()" ) );
+
+  // this->logger_->trace( fmt::runtime( "get_window_renderer()~" ) );
   return this->sdlRenderer_;
+}
+
+SFG::Engine::LogicController* SFG::Engine::SdlWindow::get_logic_controller() const {
+  // this->logger_->trace( fmt::runtime( "get_logic_controller()" ) );
+
+  // this->logger_->trace( fmt::runtime( "get_logic_controller()~" ) );
+  return this->logicController_;
 }
 
 std::string SFG::Engine::SdlWindow::get_title() const {

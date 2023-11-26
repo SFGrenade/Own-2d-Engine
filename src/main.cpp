@@ -20,7 +20,7 @@ void InitializeLoggers() {
 
   spdlogger mainLogger = std::make_shared< spdlog::logger >( "main", truncatedSinkList.begin(), truncatedSinkList.end() );
   mainLogger->set_level( spdlog::level::trace );
-  mainLogger->flush_on( spdlog::level::trace );
+  // mainLogger->flush_on( spdlog::level::trace );
   spdlog::register_logger( mainLogger );
   spdlog::set_default_logger( mainLogger );
 
@@ -28,11 +28,13 @@ void InitializeLoggers() {
       "Engine_SdlEngine",
       "Engine_SdlWindow",
       "Engine_SdlWindowRenderer",
+      "Engine_LogicController",
+      "Engine_PerformanceController",
   };
   for( auto name : allLoggerNames ) {
     spdlogger logger = std::make_shared< spdlog::logger >( name, truncatedSinkList.begin(), truncatedSinkList.end() );
     logger->set_level( spdlog::level::trace );
-    logger->flush_on( spdlog::level::trace );
+    // logger->flush_on( spdlog::level::trace );
     spdlog::register_logger( logger );
   }
   // spdlog::get("LogScript")->set_level(spdlog::level::warn);
@@ -61,7 +63,8 @@ int better_main( std::span< std::string_view const > args ) noexcept {
     myWindow1Flags = myWindow1->get_flags();
     spdlog::trace( fmt::runtime( "window 1 flags: 0b{:0>32b}" ), static_cast< uint32_t >( myWindow1Flags ) );
 
-    myWindow1->initialize_renderer( "direct3d", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
+    myWindow1->initialize_logic_controller();
+    myWindow1->initialize_window_renderer( "direct3d", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
 
     myWindow1->set_flags( SDL_WindowFlags::SDL_WINDOW_SHOWN );
     myWindow1Flags = myWindow1->get_flags();
@@ -76,7 +79,8 @@ int better_main( std::span< std::string_view const > args ) noexcept {
     myWindow2Flags = myWindow2->get_flags();
     spdlog::trace( fmt::runtime( "window 2 flags: 0b{:0>32b}" ), static_cast< uint32_t >( myWindow2Flags ) );
 
-    myWindow2->initialize_renderer( "direct3d11", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
+    myWindow2->initialize_logic_controller();
+    myWindow2->initialize_window_renderer( "direct3d11", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
 
     myWindow2->set_flags( SDL_WindowFlags::SDL_WINDOW_SHOWN );
     myWindow2Flags = myWindow2->get_flags();
@@ -91,7 +95,8 @@ int better_main( std::span< std::string_view const > args ) noexcept {
     myWindow3Flags = myWindow3->get_flags();
     spdlog::trace( fmt::runtime( "window 3 flags: 0b{:0>32b}" ), static_cast< uint32_t >( myWindow3Flags ) );
 
-    myWindow3->initialize_renderer( "software", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
+    myWindow3->initialize_logic_controller();
+    myWindow3->initialize_window_renderer( "software", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
 
     myWindow3->set_flags( SDL_WindowFlags::SDL_WINDOW_SHOWN );
     myWindow3Flags = myWindow3->get_flags();
@@ -106,7 +111,8 @@ int better_main( std::span< std::string_view const > args ) noexcept {
     myWindow4Flags = myWindow4->get_flags();
     spdlog::trace( fmt::runtime( "window 4 flags: 0b{:0>32b}" ), static_cast< uint32_t >( myWindow4Flags ) );
 
-    myWindow4->initialize_renderer( "software", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
+    myWindow4->initialize_logic_controller();
+    myWindow4->initialize_window_renderer( "software", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
 
     myWindow4->set_flags( SDL_WindowFlags::SDL_WINDOW_SHOWN );
     myWindow4Flags = myWindow4->get_flags();
