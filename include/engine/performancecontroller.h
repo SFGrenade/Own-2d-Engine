@@ -27,7 +27,7 @@ class PerformanceController {
   long double getRenderLoops();
 
   private:
-  __declspec( align( 64 ) ) spdlogger logger_;
+  spdlogger logger_;
 
   __declspec( align( 64 ) ) std::atomic< uint64_t > counterInputLoops_;
   __declspec( align( 64 ) ) std::chrono::high_resolution_clock::time_point counterInputLoopsTimePoint_;
@@ -38,7 +38,7 @@ class PerformanceController {
   __declspec( align( 64 ) ) std::atomic< uint64_t > counterRenderLoops_;
   __declspec( align( 64 ) ) std::chrono::high_resolution_clock::time_point counterRenderLoopsTimePoint_;
 
-  __declspec( align( 64 ) ) SFG::Engine::SdlWindow* sdlWindow_;
+  SFG::Engine::SdlWindow* sdlWindow_;
 };
 
 }  // namespace Engine

@@ -10,6 +10,7 @@ namespace SFG {
 namespace Engine {
 
 class SdlWindow;
+class Script;
 
 class LogicController {
   public:
@@ -19,12 +20,17 @@ class LogicController {
   void signal_quit();
   void run_loop();
 
-  private:
-  __declspec( align( 64 ) ) spdlogger logger_;
+  template < class T >
+  T* add_script();
 
-  __declspec( align( 64 ) ) SFG::Engine::SdlWindow* sdlWindow_;
-  __declspec( align( 64 ) ) bool done_;
-  __declspec( align( 64 ) ) std::mutex doneMutex_;
+  private:
+  spdlogger logger_;
+
+  SFG::Engine::SdlWindow* sdlWindow_;
+  bool done_;
+  std::mutex doneMutex_;
+
+  std::vector< SFG::Engine::Script* > scripts_;
 };
 
 }  // namespace Engine

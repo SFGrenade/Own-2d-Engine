@@ -9,7 +9,7 @@ class ScopedMutex {
   ~ScopedMutex();
 
   private:
-  __declspec( align( 64 ) ) std::mutex* mutex_;
+  std::mutex* mutex_;
 };
 
 #endif /* _GLOBALS_SCOPEDMUTEX_H_ */

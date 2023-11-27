@@ -4,12 +4,13 @@
 
 #include "_globals/moreChrono.h"
 #include "engine/performancecontroller.h"
+#include "engine/script.h"
 #include "engine/sdlwindow.h"
 #include "engine/sdlwindowrenderer.h"
 
 
 SFG::Engine::LogicController::LogicController( SFG::Engine::SdlWindow* sdlWindow )
-    : logger_( spdlog::get( "Engine_LogicController" ) ), sdlWindow_( sdlWindow ), done_( false ), doneMutex_() {
+    : logger_( spdlog::get( "Engine_LogicController" ) ), sdlWindow_( sdlWindow ), done_( false ), doneMutex_(), scripts_() {
   this->logger_->trace( fmt::runtime( "LogicController( sdlWindow = {:p} )" ), static_cast< void* >( sdlWindow ) );
 
   this->logger_->trace( fmt::runtime( "LogicController()~" ) );
@@ -65,6 +66,10 @@ void SFG::Engine::LogicController::run_loop() {
       countDownScripts = std::chrono::duration_cast< std::chrono::secondsLongDouble >( 1.0s / 50.0L );
     }
 
+    for( SFG::Engine::Script* script : this->scripts_ ) {
+      script->logic_update( secondsPerLoop );
+    }
+
     this->sdlWindow_->get_performance_controller()->incLogicLoops();
 
     this->doneMutex_.lock();
@@ -72,4 +77,17 @@ void SFG::Engine::LogicController::run_loop() {
   this->doneMutex_.unlock();
 
   this->logger_->trace( fmt::runtime( "run_loop()~" ) );
+}
+
+template < class T >
+T* SFG::Engine::LogicController::add_script() {
+  static_assert( std::is_base_of< SFG::Engine::Script, T >::value, "Class need to be inherited from `SFG::Engine::Script`!" );
+  this->logger_->trace( fmt::runtime( "add_script()" ) );
+
+  T* script = new T();
+  this->scripts_.push_back( script );
+  script->start();
+
+  this->logger_->trace( fmt::runtime( "add_script()~" ) );
+  return script;
 }
