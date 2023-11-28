@@ -41,11 +41,14 @@ class DebugInfo : public SFG::Engine::Script {
   spdlogger logger_;
 
   bool rendering_;
-  uint16_t countDown1s_;
+  uint16_t updateInfoCountDown50Ticks_;  // fixed_update is called at 50hz
   DebugInfoStruct debugInfoTopLeft_;
   DebugInfoStruct debugInfoTopRight_;
   DebugInfoStruct debugInfoBottomLeft_;
   DebugInfoStruct debugInfoBottomRight_;
+  bool renderBlendingUp_;
+  bool renderBlendingDown_;
+  std::chrono::secondsLongDouble updateInfoBlendTime_;
 
   TTF_Font* sdlFont_;
 };

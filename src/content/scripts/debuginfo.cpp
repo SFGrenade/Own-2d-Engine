@@ -8,11 +8,14 @@ SFG::Content::DebugInfo::DebugInfo( SFG::Engine::SdlWindow* sdlWindow )
     : SFG::Engine::Script( sdlWindow ),
       logger_( spdlog::get( "Content_DebugInfo" ) ),
       rendering_( true ),
-      countDown1s_( 50 ),  // fixed_update is called at 50hz
+      updateInfoCountDown50Ticks_( 50 ),  // fixed_update is called at 50hz
       debugInfoTopLeft_( { "", false, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
       debugInfoTopRight_( { "", false, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
       debugInfoBottomLeft_( { "", false, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
       debugInfoBottomRight_( { "", false, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
+      renderBlendingUp_( false ),
+      renderBlendingDown_( false ),
+      updateInfoBlendTime_(),
       sdlFont_( TTF_OpenFont( R"(./Resources/Fonts/NotoSansMono-Regular.ttf)", 18 ) ) {
   if( this->sdlFont_ == nullptr ) {
     this->logger_->error( fmt::runtime( "DebugInfo - Error when TTF_OpenFont: {:s}" ), TTF_GetError() );
@@ -97,26 +100,58 @@ void SFG::Content::DebugInfo::input_update( SDL_Event const& input ) {
 
   if( input.type == SDL_EventType::SDL_KEYDOWN ) {
     if( input.key.keysym.sym == SDL_KeyCode::SDLK_F10 ) {
-      this->rendering_ = !this->rendering_;
+      bool blendUp = false;
+      if( !this->rendering_ ) {
+        // not rendering rn, activate immediatly for blending up
+        this->rendering_ = true;
+        blendUp = true;
+      }
+      // if rendering, do nothing as it will be handled by the blend down
+
+      this->updateInfoBlendTime_ = std::chrono::duration_cast< std::chrono::secondsLongDouble >( 0.5s );
+      ( blendUp ? this->renderBlendingUp_ : this->renderBlendingDown_ ) = true;
     }
   }
 }
 
 void SFG::Content::DebugInfo::logic_update( std::chrono::secondsLongDouble const& deltaTime ) {
   SFG::Engine::Script::logic_update( deltaTime );
+
+  if( !this->renderBlendingUp_ && !this->renderBlendingDown_ ) {
+    return;
+  }
+  this->updateInfoBlendTime_ -= deltaTime;
+  uint8_t alpha = 0;
+  long double capped = std::max( std::min( this->updateInfoBlendTime_.count(), 0.5L ), 0.0L ) / 0.5L;
+  if( this->renderBlendingUp_ ) {
+    alpha = ( 255 * ( 1.0L - capped ) );
+  } else if( this->renderBlendingDown_ ) {
+    alpha = ( 255 * capped );
+  }
+  SDL_SetTextureAlphaMod( this->debugInfoTopLeft_.texture_, alpha );
+  SDL_SetTextureAlphaMod( this->debugInfoTopRight_.texture_, alpha );
+  SDL_SetTextureAlphaMod( this->debugInfoBottomLeft_.texture_, alpha );
+  SDL_SetTextureAlphaMod( this->debugInfoBottomRight_.texture_, alpha );
+  if( capped <= 0.0 ) {
+    if( this->renderBlendingDown_ ) {
+      this->rendering_ = false;
+    }
+    this->renderBlendingUp_ = false;
+    this->renderBlendingDown_ = false;
+  }
 }
 
 void SFG::Content::DebugInfo::fixed_update() {
   SFG::Engine::Script::fixed_update();
 
-  --( this->countDown1s_ );
-  if( this->countDown1s_ <= 0 ) {
+  --( this->updateInfoCountDown50Ticks_ );
+  if( this->updateInfoCountDown50Ticks_ <= 0 ) {
     this->set_debugInfo_topLeft( fmt::format( fmt::runtime( "{:.1F} fps" ), this->sdlWindow_->get_performance_controller()->getRenderLoops() ) );
     this->set_debugInfo_topRight( fmt::format( fmt::runtime( "{:.1F} llps" ), this->sdlWindow_->get_performance_controller()->getLogicLoops() ) );
     this->set_debugInfo_bottomLeft( fmt::format( fmt::runtime( "{:.1F} ilps" ), this->sdlWindow_->get_performance_controller()->getInputLoops() ) );
     this->set_debugInfo_bottomRight( fmt::format( fmt::runtime( "{:.1F} nlps" ), this->sdlWindow_->get_performance_controller()->getNetworkLoops() ) );
 
-    this->countDown1s_ = 50;  // fixed_update is called at 50hz
+    this->updateInfoCountDown50Ticks_ = 50;  // fixed_update is called at 50hz
   }
 }
 
