@@ -61,12 +61,14 @@ target("Own-2d-Engine")
 
     add_headerfiles("include/_globals/*.h")
     add_headerfiles("include/engine/*.h")
+    add_headerfiles("include/content/scripts/*.h")
 
     add_files("proto/sfg/*.proto", {proto_public = true})
 
     add_files("src/*.cpp")
     add_files("src/_globals/*.cpp")
     add_files("src/engine/*.cpp")
+    add_files("src/content/scripts/*.cpp")
 
     after_build(function (target)
         import("core.project.config")

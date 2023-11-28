@@ -12,10 +12,11 @@
 namespace SFG {
 namespace Engine {
 
-class SdlEngine;
-class PerformanceController;
-class SdlWindowRenderer;
 class LogicController;
+class PerformanceController;
+class ScriptManager;
+class SdlEngine;
+class SdlWindowRenderer;
 
 class SdlWindow {
   public:
@@ -31,6 +32,7 @@ class SdlWindow {
   SDL_Window* get_sdl_window() const;
   uint32_t get_sdl_window_id() const;
   SFG::Engine::PerformanceController* get_performance_controller() const;
+  SFG::Engine::ScriptManager* get_script_manager() const;
   SFG::Engine::SdlWindowRenderer* get_window_renderer() const;
   SFG::Engine::LogicController* get_logic_controller() const;
 
@@ -57,6 +59,7 @@ class SdlWindow {
   SDL_Window* sdlWindow_;
   uint32_t sdlWindowId_;
   SFG::Engine::PerformanceController* performanceController_;
+  SFG::Engine::ScriptManager* scriptManager_;
   SFG::Engine::SdlWindowRenderer* sdlRenderer_;
   std::thread sdlRendererThread_;
   SFG::Engine::LogicController* logicController_;

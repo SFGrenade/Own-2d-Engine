@@ -6,6 +6,7 @@
 #include "_globals/moreChrono.h"
 #include "engine/logiccontroller.h"
 #include "engine/performancecontroller.h"
+#include "engine/scriptmanager.h"
 #include "engine/sdlengine.h"
 #include "engine/sdlwindowrenderer.h"
 
@@ -18,6 +19,7 @@ SFG::Engine::SdlWindow::SdlWindow( SdlEngine* sdlEngine )
       sdlWindow_( nullptr ),
       sdlWindowId_( 0 ),
       performanceController_( new SFG::Engine::PerformanceController( this ) ),
+      scriptManager_( new SFG::Engine::ScriptManager( this ) ),
       sdlRenderer_( nullptr ),
       sdlRendererThread_(),
       logicController_( nullptr ),
@@ -45,6 +47,10 @@ SFG::Engine::SdlWindow::~SdlWindow() {
   if( this->logicController_ ) {
     delete this->logicController_;
     this->logicController_ = nullptr;
+  }
+  if( this->scriptManager_ ) {
+    delete this->scriptManager_;
+    this->scriptManager_ = nullptr;
   }
   if( this->performanceController_ ) {
     delete this->performanceController_;
@@ -204,6 +210,7 @@ void SFG::Engine::SdlWindow::run_input_loop() {
           }
           break;
       }
+      this->scriptManager_->input_update( e );
 
       sdlInputQueueMutex_.lock();
       hasInputs = !sdlInputQueue_.empty();
@@ -238,6 +245,13 @@ SFG::Engine::PerformanceController* SFG::Engine::SdlWindow::get_performance_cont
 
   // this->logger_->trace( fmt::runtime( "get_performance_controller()~" ) );
   return this->performanceController_;
+}
+
+SFG::Engine::ScriptManager* SFG::Engine::SdlWindow::get_script_manager() const {
+  // this->logger_->trace( fmt::runtime( "get_script_manager()" ) );
+
+  // this->logger_->trace( fmt::runtime( "get_script_manager()~" ) );
+  return this->scriptManager_;
 }
 
 SFG::Engine::SdlWindowRenderer* SFG::Engine::SdlWindow::get_window_renderer() const {
