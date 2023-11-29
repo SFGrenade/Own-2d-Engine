@@ -45,7 +45,7 @@ void SFG::Content::DebugInfo::start() {
   SFG::Engine::Script::start();
 }
 
-void SFG::Content::DebugInfo::frame_update( SDL_Renderer const* renderer ) {
+void SFG::Content::DebugInfo::frame_update( SDL_Renderer* renderer ) {
   SFG::Engine::Script::frame_update( renderer );
 
   if( this->debugInfoTopLeft_.drawNew_ ) {
@@ -70,26 +70,24 @@ void SFG::Content::DebugInfo::frame_update( SDL_Renderer const* renderer ) {
   }
 
   if( this->rendering_ && this->debugInfoTopLeft_.textureRect_.w > 0 && this->debugInfoTopLeft_.textureRect_.h > 0 && this->debugInfoTopLeft_.texture_ ) {
-    if( SDL_RenderCopy( const_cast< SDL_Renderer* >( renderer ), this->debugInfoTopLeft_.texture_, NULL, &( this->debugInfoTopLeft_.textureRect_ ) ) != 0 ) {
+    if( SDL_RenderCopy( renderer, this->debugInfoTopLeft_.texture_, NULL, &( this->debugInfoTopLeft_.textureRect_ ) ) != 0 ) {
       this->logger_->error( fmt::runtime( "frame_update - Error when SDL_RenderCopy: {:s}" ), SDL_GetError() );
     }
   }
   if( this->rendering_ && this->debugInfoTopRight_.textureRect_.w > 0 && this->debugInfoTopRight_.textureRect_.h > 0 && this->debugInfoTopRight_.texture_ ) {
-    if( SDL_RenderCopy( const_cast< SDL_Renderer* >( renderer ), this->debugInfoTopRight_.texture_, NULL, &( this->debugInfoTopRight_.textureRect_ ) ) != 0 ) {
+    if( SDL_RenderCopy( renderer, this->debugInfoTopRight_.texture_, NULL, &( this->debugInfoTopRight_.textureRect_ ) ) != 0 ) {
       this->logger_->error( fmt::runtime( "frame_update - Error when SDL_RenderCopy: {:s}" ), SDL_GetError() );
     }
   }
   if( this->rendering_ && this->debugInfoBottomLeft_.textureRect_.w > 0 && this->debugInfoBottomLeft_.textureRect_.h > 0
       && this->debugInfoBottomLeft_.texture_ ) {
-    if( SDL_RenderCopy( const_cast< SDL_Renderer* >( renderer ), this->debugInfoBottomLeft_.texture_, NULL, &( this->debugInfoBottomLeft_.textureRect_ ) )
-        != 0 ) {
+    if( SDL_RenderCopy( renderer, this->debugInfoBottomLeft_.texture_, NULL, &( this->debugInfoBottomLeft_.textureRect_ ) ) != 0 ) {
       this->logger_->error( fmt::runtime( "frame_update - Error when SDL_RenderCopy: {:s}" ), SDL_GetError() );
     }
   }
   if( this->rendering_ && this->debugInfoBottomRight_.textureRect_.w > 0 && this->debugInfoBottomRight_.textureRect_.h > 0
       && this->debugInfoBottomRight_.texture_ ) {
-    if( SDL_RenderCopy( const_cast< SDL_Renderer* >( renderer ), this->debugInfoBottomRight_.texture_, NULL, &( this->debugInfoBottomRight_.textureRect_ ) )
-        != 0 ) {
+    if( SDL_RenderCopy( renderer, this->debugInfoBottomRight_.texture_, NULL, &( this->debugInfoBottomRight_.textureRect_ ) ) != 0 ) {
       this->logger_->error( fmt::runtime( "frame_update - Error when SDL_RenderCopy: {:s}" ), SDL_GetError() );
     }
   }
@@ -183,7 +181,7 @@ void SFG::Content::DebugInfo::set_debugInfo_bottomRight( std::string const& debu
   this->debugInfoBottomRight_.drawNew_ = true;
 }
 
-void SFG::Content::DebugInfo::renderDebugInfo( DebugInfoStruct& debugInfo, SDL_Renderer const* renderer ) {
+void SFG::Content::DebugInfo::renderDebugInfo( DebugInfoStruct& debugInfo, SDL_Renderer* renderer ) {
   SDL_Surface* txtsfc = TTF_RenderUTF8_Shaded_Wrapped( this->sdlFont_,
                                                        debugInfo.message_.c_str(),
                                                        SDL_Color( 255, 255, 255, 255 ),
@@ -195,7 +193,7 @@ void SFG::Content::DebugInfo::renderDebugInfo( DebugInfoStruct& debugInfo, SDL_R
     if( debugInfo.texture_ ) {
       SDL_DestroyTexture( debugInfo.texture_ );
     }
-    debugInfo.texture_ = SDL_CreateTextureFromSurface( const_cast< SDL_Renderer* >( renderer ), txtsfc );
+    debugInfo.texture_ = SDL_CreateTextureFromSurface( renderer, txtsfc );
     if( !debugInfo.texture_ ) {
       this->logger_->error( fmt::runtime( "renderDebugInfo - Error when SDL_CreateTextureFromSurface: {:s}" ), SDL_GetError() );
     }

@@ -9,7 +9,7 @@ SFG::Engine::Script::~Script() {}
 
 void SFG::Engine::Script::start() {}
 
-void SFG::Engine::Script::frame_update( SDL_Renderer const* ) {}
+void SFG::Engine::Script::frame_update( SDL_Renderer* ) {}
 
 void SFG::Engine::Script::input_update( SDL_Event const& ) {}
 

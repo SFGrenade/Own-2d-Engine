@@ -22,7 +22,7 @@ class DebugInfo : public SFG::Engine::Script {
 
   virtual void start();
 
-  virtual void frame_update( SDL_Renderer const* renderer );
+  virtual void frame_update( SDL_Renderer* renderer );
   virtual void input_update( SDL_Event const& input );
   virtual void logic_update( std::chrono::secondsLongDouble const& deltaTime );
   virtual void fixed_update();
@@ -35,7 +35,7 @@ class DebugInfo : public SFG::Engine::Script {
   void set_debugInfo_topRight( std::string const& debugInfo );
   void set_debugInfo_bottomLeft( std::string const& debugInfo );
   void set_debugInfo_bottomRight( std::string const& debugInfo );
-  void renderDebugInfo( DebugInfoStruct& debugInfo, SDL_Renderer const* renderer );
+  void renderDebugInfo( DebugInfoStruct& debugInfo, SDL_Renderer* renderer );
 
   private:
   spdlogger logger_;

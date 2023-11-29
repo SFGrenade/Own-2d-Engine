@@ -35,7 +35,7 @@ void SFG::Engine::SdlWindowRenderer::initialize_sdl_renderer( int32_t rendererIn
     this->logger_->error( fmt::runtime( "initialize_sdl_renderer - Error when SDL_CreateRenderer: {:s}" ), SDL_GetError() );
   }
 
-  if( SDL_SetRenderDrawColor( this->sdlRenderer_, 255, 255, 255, SDL_ALPHA_OPAQUE ) != 0 ) {
+  if( SDL_SetRenderDrawColor( this->sdlRenderer_, 32, 32, 32, SDL_ALPHA_OPAQUE ) != 0 ) {
     this->logger_->error( fmt::runtime( "initialize_sdl_renderer - Error when SDL_SetRenderDrawColor: {:s}" ), SDL_GetError() );
   }
 

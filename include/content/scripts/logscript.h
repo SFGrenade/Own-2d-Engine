@@ -15,7 +15,7 @@ class LogScript : public SFG::Engine::Script {
 
   virtual void start();
 
-  virtual void frame_update( SDL_Renderer const* renderer );
+  virtual void frame_update( SDL_Renderer* renderer );
   virtual void input_update( SDL_Event const& input );
   virtual void logic_update( std::chrono::secondsLongDouble const& deltaTime );
   virtual void fixed_update();

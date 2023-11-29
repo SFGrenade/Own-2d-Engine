@@ -23,7 +23,7 @@ void SFG::Content::LogScript::start() {
   this->logger_->trace( fmt::runtime( "start()~" ) );
 }
 
-void SFG::Content::LogScript::frame_update( SDL_Renderer const* renderer ) {
+void SFG::Content::LogScript::frame_update( SDL_Renderer* renderer ) {
   SFG::Engine::Script::frame_update( renderer );
 
   this->logger_->trace( fmt::runtime( "frame_update( renderer = {:p} )" ), static_cast< void const* >( renderer ) );

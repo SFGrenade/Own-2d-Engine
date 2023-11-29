@@ -28,7 +28,7 @@ SFG::Engine::ScriptManager::~ScriptManager() {
   this->logger_->trace( fmt::runtime( "~ScriptManager()~" ) );
 }
 
-void SFG::Engine::ScriptManager::frame_update( SDL_Renderer const* renderer ) {
+void SFG::Engine::ScriptManager::frame_update( SDL_Renderer* renderer ) {
   // this->logger_->trace( fmt::runtime( "frame_update( renderer = {:p} )" ), static_cast< void const* >( renderer ) );
 
   this->scriptsMutex_.lock();
@@ -105,6 +105,8 @@ T* SFG::Engine::ScriptManager::add_script() {
 
 #include <content/scripts/debuginfo.h>
 #include <content/scripts/logscript.h>
+#include <content/scripts/player.h>
 
-template SFG::Content::LogScript* SFG::Engine::ScriptManager::add_script< SFG::Content::LogScript >();
 template SFG::Content::DebugInfo* SFG::Engine::ScriptManager::add_script< SFG::Content::DebugInfo >();
+template SFG::Content::LogScript* SFG::Engine::ScriptManager::add_script< SFG::Content::LogScript >();
+template SFG::Content::Player* SFG::Engine::ScriptManager::add_script< SFG::Content::Player >();
