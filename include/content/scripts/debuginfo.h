@@ -16,8 +16,11 @@ struct DebugInfoStruct {
 };
 
 class DebugInfo : public SFG::Engine::Script {
+  using _base_ = SFG::Engine::Script;
+  using _base_::_base_;
+
   public:
-  DebugInfo( SFG::Engine::SdlWindow* sdlWindow );
+  DebugInfo();
   virtual ~DebugInfo();
 
   virtual void start();
@@ -25,7 +28,6 @@ class DebugInfo : public SFG::Engine::Script {
   virtual void frame_update( SDL_Renderer* renderer );
   virtual void input_update( SDL_Event const& input );
   virtual void logic_update( std::chrono::secondsLongDouble const& deltaTime );
-  virtual void fixed_update();
   virtual void network_update();  // todo
 
   virtual void end();
@@ -41,7 +43,7 @@ class DebugInfo : public SFG::Engine::Script {
   spdlogger logger_;
 
   bool rendering_;
-  uint16_t updateInfoCountDown50Ticks_;  // fixed_update is called at 50hz
+  std::chrono::secondsLongDouble updateInfoCountDown1s_;
   DebugInfoStruct debugInfoTopLeft_;
   DebugInfoStruct debugInfoTopRight_;
   DebugInfoStruct debugInfoBottomLeft_;

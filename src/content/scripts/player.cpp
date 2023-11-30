@@ -3,27 +3,19 @@
 #include "engine/sdlwindow.h"
 
 
-SFG::Content::Player::Player( SFG::Engine::SdlWindow* sdlWindow )
-    : SFG::Engine::Script( sdlWindow ),
-      logger_( spdlog::get( "Content_Player" ) ),
-      rendering_( true ),
-      positionX_( 0 ),
-      positionY_( 0 ),
-      speed_( 500.0L ),
-      playerRect_( SDL_Rect( 0, 0, 50, 50 ) ),
-      inputUp_( false ),
-      inputDown_( false ),
-      inputLeft_( false ),
-      inputRight_( false ) {}
+SFG::Content::Player::Player() : _base_(), logger_( spdlog::get( "Content_Player" ) ), rendering_( true ), playerRect_() {
+  this->size_.x = 50.0L;
+  this->size_.y = 50.0L;
+}
 
 SFG::Content::Player::~Player() {}
 
 void SFG::Content::Player::start() {
-  SFG::Engine::Script::start();
+  _base_::start();
 }
 
 void SFG::Content::Player::frame_update( SDL_Renderer* renderer ) {
-  SFG::Engine::Script::frame_update( renderer );
+  _base_::frame_update( renderer );
 
   if( !this->rendering_ ) {
     return;
@@ -37,58 +29,44 @@ void SFG::Content::Player::frame_update( SDL_Renderer* renderer ) {
 }
 
 void SFG::Content::Player::input_update( SDL_Event const& input ) {
-  SFG::Engine::Script::input_update( input );
+  _base_::input_update( input );
 
   if( input.type == SDL_EventType::SDL_KEYDOWN ) {
     if( ( input.key.repeat == 0 ) && ( input.key.keysym.sym == SDL_KeyCode::SDLK_UP || input.key.keysym.sym == SDL_KeyCode::SDLK_w ) ) {
-      this->inputUp_ = true;
+      this->velocity_.y -= 500.0L;
     } else if( ( input.key.repeat == 0 ) && ( input.key.keysym.sym == SDL_KeyCode::SDLK_DOWN || input.key.keysym.sym == SDL_KeyCode::SDLK_s ) ) {
-      this->inputDown_ = true;
+      this->velocity_.y += 500.0L;
     } else if( ( input.key.repeat == 0 ) && ( input.key.keysym.sym == SDL_KeyCode::SDLK_LEFT || input.key.keysym.sym == SDL_KeyCode::SDLK_a ) ) {
-      this->inputLeft_ = true;
+      this->velocity_.x -= 500.0L;
     } else if( ( input.key.repeat == 0 ) && ( input.key.keysym.sym == SDL_KeyCode::SDLK_RIGHT || input.key.keysym.sym == SDL_KeyCode::SDLK_d ) ) {
-      this->inputRight_ = true;
+      this->velocity_.x += 500.0L;
     }
   } else if( input.type == SDL_EventType::SDL_KEYUP ) {
     if( ( input.key.repeat == 0 ) && ( input.key.keysym.sym == SDL_KeyCode::SDLK_UP || input.key.keysym.sym == SDL_KeyCode::SDLK_w ) ) {
-      this->inputUp_ = false;
+      this->velocity_.y += 500.0L;
     } else if( ( input.key.repeat == 0 ) && ( input.key.keysym.sym == SDL_KeyCode::SDLK_DOWN || input.key.keysym.sym == SDL_KeyCode::SDLK_s ) ) {
-      this->inputDown_ = false;
+      this->velocity_.y -= 500.0L;
     } else if( ( input.key.repeat == 0 ) && ( input.key.keysym.sym == SDL_KeyCode::SDLK_LEFT || input.key.keysym.sym == SDL_KeyCode::SDLK_a ) ) {
-      this->inputLeft_ = false;
+      this->velocity_.x += 500.0L;
     } else if( ( input.key.repeat == 0 ) && ( input.key.keysym.sym == SDL_KeyCode::SDLK_RIGHT || input.key.keysym.sym == SDL_KeyCode::SDLK_d ) ) {
-      this->inputRight_ = false;
+      this->velocity_.x -= 500.0L;
     }
   }
 }
 
 void SFG::Content::Player::logic_update( std::chrono::secondsLongDouble const& deltaTime ) {
-  SFG::Engine::Script::logic_update( deltaTime );
+  _base_::logic_update( deltaTime );
 
-  if( this->inputUp_ ) {
-    this->positionY_ -= this->speed_ * deltaTime.count();
-  }
-  if( this->inputDown_ ) {
-    this->positionY_ += this->speed_ * deltaTime.count();
-  }
-  if( this->inputLeft_ ) {
-    this->positionX_ -= this->speed_ * deltaTime.count();
-  }
-  if( this->inputRight_ ) {
-    this->positionX_ += this->speed_ * deltaTime.count();
-  }
-  this->playerRect_.x = this->positionX_;
-  this->playerRect_.y = this->positionY_;
-}
-
-void SFG::Content::Player::fixed_update() {
-  SFG::Engine::Script::fixed_update();
+  this->playerRect_.x = static_cast< int >( this->position_.x );
+  this->playerRect_.y = static_cast< int >( this->position_.y );
+  this->playerRect_.w = static_cast< int >( this->size_.x );
+  this->playerRect_.h = static_cast< int >( this->size_.y );
 }
 
 void SFG::Content::Player::network_update() {
-  SFG::Engine::Script::network_update();
+  _base_::network_update();
 }
 
 void SFG::Content::Player::end() {
-  SFG::Engine::Script::end();
+  _base_::end();
 }

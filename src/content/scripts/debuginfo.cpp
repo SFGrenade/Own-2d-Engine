@@ -4,11 +4,11 @@
 #include "engine/sdlwindow.h"
 
 
-SFG::Content::DebugInfo::DebugInfo( SFG::Engine::SdlWindow* sdlWindow )
-    : SFG::Engine::Script( sdlWindow ),
+SFG::Content::DebugInfo::DebugInfo()
+    : _base_(),
       logger_( spdlog::get( "Content_DebugInfo" ) ),
       rendering_( true ),
-      updateInfoCountDown50Ticks_( 50 ),  // fixed_update is called at 50hz
+      updateInfoCountDown1s_( std::chrono::duration_cast< std::chrono::secondsLongDouble >( 1.0s ) ),
       debugInfoTopLeft_( { "", false, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
       debugInfoTopRight_( { "", false, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
       debugInfoBottomLeft_( { "", false, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
@@ -42,11 +42,11 @@ SFG::Content::DebugInfo::~DebugInfo() {
 }
 
 void SFG::Content::DebugInfo::start() {
-  SFG::Engine::Script::start();
+  _base_::start();
 }
 
 void SFG::Content::DebugInfo::frame_update( SDL_Renderer* renderer ) {
-  SFG::Engine::Script::frame_update( renderer );
+  _base_::frame_update( renderer );
 
   if( this->debugInfoTopLeft_.drawNew_ ) {
     this->renderDebugInfo( this->debugInfoTopLeft_, renderer );
@@ -94,7 +94,7 @@ void SFG::Content::DebugInfo::frame_update( SDL_Renderer* renderer ) {
 }
 
 void SFG::Content::DebugInfo::input_update( SDL_Event const& input ) {
-  SFG::Engine::Script::input_update( input );
+  _base_::input_update( input );
 
   if( input.type == SDL_EventType::SDL_KEYDOWN ) {
     if( input.key.keysym.sym == SDL_KeyCode::SDLK_F10 ) {
@@ -113,52 +113,47 @@ void SFG::Content::DebugInfo::input_update( SDL_Event const& input ) {
 }
 
 void SFG::Content::DebugInfo::logic_update( std::chrono::secondsLongDouble const& deltaTime ) {
-  SFG::Engine::Script::logic_update( deltaTime );
+  _base_::logic_update( deltaTime );
 
-  if( !this->renderBlendingUp_ && !this->renderBlendingDown_ ) {
-    return;
-  }
-  this->updateInfoBlendTime_ -= deltaTime;
-  uint8_t alpha = 0;
-  long double capped = std::max( std::min( this->updateInfoBlendTime_.count(), 0.5L ), 0.0L ) / 0.5L;
-  if( this->renderBlendingUp_ ) {
-    alpha = ( 255 * ( 1.0L - capped ) );
-  } else if( this->renderBlendingDown_ ) {
-    alpha = ( 255 * capped );
-  }
-  SDL_SetTextureAlphaMod( this->debugInfoTopLeft_.texture_, alpha );
-  SDL_SetTextureAlphaMod( this->debugInfoTopRight_.texture_, alpha );
-  SDL_SetTextureAlphaMod( this->debugInfoBottomLeft_.texture_, alpha );
-  SDL_SetTextureAlphaMod( this->debugInfoBottomRight_.texture_, alpha );
-  if( capped <= 0.0 ) {
-    if( this->renderBlendingDown_ ) {
-      this->rendering_ = false;
-    }
-    this->renderBlendingUp_ = false;
-    this->renderBlendingDown_ = false;
-  }
-}
-
-void SFG::Content::DebugInfo::fixed_update() {
-  SFG::Engine::Script::fixed_update();
-
-  --( this->updateInfoCountDown50Ticks_ );
-  if( this->updateInfoCountDown50Ticks_ <= 0 ) {
+  this->updateInfoCountDown1s_ -= deltaTime;
+  if( this->updateInfoCountDown1s_.count() <= 0 ) {
     this->set_debugInfo_topLeft( fmt::format( fmt::runtime( "{:.1F} fps" ), this->sdlWindow_->get_performance_controller()->getRenderLoops() ) );
     this->set_debugInfo_topRight( fmt::format( fmt::runtime( "{:.1F} llps" ), this->sdlWindow_->get_performance_controller()->getLogicLoops() ) );
     this->set_debugInfo_bottomLeft( fmt::format( fmt::runtime( "{:.1F} ilps" ), this->sdlWindow_->get_performance_controller()->getInputLoops() ) );
     this->set_debugInfo_bottomRight( fmt::format( fmt::runtime( "{:.1F} nlps" ), this->sdlWindow_->get_performance_controller()->getNetworkLoops() ) );
 
-    this->updateInfoCountDown50Ticks_ = 50;  // fixed_update is called at 50hz
+    this->updateInfoCountDown1s_ = std::chrono::duration_cast< std::chrono::secondsLongDouble >( 1.0s );
+  }
+
+  if( this->renderBlendingUp_ || this->renderBlendingDown_ ) {
+    this->updateInfoBlendTime_ -= deltaTime;
+    uint8_t alpha = 0;
+    long double capped = std::max( std::min( this->updateInfoBlendTime_.count(), 0.5L ), 0.0L ) / 0.5L;
+    if( this->renderBlendingUp_ ) {
+      alpha = ( 255 * ( 1.0L - capped ) );
+    } else if( this->renderBlendingDown_ ) {
+      alpha = ( 255 * capped );
+    }
+    SDL_SetTextureAlphaMod( this->debugInfoTopLeft_.texture_, alpha );
+    SDL_SetTextureAlphaMod( this->debugInfoTopRight_.texture_, alpha );
+    SDL_SetTextureAlphaMod( this->debugInfoBottomLeft_.texture_, alpha );
+    SDL_SetTextureAlphaMod( this->debugInfoBottomRight_.texture_, alpha );
+    if( capped <= 0.0 ) {
+      if( this->renderBlendingDown_ ) {
+        this->rendering_ = false;
+      }
+      this->renderBlendingUp_ = false;
+      this->renderBlendingDown_ = false;
+    }
   }
 }
 
 void SFG::Content::DebugInfo::network_update() {
-  SFG::Engine::Script::network_update();
+  _base_::network_update();
 }
 
 void SFG::Content::DebugInfo::end() {
-  SFG::Engine::Script::end();
+  _base_::end();
 }
 
 void SFG::Content::DebugInfo::set_debugInfo_topLeft( std::string const& debugInfo ) {

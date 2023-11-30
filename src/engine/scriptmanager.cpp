@@ -64,18 +64,6 @@ void SFG::Engine::ScriptManager::logic_update( std::chrono::secondsLongDouble co
   // this->logger_->trace( fmt::runtime( "logic_update()~" ) );
 }
 
-void SFG::Engine::ScriptManager::fixed_update() {
-  // this->logger_->trace( fmt::runtime( "fixed_update()" ) );
-
-  this->scriptsMutex_.lock();
-  for( SFG::Engine::Script* script : this->scripts_ ) {
-    script->fixed_update();
-  }
-  this->scriptsMutex_.unlock();
-
-  // this->logger_->trace( fmt::runtime( "fixed_update()~" ) );
-}
-
 void SFG::Engine::ScriptManager::network_update() {
   // this->logger_->trace( fmt::runtime( "network_update()" ) );
 
@@ -93,7 +81,8 @@ T* SFG::Engine::ScriptManager::add_script() {
   static_assert( std::is_base_of< SFG::Engine::Script, T >::value, "Class need to be inherited from `SFG::Engine::Script`!" );
   this->logger_->trace( fmt::runtime( "add_script()" ) );
 
-  T* script = new T( this->sdlWindow_ );
+  T* script = new T();
+  script->set_sdlWindow( this->sdlWindow_ );
   this->scripts_.push_back( script );
   script->start();
 

@@ -2,7 +2,7 @@
 #define _CONTENT_PLAYER_H_
 
 #include "_globals/spdlogInclude.h"
-#include "engine/script.h"
+#include "engine/scriptentity.h"
 
 
 namespace SFG {
@@ -15,9 +15,12 @@ struct PlayerStruct {
   SDL_Rect textureRect_;
 };
 
-class Player : public SFG::Engine::Script {
+class Player : public SFG::Engine::ScriptEntity {
+  using _base_ = SFG::Engine::ScriptEntity;
+  using _base_::_base_;
+
   public:
-  Player( SFG::Engine::SdlWindow* sdlWindow );
+  Player();
   virtual ~Player();
 
   virtual void start();
@@ -25,7 +28,6 @@ class Player : public SFG::Engine::Script {
   virtual void frame_update( SDL_Renderer* renderer );
   virtual void input_update( SDL_Event const& input );
   virtual void logic_update( std::chrono::secondsLongDouble const& deltaTime );
-  virtual void fixed_update();
   virtual void network_update();  // todo
 
   virtual void end();
@@ -34,15 +36,7 @@ class Player : public SFG::Engine::Script {
   spdlogger logger_;
 
   bool rendering_;
-  long double positionX_;
-  long double positionY_;
-  long double speed_;
   SDL_Rect playerRect_;
-
-  bool inputUp_;
-  bool inputDown_;
-  bool inputLeft_;
-  bool inputRight_;
 };
 
 }  // namespace Content

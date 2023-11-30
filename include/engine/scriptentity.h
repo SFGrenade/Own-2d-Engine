@@ -1,8 +1,9 @@
-#ifndef _ENGINE_SCRIPT_H_
-#define _ENGINE_SCRIPT_H_
+#ifndef _ENGINE_SCRIPTENTITY_H_
+#define _ENGINE_SCRIPTENTITY_H_
 
 #include "_globals/moreChrono.h"
 #include "_globals/sdlInclude.h"
+#include "engine/script.h"
 
 
 namespace SFG {
@@ -10,13 +11,17 @@ namespace Engine {
 
 class SdlWindow;
 
-class Script {
-  // using _base_ = ;
-  // using _base_::_base_;
+struct Vector2 {
+  long double x, y;
+};
+
+class ScriptEntity : public Script {
+  using _base_ = SFG::Engine::Script;
+  using _base_::_base_;
 
   public:
-  Script();
-  virtual ~Script();
+  ScriptEntity();
+  virtual ~ScriptEntity();
 
   virtual void start();
 
@@ -27,13 +32,13 @@ class Script {
 
   virtual void end();
 
-  void set_sdlWindow( SFG::Engine::SdlWindow* sdlWindow );
-
   protected:
-  SFG::Engine::SdlWindow* sdlWindow_;
+  Vector2 position_;
+  Vector2 size_;
+  Vector2 velocity_;
 };
 
 }  // namespace Engine
 }  // namespace SFG
 
-#endif /* _ENGINE_SCRIPT_H_ */
+#endif /* _ENGINE_SCRIPTENTITY_H_ */

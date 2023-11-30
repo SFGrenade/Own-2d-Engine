@@ -1,22 +1,21 @@
-#ifndef _ENGINE_SCRIPT_H_
-#define _ENGINE_SCRIPT_H_
+#ifndef _ENGINE_SCRIPTCOLLIDER_H_
+#define _ENGINE_SCRIPTCOLLIDER_H_
 
 #include "_globals/moreChrono.h"
 #include "_globals/sdlInclude.h"
+#include "engine/scriptentity.h"
 
 
 namespace SFG {
 namespace Engine {
 
-class SdlWindow;
-
-class Script {
-  // using _base_ = ;
-  // using _base_::_base_;
+class ScriptCollider : SFG::Engine::ScriptEntity {
+  using _base_ = SFG::Engine::ScriptEntity;
+  using _base_::_base_;
 
   public:
-  Script();
-  virtual ~Script();
+  ScriptCollider();
+  virtual ~ScriptCollider();
 
   virtual void start();
 
@@ -27,13 +26,11 @@ class Script {
 
   virtual void end();
 
-  void set_sdlWindow( SFG::Engine::SdlWindow* sdlWindow );
-
   protected:
-  SFG::Engine::SdlWindow* sdlWindow_;
+  bool isTrigger_;
 };
 
 }  // namespace Engine
 }  // namespace SFG
 
-#endif /* _ENGINE_SCRIPT_H_ */
+#endif /* _ENGINE_SCRIPTCOLLIDER_H_ */

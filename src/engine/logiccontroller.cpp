@@ -37,21 +37,12 @@ void SFG::Engine::LogicController::run_loop() {
 
   std::chrono::high_resolution_clock::time_point timePointStart = std::chrono::high_resolution_clock::now();
   std::chrono::secondsLongDouble secondsPerLoop;
-  std::chrono::secondsLongDouble countDownScripts = std::chrono::duration_cast< std::chrono::secondsLongDouble >( 1.0s / 50.0L );
 
   this->doneMutex_.lock();
   while( !this->done_ ) {
     this->doneMutex_.unlock();
 
     secondsPerLoop = getDurationSinceLast( timePointStart );
-
-    countDownScripts -= secondsPerLoop;
-
-    if( countDownScripts.count() <= 0 ) {
-      this->sdlWindow_->get_script_manager()->fixed_update();
-
-      countDownScripts = std::chrono::duration_cast< std::chrono::secondsLongDouble >( 1.0s / 50.0L );
-    }
 
     this->sdlWindow_->get_script_manager()->logic_update( secondsPerLoop );
 

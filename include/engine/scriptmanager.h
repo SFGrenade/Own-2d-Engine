@@ -24,7 +24,6 @@ class ScriptManager {
   void frame_update( SDL_Renderer* renderer );
   void input_update( SDL_Event const& input );
   void logic_update( std::chrono::secondsLongDouble const& deltaTime );
-  void fixed_update();
   void network_update();  // todo
 
   template < class T >
