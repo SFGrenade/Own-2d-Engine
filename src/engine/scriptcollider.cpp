@@ -24,11 +24,6 @@ void SFG::Engine::ScriptCollider::input_update( SDL_Event const& input ) {
 
 void SFG::Engine::ScriptCollider::logic_update( std::chrono::secondsLongDouble const& deltaTime ) {
   // what is this degeneracy
-  bool willEnterColliderFromAbove = false;
-  bool willEnterColliderFromBelow = false;
-  bool willEnterColliderFromLeft = false;
-  bool willEnterColliderFromRight = false;
-
   for( int i = 0; i < this->scriptList_->size(); ++i ) {
     SFG::Engine::Script* script = this->scriptList_->at( i );
     if( script == this ) {
@@ -66,46 +61,42 @@ void SFG::Engine::ScriptCollider::logic_update( std::chrono::secondsLongDouble c
     ) {
       // spdlog::debug( fmt::runtime( "Collision between {:p} and {:p}" ), static_cast< void* >( this ), static_cast< void* >( colliderScript ) );
       if( list_contains< SFG::Engine::ScriptCollider* >( this->enteredCollidersFromAbove_, colliderScript ) ) {
-        willEnterColliderFromAbove = true;
         this->position_.y = colliderScript->position_.y - this->size_.y;
         this->velocity_.y = std::min( this->velocity_.y, 0.0L );
       } else if( list_contains< SFG::Engine::ScriptCollider* >( this->enteredCollidersFromBelow_, colliderScript ) ) {
-        willEnterColliderFromBelow = true;
         this->position_.y = colliderScript->position_.y + colliderScript->size_.y;
         this->velocity_.y = std::max( this->velocity_.y, 0.0L );
       } else if( list_contains< SFG::Engine::ScriptCollider* >( this->enteredCollidersFromLeft_, colliderScript ) ) {
-        willEnterColliderFromLeft = true;
         this->position_.x = colliderScript->position_.x - this->size_.x;
         this->velocity_.x = std::min( this->velocity_.x, 0.0L );
       } else if( list_contains< SFG::Engine::ScriptCollider* >( this->enteredCollidersFromRight_, colliderScript ) ) {
-        willEnterColliderFromRight = true;
         this->position_.x = colliderScript->position_.x + colliderScript->size_.x;
         this->velocity_.x = std::max( this->velocity_.x, 0.0L );
       }
     } else if( ( offsetDistanceBottom1ToTop2 >= 0.0L )  // offset
-               && ( distanceTop1ToBottom2 <= 0.0L )     // normal
-               && ( distanceRight1ToLeft2 >= 0.0L )     // normal
-               && ( distanceLeft1ToRight2 <= 0.0L )     // normal
+               && ( distanceTop1ToBottom2 < 0.0L )      // normal
+               && ( distanceRight1ToLeft2 > 0.0L )      // normal
+               && ( distanceLeft1ToRight2 < 0.0L )      // normal
     ) {
       // spdlog::debug( fmt::runtime( "{:p} is about to run into {:p} from above" ), static_cast< void* >( this ), static_cast< void* >( colliderScript ) );
       this->enteredCollidersFromAbove_.push_back( colliderScript );
-    } else if( ( distanceBottom1ToTop2 >= 0.0L )           // normal
+    } else if( ( distanceBottom1ToTop2 > 0.0L )            // normal
                && ( offsetDistanceTop1ToBottom2 <= 0.0L )  // offset
-               && ( distanceRight1ToLeft2 >= 0.0L )        // normal
-               && ( distanceLeft1ToRight2 <= 0.0L )        // normal
+               && ( distanceRight1ToLeft2 > 0.0L )         // normal
+               && ( distanceLeft1ToRight2 < 0.0L )         // normal
     ) {
       // spdlog::debug( fmt::runtime( "{:p} is about to run into {:p} from below" ), static_cast< void* >( this ), static_cast< void* >( colliderScript ) );
       this->enteredCollidersFromBelow_.push_back( colliderScript );
-    } else if( ( distanceBottom1ToTop2 >= 0.0L )           // normal
-               && ( distanceTop1ToBottom2 <= 0.0L )        // normal
+    } else if( ( distanceBottom1ToTop2 > 0.0L )            // normal
+               && ( distanceTop1ToBottom2 < 0.0L )         // normal
                && ( offsetDistanceRight1ToLeft2 >= 0.0L )  // offset
-               && ( distanceLeft1ToRight2 <= 0.0L )        // normal
+               && ( distanceLeft1ToRight2 < 0.0L )         // normal
     ) {
       // spdlog::debug( fmt::runtime( "{:p} is about to run into {:p} from left" ), static_cast< void* >( this ), static_cast< void* >( colliderScript ) );
       this->enteredCollidersFromLeft_.push_back( colliderScript );
-    } else if( ( distanceBottom1ToTop2 >= 0.0L )           // normal
-               && ( distanceTop1ToBottom2 <= 0.0L )        // normal
-               && ( distanceRight1ToLeft2 >= 0.0L )        // normal
+    } else if( ( distanceBottom1ToTop2 > 0.0L )            // normal
+               && ( distanceTop1ToBottom2 < 0.0L )         // normal
+               && ( distanceRight1ToLeft2 > 0.0L )         // normal
                && ( offsetDistanceLeft1ToRight2 <= 0.0L )  // offset
     ) {
       // spdlog::debug( fmt::runtime( "{:p} is about to run into {:p} from right" ), static_cast< void* >( this ), static_cast< void* >( colliderScript ) );

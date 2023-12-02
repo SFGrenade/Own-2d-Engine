@@ -79,7 +79,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
     firstWall->set_size( 50.0L, 50.0L );
     spdlog::debug( fmt::runtime( "firstWall at {:p}" ), static_cast< void* >( firstWall ) );
     SFG::Content::Wall* secondWall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
-    secondWall->set_position( 255.0L, 145.0L );
+    secondWall->set_position( 250.0L, 150.0L );
     secondWall->set_size( 50.0L, 50.0L );
     spdlog::debug( fmt::runtime( "secondWall at {:p}" ), static_cast< void* >( secondWall ) );
     SFG::Content::Player* player = myWindow1->get_script_manager()->add_script< SFG::Content::Player >();
@@ -108,7 +108,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   //   firstWall->set_size( 50.0L, 50.0L );
   //   spdlog::debug( fmt::runtime( "firstWall at {:p}" ), static_cast< void* >( firstWall ) );
   //   SFG::Content::Wall* secondWall = myWindow2->get_script_manager()->add_script< SFG::Content::Wall >();
-  //   secondWall->set_position( 255.0L, 145.0L );
+  //   secondWall->set_position( 250.0L, 150.0L );
   //   secondWall->set_size( 50.0L, 50.0L );
   //   spdlog::debug( fmt::runtime( "secondWall at {:p}" ), static_cast< void* >( secondWall ) );
   //   SFG::Content::Player* player = myWindow2->get_script_manager()->add_script< SFG::Content::Player >();
@@ -137,7 +137,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   //   firstWall->set_size( 50.0L, 50.0L );
   //   spdlog::debug( fmt::runtime( "firstWall at {:p}" ), static_cast< void* >( firstWall ) );
   //   SFG::Content::Wall* secondWall = myWindow3->get_script_manager()->add_script< SFG::Content::Wall >();
-  //   secondWall->set_position( 255.0L, 145.0L );
+  //   secondWall->set_position( 250.0L, 150.0L );
   //   secondWall->set_size( 50.0L, 50.0L );
   //   spdlog::debug( fmt::runtime( "secondWall at {:p}" ), static_cast< void* >( secondWall ) );
   //   SFG::Content::Player* player = myWindow3->get_script_manager()->add_script< SFG::Content::Player >();
@@ -166,7 +166,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   //   firstWall->set_size( 50.0L, 50.0L );
   //   spdlog::debug( fmt::runtime( "firstWall at {:p}" ), static_cast< void* >( firstWall ) );
   //   SFG::Content::Wall* secondWall = myWindow4->get_script_manager()->add_script< SFG::Content::Wall >();
-  //   secondWall->set_position( 255.0L, 145.0L );
+  //   secondWall->set_position( 250.0L, 150.0L );
   //   secondWall->set_size( 50.0L, 50.0L );
   //   spdlog::debug( fmt::runtime( "secondWall at {:p}" ), static_cast< void* >( secondWall ) );
   //   SFG::Content::Player* player = myWindow4->get_script_manager()->add_script< SFG::Content::Player >();
