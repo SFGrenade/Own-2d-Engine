@@ -9,6 +9,7 @@ namespace SFG {
 namespace Engine {
 
 class SdlWindow;
+class ScriptManager;
 
 class Script {
   // using _base_ = ;
@@ -28,9 +29,13 @@ class Script {
   virtual void end();
 
   void set_sdlWindow( SFG::Engine::SdlWindow* sdlWindow );
+  void set_scriptManager( SFG::Engine::ScriptManager* scriptManager );
+  void set_scriptList( std::vector< SFG::Engine::Script* > const* scriptList );
 
   protected:
   SFG::Engine::SdlWindow* sdlWindow_;
+  SFG::Engine::ScriptManager* scriptManager_;
+  std::vector< SFG::Engine::Script* > const* scriptList_;
 };
 
 }  // namespace Engine

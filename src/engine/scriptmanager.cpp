@@ -83,6 +83,8 @@ T* SFG::Engine::ScriptManager::add_script() {
 
   T* script = new T();
   script->set_sdlWindow( this->sdlWindow_ );
+  script->set_scriptManager( this );
+  script->set_scriptList( &( this->scripts_ ) );
   this->scripts_.push_back( script );
   script->start();
 
@@ -95,7 +97,9 @@ T* SFG::Engine::ScriptManager::add_script() {
 #include <content/scripts/debuginfo.h>
 #include <content/scripts/logscript.h>
 #include <content/scripts/player.h>
+#include <content/scripts/wall.h>
 
 template SFG::Content::DebugInfo* SFG::Engine::ScriptManager::add_script< SFG::Content::DebugInfo >();
 template SFG::Content::LogScript* SFG::Engine::ScriptManager::add_script< SFG::Content::LogScript >();
 template SFG::Content::Player* SFG::Engine::ScriptManager::add_script< SFG::Content::Player >();
+template SFG::Content::Wall* SFG::Engine::ScriptManager::add_script< SFG::Content::Wall >();

@@ -3,10 +3,15 @@
 #include "engine/sdlwindow.h"
 
 
-SFG::Content::Player::Player() : _base_(), logger_( spdlog::get( "Content_Player" ) ), rendering_( true ), playerRect_() {
-  this->size_.x = 50.0L;
-  this->size_.y = 50.0L;
-}
+SFG::Content::Player::Player()
+    : _base_(),
+      logger_( spdlog::get( "Content_Player" ) ),
+      rendering_( true ),
+      pressesUp_( false ),
+      pressesDown_( false ),
+      pressesLeft_( false ),
+      pressesRight_( false ),
+      playerRect_() {}
 
 SFG::Content::Player::~Player() {}
 
@@ -33,28 +38,43 @@ void SFG::Content::Player::input_update( SDL_Event const& input ) {
 
   if( input.type == SDL_EventType::SDL_KEYDOWN ) {
     if( ( input.key.repeat == 0 ) && ( input.key.keysym.sym == SDL_KeyCode::SDLK_UP || input.key.keysym.sym == SDL_KeyCode::SDLK_w ) ) {
-      this->velocity_.y -= 500.0L;
+      this->pressesUp_ = true;
     } else if( ( input.key.repeat == 0 ) && ( input.key.keysym.sym == SDL_KeyCode::SDLK_DOWN || input.key.keysym.sym == SDL_KeyCode::SDLK_s ) ) {
-      this->velocity_.y += 500.0L;
+      this->pressesDown_ = true;
     } else if( ( input.key.repeat == 0 ) && ( input.key.keysym.sym == SDL_KeyCode::SDLK_LEFT || input.key.keysym.sym == SDL_KeyCode::SDLK_a ) ) {
-      this->velocity_.x -= 500.0L;
+      this->pressesLeft_ = true;
     } else if( ( input.key.repeat == 0 ) && ( input.key.keysym.sym == SDL_KeyCode::SDLK_RIGHT || input.key.keysym.sym == SDL_KeyCode::SDLK_d ) ) {
-      this->velocity_.x += 500.0L;
+      this->pressesRight_ = true;
     }
   } else if( input.type == SDL_EventType::SDL_KEYUP ) {
     if( ( input.key.repeat == 0 ) && ( input.key.keysym.sym == SDL_KeyCode::SDLK_UP || input.key.keysym.sym == SDL_KeyCode::SDLK_w ) ) {
-      this->velocity_.y += 500.0L;
+      this->pressesUp_ = false;
     } else if( ( input.key.repeat == 0 ) && ( input.key.keysym.sym == SDL_KeyCode::SDLK_DOWN || input.key.keysym.sym == SDL_KeyCode::SDLK_s ) ) {
-      this->velocity_.y -= 500.0L;
+      this->pressesDown_ = false;
     } else if( ( input.key.repeat == 0 ) && ( input.key.keysym.sym == SDL_KeyCode::SDLK_LEFT || input.key.keysym.sym == SDL_KeyCode::SDLK_a ) ) {
-      this->velocity_.x += 500.0L;
+      this->pressesLeft_ = false;
     } else if( ( input.key.repeat == 0 ) && ( input.key.keysym.sym == SDL_KeyCode::SDLK_RIGHT || input.key.keysym.sym == SDL_KeyCode::SDLK_d ) ) {
-      this->velocity_.x -= 500.0L;
+      this->pressesRight_ = false;
     }
   }
 }
 
 void SFG::Content::Player::logic_update( std::chrono::secondsLongDouble const& deltaTime ) {
+  if( this->pressesUp_ ) {
+    this->velocity_.y = -500.0L;
+  } else if( this->pressesDown_ ) {
+    this->velocity_.y = +500.0L;
+  } else {
+    this->velocity_.y = 0.0L;
+  }
+  if( this->pressesLeft_ ) {
+    this->velocity_.x = -500.0L;
+  } else if( this->pressesRight_ ) {
+    this->velocity_.x = +500.0L;
+  } else {
+    this->velocity_.x = 0.0L;
+  }
+
   _base_::logic_update( deltaTime );
 
   this->playerRect_.x = static_cast< int >( this->position_.x );

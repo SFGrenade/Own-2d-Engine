@@ -32,6 +32,10 @@ class ScriptEntity : public Script {
 
   virtual void end();
 
+  void set_position( long double x, long double y );
+  void set_size( long double w, long double h );
+  void set_velocity( long double x, long double y );
+
   protected:
   Vector2 position_;
   Vector2 size_;

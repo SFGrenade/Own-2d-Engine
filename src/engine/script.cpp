@@ -1,9 +1,10 @@
 #include "engine/script.h"
 
+#include "engine/scriptmanager.h"
 #include "engine/sdlwindow.h"
 
 
-SFG::Engine::Script::Script() : sdlWindow_( nullptr ) {}
+SFG::Engine::Script::Script() : sdlWindow_( nullptr ), scriptManager_( nullptr ) {}
 
 SFG::Engine::Script::~Script() {}
 
@@ -21,4 +22,12 @@ void SFG::Engine::Script::end() {}
 
 void SFG::Engine::Script::set_sdlWindow( SFG::Engine::SdlWindow* sdlWindow ) {
   this->sdlWindow_ = sdlWindow;
+}
+
+void SFG::Engine::Script::set_scriptManager( SFG::Engine::ScriptManager* scriptManager ) {
+  this->scriptManager_ = scriptManager;
+}
+
+void SFG::Engine::Script::set_scriptList( std::vector< SFG::Engine::Script* > const* scriptList ) {
+  this->scriptList_ = scriptList;
 }

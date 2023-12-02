@@ -1,5 +1,5 @@
-#ifndef _CONTENT_PLAYER_H_
-#define _CONTENT_PLAYER_H_
+#ifndef _CONTENT_WALL_H_
+#define _CONTENT_WALL_H_
 
 #include "_globals/spdlogInclude.h"
 #include "engine/scriptcollider.h"
@@ -8,13 +8,13 @@
 namespace SFG {
 namespace Content {
 
-class Player : public SFG::Engine::ScriptCollider {
+class Wall : public SFG::Engine::ScriptCollider {
   using _base_ = SFG::Engine::ScriptCollider;
   using _base_::_base_;
 
   public:
-  Player();
-  virtual ~Player();
+  Wall();
+  virtual ~Wall();
 
   virtual void start();
 
@@ -29,14 +29,10 @@ class Player : public SFG::Engine::ScriptCollider {
   spdlogger logger_;
 
   bool rendering_;
-  bool pressesUp_;
-  bool pressesDown_;
-  bool pressesLeft_;
-  bool pressesRight_;
-  SDL_Rect playerRect_;
+  SDL_Rect wallRect_;
 };
 
 }  // namespace Content
 }  // namespace SFG
 
-#endif /* _CONTENT_PLAYER_H_ */
+#endif /* _CONTENT_WALL_H_ */

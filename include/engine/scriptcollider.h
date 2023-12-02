@@ -1,6 +1,8 @@
 #ifndef _ENGINE_SCRIPTCOLLIDER_H_
 #define _ENGINE_SCRIPTCOLLIDER_H_
 
+#include <list>
+
 #include "_globals/moreChrono.h"
 #include "_globals/sdlInclude.h"
 #include "engine/scriptentity.h"
@@ -9,7 +11,7 @@
 namespace SFG {
 namespace Engine {
 
-class ScriptCollider : SFG::Engine::ScriptEntity {
+class ScriptCollider : public SFG::Engine::ScriptEntity {
   using _base_ = SFG::Engine::ScriptEntity;
   using _base_::_base_;
 
@@ -28,6 +30,11 @@ class ScriptCollider : SFG::Engine::ScriptEntity {
 
   protected:
   bool isTrigger_;
+
+  std::list< SFG::Engine::ScriptCollider* > enteredCollidersFromAbove_;
+  std::list< SFG::Engine::ScriptCollider* > enteredCollidersFromBelow_;
+  std::list< SFG::Engine::ScriptCollider* > enteredCollidersFromLeft_;
+  std::list< SFG::Engine::ScriptCollider* > enteredCollidersFromRight_;
 };
 
 }  // namespace Engine

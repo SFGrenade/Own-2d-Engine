@@ -35,3 +35,18 @@ void SFG::Engine::ScriptEntity::network_update() {
 void SFG::Engine::ScriptEntity::end() {
   _base_::end();
 }
+
+void SFG::Engine::ScriptEntity::set_position( long double x, long double y ) {
+  this->position_.x = x;
+  this->position_.y = y;
+}
+
+void SFG::Engine::ScriptEntity::set_size( long double w, long double h ) {
+  this->size_.x = w;
+  this->size_.y = h;
+}
+
+void SFG::Engine::ScriptEntity::set_velocity( long double x, long double y ) {
+  this->velocity_.x = x;
+  this->velocity_.y = y;
+}
