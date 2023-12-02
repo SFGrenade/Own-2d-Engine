@@ -1,6 +1,7 @@
 #ifndef _CONTENT_PLAYER_H_
 #define _CONTENT_PLAYER_H_
 
+#include "_globals/sdlInclude.h"
 #include "_globals/spdlogInclude.h"
 #include "engine/scriptcollider.h"
 
@@ -34,6 +35,8 @@ class Player : public SFG::Engine::ScriptCollider {
   bool pressesLeft_;
   bool pressesRight_;
   SDL_Rect playerRect_;
+  SDL_Texture* playerTextureCollision_;
+  SDL_Texture* playerTextureNoCollision_;
 };
 
 }  // namespace Content

@@ -74,19 +74,63 @@ int better_main( std::span< std::string_view const > args ) noexcept {
     spdlog::trace( fmt::runtime( "window 1 flags: 0b{:0>32b}" ), static_cast< uint32_t >( myWindow1Flags ) );
 
     myWindow1->initialize_logic_controller();
-    SFG::Content::Wall* firstWall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
-    firstWall->set_position( 200.0L, 200.0L );
-    firstWall->set_size( 50.0L, 50.0L );
-    spdlog::debug( fmt::runtime( "firstWall at {:p}" ), static_cast< void* >( firstWall ) );
-    SFG::Content::Wall* secondWall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
-    secondWall->set_position( 250.0L, 150.0L );
-    secondWall->set_size( 50.0L, 50.0L );
-    spdlog::debug( fmt::runtime( "secondWall at {:p}" ), static_cast< void* >( secondWall ) );
+    {
+      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wall->set_position( 0.0L, 0.0L );
+      wall->set_size( 800.0L, 50.0L );
+    }
+    {
+      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wall->set_position( 0.0L, 550.0L );
+      wall->set_size( 800.0L, 50.0L );
+    }
+    {
+      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wall->set_position( 0.0L, 50.0L );
+      wall->set_size( 50.0L, 500.0L );
+    }
+    {
+      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wall->set_position( 750.0L, 50.0L );
+      wall->set_size( 50.0L, 500.0L );
+    }
+    {
+      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wall->set_position( 150.0L, 50.0L );
+      wall->set_size( 50.0L, 400.0L );
+    }
+    {
+      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wall->set_position( 100.0L, 50.0L );
+      wall->set_size( 50.0L, 50.0L );
+    }
+    {
+      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wall->set_position( 50.0L, 150.0L );
+      wall->set_size( 50.0L, 50.0L );
+    }
+    {
+      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wall->set_position( 100.0L, 250.0L );
+      wall->set_size( 50.0L, 50.0L );
+    }
+    {
+      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wall->set_position( 50.0L, 350.0L );
+      wall->set_size( 50.0L, 50.0L );
+    }
+    {
+      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wall->set_position( 100.0L, 450.0L );
+      wall->set_size( 50.0L, 50.0L );
+    }
+
     SFG::Content::Player* player = myWindow1->get_script_manager()->add_script< SFG::Content::Player >();
-    player->set_size( 50.0L, 50.0L );
-    spdlog::debug( fmt::runtime( "player at {:p}" ), static_cast< void* >( player ) );
+    player->set_position( 51.0L, 51.0L );
+    player->set_size( 48.0L, 48.0L );
 
     myWindow1->get_script_manager()->add_script< SFG::Content::DebugInfo >();
+    // myWindow1->initialize_window_renderer( "direct3d", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
     myWindow1->initialize_window_renderer( "direct3d", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
 
     myWindow1->set_flags( SDL_WindowFlags::SDL_WINDOW_SHOWN );

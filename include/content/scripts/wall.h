@@ -1,6 +1,7 @@
 #ifndef _CONTENT_WALL_H_
 #define _CONTENT_WALL_H_
 
+#include "_globals/sdlInclude.h"
 #include "_globals/spdlogInclude.h"
 #include "engine/scriptcollider.h"
 
@@ -30,6 +31,8 @@ class Wall : public SFG::Engine::ScriptCollider {
 
   bool rendering_;
   SDL_Rect wallRect_;
+  SDL_Texture* wallTextureCollision_;
+  SDL_Texture* wallTextureNoCollision_;
 };
 
 }  // namespace Content

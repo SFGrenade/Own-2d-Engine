@@ -11,7 +11,9 @@ SFG::Content::Player::Player()
       pressesDown_( false ),
       pressesLeft_( false ),
       pressesRight_( false ),
-      playerRect_() {}
+      playerRect_(),
+      playerTextureCollision_( nullptr ),
+      playerTextureNoCollision_( nullptr ) {}
 
 SFG::Content::Player::~Player() {}
 
@@ -25,12 +27,43 @@ void SFG::Content::Player::frame_update( SDL_Renderer* renderer ) {
   if( !this->rendering_ ) {
     return;
   }
+  if( this->playerTextureCollision_ == nullptr ) {
+    SDL_Surface* txtsfc = SDL_CreateRGBSurfaceWithFormat( 0, 1, 1, 32, SDL_PixelFormatEnum::SDL_PIXELFORMAT_RGBA8888 );
+    if( txtsfc == nullptr ) {
+      this->logger_->error( fmt::runtime( "frame_update - Error when SDL_CreateRGBSurface: {:s}" ), TTF_GetError() );
+    } else {
+      static_cast< uint32_t* >( txtsfc->pixels )[0] = 0xFF00FFFF;
+      this->playerTextureCollision_ = SDL_CreateTextureFromSurface( renderer, txtsfc );
+      if( !this->playerTextureCollision_ ) {
+        this->logger_->error( fmt::runtime( "frame_update - Error when SDL_CreateTextureFromSurface: {:s}" ), SDL_GetError() );
+      }
+      SDL_FreeSurface( txtsfc );
+    }
+  }
+  if( this->playerTextureNoCollision_ == nullptr ) {
+    SDL_Surface* txtsfc = SDL_CreateRGBSurfaceWithFormat( 0, 1, 1, 32, SDL_PixelFormatEnum::SDL_PIXELFORMAT_RGBA8888 );
+    if( txtsfc == nullptr ) {
+      this->logger_->error( fmt::runtime( "frame_update - Error when SDL_CreateRGBSurface: {:s}" ), TTF_GetError() );
+    } else {
+      static_cast< uint32_t* >( txtsfc->pixels )[0] = 0xFF0000FF;
+      this->playerTextureNoCollision_ = SDL_CreateTextureFromSurface( renderer, txtsfc );
+      if( !this->playerTextureNoCollision_ ) {
+        this->logger_->error( fmt::runtime( "frame_update - Error when SDL_CreateTextureFromSurface: {:s}" ), SDL_GetError() );
+      }
+      SDL_FreeSurface( txtsfc );
+    }
+  }
 
-  uint8_t origR, origG, origB, origA;
-  SDL_GetRenderDrawColor( renderer, &origR, &origG, &origB, &origA );
-  SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
-  SDL_RenderFillRect( renderer, &playerRect_ );
-  SDL_SetRenderDrawColor( renderer, origR, origG, origB, origA );
+  if( this->enteredCollidersFromAbove_.size() > 0 || this->enteredCollidersFromBelow_.size() > 0 || this->enteredCollidersFromLeft_.size() > 0
+      || this->enteredCollidersFromRight_.size() > 0 ) {
+    if( SDL_RenderCopy( renderer, this->playerTextureCollision_, NULL, &( this->playerRect_ ) ) != 0 ) {
+      this->logger_->error( fmt::runtime( "frame_update - Error when SDL_RenderCopy: {:s}" ), SDL_GetError() );
+    }
+  } else {
+    if( SDL_RenderCopy( renderer, this->playerTextureNoCollision_, NULL, &( this->playerRect_ ) ) != 0 ) {
+      this->logger_->error( fmt::runtime( "frame_update - Error when SDL_RenderCopy: {:s}" ), SDL_GetError() );
+    }
+  }
 }
 
 void SFG::Content::Player::input_update( SDL_Event const& input ) {
