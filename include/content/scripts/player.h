@@ -17,24 +17,19 @@ class Player : public SFG::Engine::ScriptCollider {
   Player();
   virtual ~Player();
 
-  virtual void start();
-
   virtual void frame_update( SDL_Renderer* renderer );
   virtual void input_update( SDL_Event const& input );
   virtual void logic_update( std::chrono::secondsLongDouble const& deltaTime );
-  virtual void network_update();  // todo
-
-  virtual void end();
 
   private:
   spdlogger logger_;
 
   bool rendering_;
-  bool pressesUp_;
-  bool pressesDown_;
-  bool pressesLeft_;
-  bool pressesRight_;
-  SDL_Rect playerRect_;
+  __declspec( align( 64 ) ) bool pressesUp_;       // used for input and logic
+  __declspec( align( 64 ) ) bool pressesDown_;     // used for input and logic
+  __declspec( align( 64 ) ) bool pressesLeft_;     // used for input and logic
+  __declspec( align( 64 ) ) bool pressesRight_;    // used for input and logic
+  __declspec( align( 64 ) ) SDL_Rect playerRect_;  // used for graphics and logic
   SDL_Texture* playerTextureCollision_;
   SDL_Texture* playerTextureNoCollision_;
 };

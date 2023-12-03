@@ -57,6 +57,7 @@ SFG::Engine::SdlWindow::~SdlWindow() {
     this->performanceController_ = nullptr;
   }
   if( this->sdlWindow_ ) {
+    this->logger_->trace( fmt::runtime( "~SdlWindow - destroying window" ) );
     SDL_DestroyWindow( this->sdlWindow_ );
     this->sdlWindow_ = nullptr;
   }

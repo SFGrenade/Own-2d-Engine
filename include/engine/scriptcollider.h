@@ -19,14 +19,7 @@ class ScriptCollider : public SFG::Engine::ScriptEntity {
   ScriptCollider();
   virtual ~ScriptCollider();
 
-  virtual void start();
-
-  virtual void frame_update( SDL_Renderer* renderer );
-  virtual void input_update( SDL_Event const& input );
   virtual void logic_update( std::chrono::secondsLongDouble const& deltaTime );
-  virtual void network_update();
-
-  virtual void end();
 
   protected:
   bool isTrigger_;

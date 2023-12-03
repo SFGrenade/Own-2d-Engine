@@ -23,14 +23,9 @@ class DebugInfo : public SFG::Engine::Script {
   DebugInfo();
   virtual ~DebugInfo();
 
-  virtual void start();
-
   virtual void frame_update( SDL_Renderer* renderer );
   virtual void input_update( SDL_Event const& input );
   virtual void logic_update( std::chrono::secondsLongDouble const& deltaTime );
-  virtual void network_update();  // todo
-
-  virtual void end();
 
   private:
   void set_debugInfo_topLeft( std::string const& debugInfo );

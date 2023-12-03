@@ -24,25 +24,30 @@ SFG::Content::DebugInfo::DebugInfo()
 
 SFG::Content::DebugInfo::~DebugInfo() {
   if( this->sdlFont_ ) {
+    this->logger_->trace( fmt::runtime( "~DebugInfo - closing font" ) );
     TTF_CloseFont( this->sdlFont_ );
     this->sdlFont_ = nullptr;
   }
   if( this->debugInfoTopLeft_.texture_ ) {
+    this->logger_->trace( fmt::runtime( "~DebugInfo - destroying debugInfoTopLeft.texture" ) );
     SDL_DestroyTexture( this->debugInfoTopLeft_.texture_ );
+    this->debugInfoTopLeft_.texture_ = nullptr;
   }
   if( this->debugInfoTopRight_.texture_ ) {
+    this->logger_->trace( fmt::runtime( "~DebugInfo - destroying debugInfoTopRight.texture" ) );
     SDL_DestroyTexture( this->debugInfoTopRight_.texture_ );
+    this->debugInfoTopRight_.texture_ = nullptr;
   }
   if( this->debugInfoBottomLeft_.texture_ ) {
+    this->logger_->trace( fmt::runtime( "~DebugInfo - destroying debugInfoBottomLeft.texture" ) );
     SDL_DestroyTexture( this->debugInfoBottomLeft_.texture_ );
+    this->debugInfoBottomLeft_.texture_ = nullptr;
   }
   if( this->debugInfoBottomRight_.texture_ ) {
+    this->logger_->trace( fmt::runtime( "~DebugInfo - destroying debugInfoBottomRight.texture" ) );
     SDL_DestroyTexture( this->debugInfoBottomRight_.texture_ );
+    this->debugInfoBottomRight_.texture_ = nullptr;
   }
-}
-
-void SFG::Content::DebugInfo::start() {
-  _base_::start();
 }
 
 void SFG::Content::DebugInfo::frame_update( SDL_Renderer* renderer ) {
@@ -148,14 +153,6 @@ void SFG::Content::DebugInfo::logic_update( std::chrono::secondsLongDouble const
   }
 }
 
-void SFG::Content::DebugInfo::network_update() {
-  _base_::network_update();
-}
-
-void SFG::Content::DebugInfo::end() {
-  _base_::end();
-}
-
 void SFG::Content::DebugInfo::set_debugInfo_topLeft( std::string const& debugInfo ) {
   this->debugInfoTopLeft_.message_ = debugInfo;
   this->debugInfoTopLeft_.drawNew_ = true;
@@ -186,6 +183,7 @@ void SFG::Content::DebugInfo::renderDebugInfo( DebugInfoStruct& debugInfo, SDL_R
     this->logger_->error( fmt::runtime( "renderDebugInfo - Error when TTF_RenderUTF8_Shaded_Wrapped: {:s}" ), TTF_GetError() );
   } else {
     if( debugInfo.texture_ ) {
+      this->logger_->trace( fmt::runtime( "renderDebugInfo - destroying debugInfo.texture" ) );
       SDL_DestroyTexture( debugInfo.texture_ );
     }
     debugInfo.texture_ = SDL_CreateTextureFromSurface( renderer, txtsfc );

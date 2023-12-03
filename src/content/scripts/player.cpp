@@ -15,10 +15,17 @@ SFG::Content::Player::Player()
       playerTextureCollision_( nullptr ),
       playerTextureNoCollision_( nullptr ) {}
 
-SFG::Content::Player::~Player() {}
-
-void SFG::Content::Player::start() {
-  _base_::start();
+SFG::Content::Player::~Player() {
+  if( this->playerTextureCollision_ ) {
+    this->logger_->trace( fmt::runtime( "~Player - destroying playerTextureCollision" ) );
+    SDL_DestroyTexture( this->playerTextureCollision_ );
+    this->playerTextureCollision_ = nullptr;
+  }
+  if( this->playerTextureNoCollision_ ) {
+    this->logger_->trace( fmt::runtime( "~Player - destroying playerTextureNoCollision" ) );
+    SDL_DestroyTexture( this->playerTextureNoCollision_ );
+    this->playerTextureNoCollision_ = nullptr;
+  }
 }
 
 void SFG::Content::Player::frame_update( SDL_Renderer* renderer ) {
@@ -114,12 +121,4 @@ void SFG::Content::Player::logic_update( std::chrono::secondsLongDouble const& d
   this->playerRect_.y = static_cast< int >( this->position_.y );
   this->playerRect_.w = static_cast< int >( this->size_.x );
   this->playerRect_.h = static_cast< int >( this->size_.y );
-}
-
-void SFG::Content::Player::network_update() {
-  _base_::network_update();
-}
-
-void SFG::Content::Player::end() {
-  _base_::end();
 }

@@ -11,10 +11,17 @@ SFG::Content::Wall::Wall()
       wallTextureCollision_( nullptr ),
       wallTextureNoCollision_( nullptr ) {}
 
-SFG::Content::Wall::~Wall() {}
-
-void SFG::Content::Wall::start() {
-  _base_::start();
+SFG::Content::Wall::~Wall() {
+  if( this->wallTextureCollision_ ) {
+    this->logger_->trace( fmt::runtime( "~Wall - destroying wallTextureCollision" ) );
+    SDL_DestroyTexture( this->wallTextureCollision_ );
+    this->wallTextureCollision_ = nullptr;
+  }
+  if( this->wallTextureNoCollision_ ) {
+    this->logger_->trace( fmt::runtime( "~Wall - destroying wallTextureNoCollision" ) );
+    SDL_DestroyTexture( this->wallTextureNoCollision_ );
+    this->wallTextureNoCollision_ = nullptr;
+  }
 }
 
 void SFG::Content::Wall::frame_update( SDL_Renderer* renderer ) {
@@ -62,10 +69,6 @@ void SFG::Content::Wall::frame_update( SDL_Renderer* renderer ) {
   }
 }
 
-void SFG::Content::Wall::input_update( SDL_Event const& input ) {
-  _base_::input_update( input );
-}
-
 void SFG::Content::Wall::logic_update( std::chrono::secondsLongDouble const& deltaTime ) {
   _base_::logic_update( deltaTime );
 
@@ -73,12 +76,4 @@ void SFG::Content::Wall::logic_update( std::chrono::secondsLongDouble const& del
   this->wallRect_.y = static_cast< int >( this->position_.y );
   this->wallRect_.w = static_cast< int >( this->size_.x );
   this->wallRect_.h = static_cast< int >( this->size_.y );
-}
-
-void SFG::Content::Wall::network_update() {
-  _base_::network_update();
-}
-
-void SFG::Content::Wall::end() {
-  _base_::end();
 }

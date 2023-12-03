@@ -9,31 +9,11 @@ SFG::Engine::ScriptEntity::ScriptEntity()
 
 SFG::Engine::ScriptEntity::~ScriptEntity() {}
 
-void SFG::Engine::ScriptEntity::start() {
-  _base_::start();
-}
-
-void SFG::Engine::ScriptEntity::frame_update( SDL_Renderer* renderer ) {
-  _base_::frame_update( renderer );
-}
-
-void SFG::Engine::ScriptEntity::input_update( SDL_Event const& input ) {
-  _base_::input_update( input );
-}
-
 void SFG::Engine::ScriptEntity::logic_update( std::chrono::secondsLongDouble const& deltaTime ) {
   _base_::logic_update( deltaTime );
 
   this->position_.x += this->velocity_.x * deltaTime.count();
   this->position_.y += this->velocity_.y * deltaTime.count();
-}
-
-void SFG::Engine::ScriptEntity::network_update() {
-  _base_::network_update();
-}
-
-void SFG::Engine::ScriptEntity::end() {
-  _base_::end();
 }
 
 void SFG::Engine::ScriptEntity::set_position( long double x, long double y ) {

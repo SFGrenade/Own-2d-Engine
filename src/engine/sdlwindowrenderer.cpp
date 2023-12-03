@@ -18,6 +18,12 @@ SFG::Engine::SdlWindowRenderer::SdlWindowRenderer( SFG::Engine::SdlWindow* sdlWi
 SFG::Engine::SdlWindowRenderer::~SdlWindowRenderer() {
   this->logger_->trace( fmt::runtime( "~SdlWindowRenderer()" ) );
 
+  if( this->sdlRenderer_ ) {
+    this->logger_->trace( fmt::runtime( "~SdlWindowRenderer - destroying renderer" ) );
+    SDL_DestroyRenderer( this->sdlRenderer_ );
+    this->sdlRenderer_ = nullptr;
+  }
+
   this->logger_->trace( fmt::runtime( "~SdlWindowRenderer()~" ) );
 }
 

@@ -23,14 +23,7 @@ class ScriptEntity : public Script {
   ScriptEntity();
   virtual ~ScriptEntity();
 
-  virtual void start();
-
-  virtual void frame_update( SDL_Renderer* renderer );
-  virtual void input_update( SDL_Event const& input );
   virtual void logic_update( std::chrono::secondsLongDouble const& deltaTime );
-  virtual void network_update();
-
-  virtual void end();
 
   void set_position( long double x, long double y );
   void set_size( long double w, long double h );

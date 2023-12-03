@@ -17,20 +17,14 @@ class Wall : public SFG::Engine::ScriptCollider {
   Wall();
   virtual ~Wall();
 
-  virtual void start();
-
   virtual void frame_update( SDL_Renderer* renderer );
-  virtual void input_update( SDL_Event const& input );
   virtual void logic_update( std::chrono::secondsLongDouble const& deltaTime );
-  virtual void network_update();  // todo
-
-  virtual void end();
 
   private:
   spdlogger logger_;
 
   bool rendering_;
-  SDL_Rect wallRect_;
+  __declspec( align( 64 ) ) SDL_Rect wallRect_;  // used for graphics and logic
   SDL_Texture* wallTextureCollision_;
   SDL_Texture* wallTextureNoCollision_;
 };
