@@ -13,19 +13,25 @@ SFG::Content::Player::Player()
       pressesLeft_( false ),
       pressesRight_( false ),
       playerRect_(),
-      playerTextureCollision_( nullptr ),
-      playerTextureNoCollision_( nullptr ) {}
+      playerTextureTouching_( nullptr ),
+      playerTextureColliding_( nullptr ),
+      playerTextureFree_( nullptr ) {}
 
 SFG::Content::Player::~Player() {
-  if( this->playerTextureCollision_ ) {
-    this->logger_->trace( fmt::runtime( "~Player - destroying playerTextureCollision" ) );
-    SDL_DestroyTexture( this->playerTextureCollision_ );
-    this->playerTextureCollision_ = nullptr;
+  if( this->playerTextureTouching_ ) {
+    this->logger_->trace( fmt::runtime( "~Player - destroying playerTextureTouching" ) );
+    SDL_DestroyTexture( this->playerTextureTouching_ );
+    this->playerTextureTouching_ = nullptr;
   }
-  if( this->playerTextureNoCollision_ ) {
-    this->logger_->trace( fmt::runtime( "~Player - destroying playerTextureNoCollision" ) );
-    SDL_DestroyTexture( this->playerTextureNoCollision_ );
-    this->playerTextureNoCollision_ = nullptr;
+  if( this->playerTextureColliding_ ) {
+    this->logger_->trace( fmt::runtime( "~Player - destroying playerTextureColliding" ) );
+    SDL_DestroyTexture( this->playerTextureColliding_ );
+    this->playerTextureColliding_ = nullptr;
+  }
+  if( this->playerTextureFree_ ) {
+    this->logger_->trace( fmt::runtime( "~Player - destroying playerTextureFree" ) );
+    SDL_DestroyTexture( this->playerTextureFree_ );
+    this->playerTextureFree_ = nullptr;
   }
 }
 
@@ -35,40 +41,56 @@ void SFG::Content::Player::frame_update( SDL_Renderer* renderer ) {
   if( !this->rendering_ ) {
     return;
   }
-  if( this->playerTextureCollision_ == nullptr ) {
+  if( this->playerTextureTouching_ == nullptr ) {
     SDL_Surface* txtsfc = SDL_CreateRGBSurfaceWithFormat( 0, 1, 1, 32, SDL_PixelFormatEnum::SDL_PIXELFORMAT_RGBA8888 );
     if( txtsfc == nullptr ) {
-      this->logger_->error( fmt::runtime( "frame_update - Error when SDL_CreateRGBSurface: {:s}" ), TTF_GetError() );
+      this->logger_->error( fmt::runtime( "frame_update - Error when SDL_CreateRGBSurfaceWithFormat: {:s}" ), TTF_GetError() );
     } else {
-      static_cast< uint32_t* >( txtsfc->pixels )[0] = 0xFF00FFFF;
-      this->playerTextureCollision_ = SDL_CreateTextureFromSurface( renderer, txtsfc );
-      if( !this->playerTextureCollision_ ) {
+      static_cast< uint32_t* >( txtsfc->pixels )[0] = 0xFF007FFF;
+      this->playerTextureTouching_ = SDL_CreateTextureFromSurface( renderer, txtsfc );
+      if( !this->playerTextureTouching_ ) {
         this->logger_->error( fmt::runtime( "frame_update - Error when SDL_CreateTextureFromSurface: {:s}" ), SDL_GetError() );
       }
       SDL_FreeSurface( txtsfc );
     }
   }
-  if( this->playerTextureNoCollision_ == nullptr ) {
+  if( this->playerTextureColliding_ == nullptr ) {
     SDL_Surface* txtsfc = SDL_CreateRGBSurfaceWithFormat( 0, 1, 1, 32, SDL_PixelFormatEnum::SDL_PIXELFORMAT_RGBA8888 );
     if( txtsfc == nullptr ) {
-      this->logger_->error( fmt::runtime( "frame_update - Error when SDL_CreateRGBSurface: {:s}" ), TTF_GetError() );
+      this->logger_->error( fmt::runtime( "frame_update - Error when SDL_CreateRGBSurfaceWithFormat: {:s}" ), TTF_GetError() );
+    } else {
+      static_cast< uint32_t* >( txtsfc->pixels )[0] = 0xFF00FFFF;
+      this->playerTextureColliding_ = SDL_CreateTextureFromSurface( renderer, txtsfc );
+      if( !this->playerTextureColliding_ ) {
+        this->logger_->error( fmt::runtime( "frame_update - Error when SDL_CreateTextureFromSurface: {:s}" ), SDL_GetError() );
+      }
+      SDL_FreeSurface( txtsfc );
+    }
+  }
+  if( this->playerTextureFree_ == nullptr ) {
+    SDL_Surface* txtsfc = SDL_CreateRGBSurfaceWithFormat( 0, 1, 1, 32, SDL_PixelFormatEnum::SDL_PIXELFORMAT_RGBA8888 );
+    if( txtsfc == nullptr ) {
+      this->logger_->error( fmt::runtime( "frame_update - Error when SDL_CreateRGBSurfaceWithFormat: {:s}" ), TTF_GetError() );
     } else {
       static_cast< uint32_t* >( txtsfc->pixels )[0] = 0xFF0000FF;
-      this->playerTextureNoCollision_ = SDL_CreateTextureFromSurface( renderer, txtsfc );
-      if( !this->playerTextureNoCollision_ ) {
+      this->playerTextureFree_ = SDL_CreateTextureFromSurface( renderer, txtsfc );
+      if( !this->playerTextureFree_ ) {
         this->logger_->error( fmt::runtime( "frame_update - Error when SDL_CreateTextureFromSurface: {:s}" ), SDL_GetError() );
       }
       SDL_FreeSurface( txtsfc );
     }
   }
 
-  if( this->enteredCollidersFromAbove_.size() > 0 || this->enteredCollidersFromBelow_.size() > 0 || this->enteredCollidersFromLeft_.size() > 0
-      || this->enteredCollidersFromRight_.size() > 0 ) {
-    if( SDL_RenderCopy( renderer, this->playerTextureCollision_, NULL, &( this->playerRect_ ) ) != 0 ) {
+  if( this->isTouching_ ) {
+    if( SDL_RenderCopy( renderer, this->playerTextureTouching_, NULL, &( this->playerRect_ ) ) != 0 ) {
+      this->logger_->error( fmt::runtime( "frame_update - Error when SDL_RenderCopy: {:s}" ), SDL_GetError() );
+    }
+  } else if( this->isColliding_ ) {
+    if( SDL_RenderCopy( renderer, this->playerTextureColliding_, NULL, &( this->playerRect_ ) ) != 0 ) {
       this->logger_->error( fmt::runtime( "frame_update - Error when SDL_RenderCopy: {:s}" ), SDL_GetError() );
     }
   } else {
-    if( SDL_RenderCopy( renderer, this->playerTextureNoCollision_, NULL, &( this->playerRect_ ) ) != 0 ) {
+    if( SDL_RenderCopy( renderer, this->playerTextureFree_, NULL, &( this->playerRect_ ) ) != 0 ) {
       this->logger_->error( fmt::runtime( "frame_update - Error when SDL_RenderCopy: {:s}" ), SDL_GetError() );
     }
   }

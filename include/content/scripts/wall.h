@@ -25,8 +25,9 @@ class Wall : public SFG::Engine::ScriptCollider {
 
   bool rendering_;
   __declspec( align( 64 ) ) SDL_Rect wallRect_;  // used for graphics and logic
-  SDL_Texture* wallTextureCollision_;
-  SDL_Texture* wallTextureNoCollision_;
+  SDL_Texture* wallTextureTouching_;
+  SDL_Texture* wallTextureColliding_;
+  SDL_Texture* wallTextureFree_;
 };
 
 }  // namespace Content

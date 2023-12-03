@@ -23,11 +23,8 @@ class ScriptCollider : public SFG::Engine::ScriptEntity {
 
   protected:
   bool isTrigger_;
-
-  std::list< SFG::Engine::ScriptCollider* > enteredCollidersFromAbove_;
-  std::list< SFG::Engine::ScriptCollider* > enteredCollidersFromBelow_;
-  std::list< SFG::Engine::ScriptCollider* > enteredCollidersFromLeft_;
-  std::list< SFG::Engine::ScriptCollider* > enteredCollidersFromRight_;
+  bool isTouching_;
+  bool isColliding_;
 };
 
 }  // namespace Engine

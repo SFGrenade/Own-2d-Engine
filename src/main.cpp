@@ -38,30 +38,26 @@ int better_main( std::span< std::string_view const > args ) noexcept {
     myWindow1Flags = myWindow1->get_flags();
     spdlog::trace( fmt::runtime( "window 1 flags: 0b{:0>32b}" ), static_cast< uint32_t >( myWindow1Flags ) );
 
-    {
-      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
-      wall->set_position( 0.0L, 0.0L );
-      wall->set_size( 800.0L, 50.0L );
+    for( int i = 0; i < ( 800 / 50 ); i++ ) {
+      SFG::Content::Wall* wallUpper = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wallUpper->set_position( i * 50.0L, 0.0L );
+      wallUpper->set_size( 50.0L, 50.0L );
+      SFG::Content::Wall* wallLower = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wallLower->set_position( i * 50.0L, 550.0L );
+      wallLower->set_size( 50.0L, 50.0L );
     }
-    {
-      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
-      wall->set_position( 0.0L, 550.0L );
-      wall->set_size( 800.0L, 50.0L );
+    for( int i = 0; i < ( 500 / 50 ); i++ ) {
+      SFG::Content::Wall* wallLeft = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wallLeft->set_position( 0.0L, ( i + 1 ) * 50.0L );
+      wallLeft->set_size( 50.0L, 50.0L );
+      SFG::Content::Wall* wallRight = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wallRight->set_position( 750.0L, ( i + 1 ) * 50.0L );
+      wallRight->set_size( 50.0L, 50.0L );
     }
-    {
+    for( int i = 0; i < ( 400 / 50 ); i++ ) {
       SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
-      wall->set_position( 0.0L, 50.0L );
-      wall->set_size( 50.0L, 500.0L );
-    }
-    {
-      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
-      wall->set_position( 750.0L, 50.0L );
-      wall->set_size( 50.0L, 500.0L );
-    }
-    {
-      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
-      wall->set_position( 150.0L, 50.0L );
-      wall->set_size( 50.0L, 400.0L );
+      wall->set_position( 150.0L, ( ( i + 1 ) * 50.0L ) );
+      wall->set_size( 50.0L, 50.0L );
     }
     {
       SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
