@@ -10,46 +10,11 @@
 #include "content/scripts/logscript.h"
 #include "content/scripts/player.h"
 #include "content/scripts/wall.h"
+#include "engine/loggerfactory.h"
 #include "engine/scriptmanager.h"
 #include "engine/sdlengine.h"
 #include "engine/sdlwindow.h"
 
-
-void InitializeLoggers() {
-  auto consoleSink = std::make_shared< spdlog::sinks::stdout_color_sink_mt >();
-  consoleSink->set_level( spdlog::level::warn );
-
-  auto truncatedFileSink = std::make_shared< spdlog::sinks::basic_file_sink_mt >( "log.log", true );
-  truncatedFileSink->set_level( spdlog::level::trace );
-  spdlog::sinks_init_list truncatedSinkList = { truncatedFileSink, consoleSink };
-
-  spdlogger mainLogger = std::make_shared< spdlog::logger >( "main", truncatedSinkList.begin(), truncatedSinkList.end() );
-  mainLogger->set_level( spdlog::level::trace );
-  mainLogger->flush_on( spdlog::level::trace );
-  spdlog::register_logger( mainLogger );
-  spdlog::set_default_logger( mainLogger );
-
-  std::vector< std::string > allLoggerNames = {
-      "Engine_LogicController",
-      "Engine_PerformanceController",
-      "Engine_ScriptManager",
-      "Engine_SdlEngine",
-      "Engine_SdlWindow",
-      "Engine_SdlWindowRenderer",
-      "Content_DebugInfo",
-      "Content_LogScript",
-      "Content_Player",
-      "Content_Wall",
-  };
-  for( auto name : allLoggerNames ) {
-    spdlogger logger = std::make_shared< spdlog::logger >( name, truncatedSinkList.begin(), truncatedSinkList.end() );
-    logger->set_level( spdlog::level::trace );
-    logger->flush_on( spdlog::level::trace );
-    spdlog::register_logger( logger );
-  }
-  // spdlog::get("LogScript")->set_level(spdlog::level::warn);
-  spdlog::set_pattern( "[%Y-%m-%d %H:%M:%S.%e] [thread %t] [%n] [%l] %v" );
-}
 
 int main( int const argc, char const* const* argv ) {
   int better_main( std::span< std::string_view const > ) noexcept;
@@ -58,7 +23,7 @@ int main( int const argc, char const* const* argv ) {
 }
 
 int better_main( std::span< std::string_view const > args ) noexcept {
-  InitializeLoggers();
+  SFG::Engine::LoggerFactory::init();
 
   spdlog::trace( fmt::runtime( "better_main( args = {:c}\"{:s}\"{:c} )" ), '{', fmt::join( args, "\", \"" ), '}' );
 
@@ -238,5 +203,6 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   myEngine = nullptr;
 
   spdlog::trace( fmt::runtime( "better_main()~" ) );
+  SFG::Engine::LoggerFactory::deinit();
   return EXIT_SUCCESS;
 }

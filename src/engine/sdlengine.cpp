@@ -5,10 +5,11 @@
 
 #include "_globals/moreChrono.h"
 #include "_globals/scopedmutex.h"
+#include "engine/loggerfactory.h"
 #include "engine/sdlwindow.h"
 
 SFG::Engine::SdlEngine::SdlEngine( uint32_t sdlInitFlags, IMG_InitFlags imgInitFlags, MIX_InitFlags mixInitFlags )
-    : logger_( spdlog::get( "Engine_SdlEngine" ) ),
+    : logger_( SFG::Engine::LoggerFactory::get_logger( "Engine_SdlEngine" ) ),
       windows_(),
       windowsMutex_(),
       windowIdsToDestroy_(),

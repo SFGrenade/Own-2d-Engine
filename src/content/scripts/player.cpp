@@ -1,11 +1,12 @@
 #include "content/scripts/player.h"
 
+#include "engine/loggerfactory.h"
 #include "engine/sdlwindow.h"
 
 
 SFG::Content::Player::Player()
     : _base_(),
-      logger_( spdlog::get( "Content_Player" ) ),
+      logger_( SFG::Engine::LoggerFactory::get_logger( "Content_Player" ) ),
       rendering_( true ),
       pressesUp_( false ),
       pressesDown_( false ),

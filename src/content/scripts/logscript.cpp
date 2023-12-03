@@ -1,9 +1,10 @@
 #include "content/scripts/logscript.h"
 
+#include "engine/loggerfactory.h"
 #include "engine/sdlwindow.h"
 
 
-SFG::Content::LogScript::LogScript() : _base_(), logger_( spdlog::get( "Content_LogScript" ) ) {
+SFG::Content::LogScript::LogScript() : _base_(), logger_( SFG::Engine::LoggerFactory::get_logger( "Content_LogScript" ) ) {
   this->logger_->trace( fmt::runtime( "LogScript()" ) );
 
   this->logger_->trace( fmt::runtime( "LogScript()~" ) );

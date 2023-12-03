@@ -1,8 +1,10 @@
 #include "engine/performancecontroller.h"
 
+#include "engine/loggerfactory.h"
+
 
 SFG::Engine::PerformanceController::PerformanceController( SFG::Engine::SdlWindow* sdlWindow )
-    : logger_( spdlog::get( "Engine_PerformanceController" ) ), sdlWindow_( sdlWindow ) {
+    : logger_( SFG::Engine::LoggerFactory::get_logger( "Engine_PerformanceController" ) ), sdlWindow_( sdlWindow ) {
   this->logger_->trace( fmt::runtime( "PerformanceController( sdlWindow = {:p} )" ), static_cast< void* >( sdlWindow ) );
 
   this->logger_->trace( fmt::runtime( "PerformanceController()~" ) );

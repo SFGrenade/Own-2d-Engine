@@ -1,11 +1,12 @@
 #include "content/scripts/wall.h"
 
+#include "engine/loggerfactory.h"
 #include "engine/sdlwindow.h"
 
 
 SFG::Content::Wall::Wall()
     : _base_(),
-      logger_( spdlog::get( "Content_Wall" ) ),
+      logger_( SFG::Engine::LoggerFactory::get_logger( "Content_Wall" ) ),
       rendering_( true ),
       wallRect_(),
       wallTextureCollision_( nullptr ),

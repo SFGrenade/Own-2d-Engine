@@ -3,6 +3,7 @@
 #include <thread>
 
 #include "_globals/moreChrono.h"
+#include "engine/loggerfactory.h"
 #include "engine/performancecontroller.h"
 #include "engine/scriptmanager.h"
 #include "engine/sdlwindow.h"
@@ -10,7 +11,7 @@
 
 
 SFG::Engine::LogicController::LogicController( SFG::Engine::SdlWindow* sdlWindow )
-    : logger_( spdlog::get( "Engine_LogicController" ) ), sdlWindow_( sdlWindow ), done_( false ), doneMutex_() {
+    : logger_( SFG::Engine::LoggerFactory::get_logger( "Engine_LogicController" ) ), sdlWindow_( sdlWindow ), done_( false ), doneMutex_() {
   this->logger_->trace( fmt::runtime( "LogicController( sdlWindow = {:p} )" ), static_cast< void* >( sdlWindow ) );
 
   this->logger_->trace( fmt::runtime( "LogicController()~" ) );

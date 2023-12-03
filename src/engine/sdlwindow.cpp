@@ -4,6 +4,7 @@
 #include <thread>
 
 #include "_globals/moreChrono.h"
+#include "engine/loggerfactory.h"
 #include "engine/logiccontroller.h"
 #include "engine/performancecontroller.h"
 #include "engine/scriptmanager.h"
@@ -12,7 +13,7 @@
 
 
 SFG::Engine::SdlWindow::SdlWindow( SdlEngine* sdlEngine )
-    : logger_( spdlog::get( "Engine_SdlWindow" ) ),
+    : logger_( SFG::Engine::LoggerFactory::get_logger( "Engine_SdlWindow" ) ),
       sdlEngine_( sdlEngine ),
       sdlInputQueue_(),
       sdlInputQueueMutex_(),

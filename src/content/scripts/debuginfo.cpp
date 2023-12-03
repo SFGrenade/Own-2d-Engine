@@ -1,12 +1,13 @@
 #include "content/scripts/debuginfo.h"
 
+#include "engine/loggerfactory.h"
 #include "engine/performancecontroller.h"
 #include "engine/sdlwindow.h"
 
 
 SFG::Content::DebugInfo::DebugInfo()
     : _base_(),
-      logger_( spdlog::get( "Content_DebugInfo" ) ),
+      logger_( SFG::Engine::LoggerFactory::get_logger( "Content_DebugInfo" ) ),
       rendering_( true ),
       updateInfoCountDown1s_( std::chrono::duration_cast< std::chrono::secondsLongDouble >( 1.0s ) ),
       debugInfoTopLeft_( { "", false, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
