@@ -1,8 +1,6 @@
 #ifndef _ENGINE_PERFORMANCECONTROLLER_H_
 #define _ENGINE_PERFORMANCECONTROLLER_H_
 
-#include <atomic>
-
 #include "_globals/moreChrono.h"
 #include "_globals/spdlogInclude.h"
 
@@ -29,13 +27,13 @@ class PerformanceController {
   private:
   spdlogger logger_;
 
-  __declspec( align( 64 ) ) std::atomic< uint64_t > counterInputLoops_;
+  __declspec( align( 64 ) ) uint64_t counterInputLoops_;
   __declspec( align( 64 ) ) std::chrono::high_resolution_clock::time_point counterInputLoopsTimePoint_;
-  __declspec( align( 64 ) ) std::atomic< uint64_t > counterLogicLoops_;
+  __declspec( align( 64 ) ) uint64_t counterLogicLoops_;
   __declspec( align( 64 ) ) std::chrono::high_resolution_clock::time_point counterLogicLoopsTimePoint_;
-  __declspec( align( 64 ) ) std::atomic< uint64_t > counterNetworkLoops_;
+  __declspec( align( 64 ) ) uint64_t counterNetworkLoops_;
   __declspec( align( 64 ) ) std::chrono::high_resolution_clock::time_point counterNetworkLoopsTimePoint_;
-  __declspec( align( 64 ) ) std::atomic< uint64_t > counterRenderLoops_;
+  __declspec( align( 64 ) ) uint64_t counterRenderLoops_;
   __declspec( align( 64 ) ) std::chrono::high_resolution_clock::time_point counterRenderLoopsTimePoint_;
 
   SFG::Engine::SdlWindow* sdlWindow_;
