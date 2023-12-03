@@ -1,6 +1,7 @@
 #include "engine/scriptcollider.h"
 
 #include "_globals/list_contains.h"
+#include "_globals/num_ops.h"
 #include "engine/scriptmanager.h"
 #include "engine/sdlwindow.h"
 
@@ -103,7 +104,7 @@ void SFG::Engine::ScriptCollider::logic_update( std::chrono::secondsLongDouble c
       if( thisTouchingOrCollidingOtherTop ) {
         // this is touching or colliding with other
         touchingAtLeastOne = true;
-        this->velocity_.y = std::min( this->velocity_.y, 0.0L );
+        this->velocity_.y = min( this->velocity_.y, 0.0L );
         if( thisCollidingOtherTop ) {
           // actual collision, not only touching
           collidingAtLeastOne = true;
@@ -115,7 +116,7 @@ void SFG::Engine::ScriptCollider::logic_update( std::chrono::secondsLongDouble c
       if( thisTouchingOrCollidingOtherBottom ) {
         // this is touching or colliding with other
         touchingAtLeastOne = true;
-        this->velocity_.y = std::max( this->velocity_.y, 0.0L );
+        this->velocity_.y = max( this->velocity_.y, 0.0L );
         if( thisCollidingOtherBottom ) {
           // actual collision, not only touching
           collidingAtLeastOne = true;
@@ -130,7 +131,7 @@ void SFG::Engine::ScriptCollider::logic_update( std::chrono::secondsLongDouble c
       if( thisTouchingOrCollidingOtherLeft ) {
         // this is touching or colliding with other
         touchingAtLeastOne = true;
-        this->velocity_.x = std::min( this->velocity_.x, 0.0L );
+        this->velocity_.x = min( this->velocity_.x, 0.0L );
         if( thisCollidingOtherLeft ) {
           // actual collision, not only touching
           collidingAtLeastOne = true;
@@ -142,7 +143,7 @@ void SFG::Engine::ScriptCollider::logic_update( std::chrono::secondsLongDouble c
       if( thisTouchingOrCollidingOtherRight ) {
         // this is touching or colliding with other
         touchingAtLeastOne = true;
-        this->velocity_.x = std::max( this->velocity_.x, 0.0L );
+        this->velocity_.x = max( this->velocity_.x, 0.0L );
         if( thisCollidingOtherRight ) {
           // actual collision, not only touching
           collidingAtLeastOne = true;

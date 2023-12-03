@@ -1,5 +1,6 @@
 #include "content/scripts/debuginfo.h"
 
+#include "_globals/num_ops.h"
 #include "engine/loggerfactory.h"
 #include "engine/performancecontroller.h"
 #include "engine/sdlwindow.h"
@@ -134,11 +135,11 @@ void SFG::Content::DebugInfo::logic_update( std::chrono::secondsLongDouble const
   if( this->renderBlendingUp_ || this->renderBlendingDown_ ) {
     this->updateInfoBlendTime_ -= deltaTime;
     uint8_t alpha = 0;
-    long double capped = std::max( std::min( this->updateInfoBlendTime_.count(), 0.5L ), 0.0L ) / 0.5L;
+    long double capped = clamp( this->updateInfoBlendTime_.count(), 0.5L, 0.0L ) / 0.5L;
     if( this->renderBlendingUp_ ) {
-      alpha = ( 255 * ( 1.0L - capped ) );
+      alpha = static_cast< uint8_t >( 255 * ( 1.0L - capped ) );
     } else if( this->renderBlendingDown_ ) {
-      alpha = ( 255 * capped );
+      alpha = static_cast< uint8_t >( 255 * capped );
     }
     SDL_SetTextureAlphaMod( this->debugInfoTopLeft_.texture_, alpha );
     SDL_SetTextureAlphaMod( this->debugInfoTopRight_.texture_, alpha );
