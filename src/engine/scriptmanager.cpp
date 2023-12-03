@@ -9,7 +9,7 @@
 
 
 SFG::Engine::ScriptManager::ScriptManager( SFG::Engine::SdlWindow* sdlWindow )
-    : logger_( SFG::Engine::LoggerFactory::get_logger( "Engine_ScriptManager" ) ), sdlWindow_( sdlWindow ), scripts_(), scriptsMutex_() {
+    : logger_( SFG::Engine::LoggerFactory::get_logger( "Engine_ScriptManager" ) ), sdlWindow_( sdlWindow ), scripts_() {
   this->logger_->trace( fmt::runtime( "ScriptManager( sdlWindow = {:p} )" ), static_cast< void* >( sdlWindow ) );
 
   this->logger_->trace( fmt::runtime( "ScriptManager()~" ) );
@@ -18,13 +18,11 @@ SFG::Engine::ScriptManager::ScriptManager( SFG::Engine::SdlWindow* sdlWindow )
 SFG::Engine::ScriptManager::~ScriptManager() {
   this->logger_->trace( fmt::runtime( "~ScriptManager()" ) );
 
-  this->scriptsMutex_.lock();
   for( SFG::Engine::Script* script : this->scripts_ ) {
     script->end();
     delete script;
   }
   this->scripts_.clear();
-  this->scriptsMutex_.unlock();
 
   this->logger_->trace( fmt::runtime( "~ScriptManager()~" ) );
 }
@@ -32,11 +30,9 @@ SFG::Engine::ScriptManager::~ScriptManager() {
 void SFG::Engine::ScriptManager::frame_update( SDL_Renderer* renderer ) {
   // this->logger_->trace( fmt::runtime( "frame_update( renderer = {:p} )" ), static_cast< void const* >( renderer ) );
 
-  this->scriptsMutex_.lock();
-  for( SFG::Engine::Script* script : this->scripts_ ) {
+  for( SFG::Engine::Script* script : this->scripts_ ) {  // maybe this is a race condition with begin and end or something, we'll see
     script->frame_update( renderer );
   }
-  this->scriptsMutex_.unlock();
 
   // this->logger_->trace( fmt::runtime( "frame_update()~" ) );
 }
@@ -44,11 +40,9 @@ void SFG::Engine::ScriptManager::frame_update( SDL_Renderer* renderer ) {
 void SFG::Engine::ScriptManager::input_update( SDL_Event const& input ) {
   // this->logger_->trace( fmt::runtime( "input_update( input = {:s} )" ), SDL_EventType_to_string( static_cast< SDL_EventType >( input.type ) ) );
 
-  this->scriptsMutex_.lock();
-  for( SFG::Engine::Script* script : this->scripts_ ) {
+  for( SFG::Engine::Script* script : this->scripts_ ) {  // maybe this is a race condition with begin and end or something, we'll see
     script->input_update( input );
   }
-  this->scriptsMutex_.unlock();
 
   // this->logger_->trace( fmt::runtime( "input_update()~" ) );
 }
@@ -56,11 +50,9 @@ void SFG::Engine::ScriptManager::input_update( SDL_Event const& input ) {
 void SFG::Engine::ScriptManager::logic_update( std::chrono::secondsLongDouble const& deltaTime ) {
   // this->logger_->trace( fmt::runtime( "logic_update( deltaTime = {:.8F} )" ), deltaTime.count() );
 
-  this->scriptsMutex_.lock();
-  for( SFG::Engine::Script* script : this->scripts_ ) {
+  for( SFG::Engine::Script* script : this->scripts_ ) {  // maybe this is a race condition with begin and end or something, we'll see
     script->logic_update( deltaTime );
   }
-  this->scriptsMutex_.unlock();
 
   // this->logger_->trace( fmt::runtime( "logic_update()~" ) );
 }
@@ -68,11 +60,9 @@ void SFG::Engine::ScriptManager::logic_update( std::chrono::secondsLongDouble co
 void SFG::Engine::ScriptManager::network_update() {
   // this->logger_->trace( fmt::runtime( "network_update()" ) );
 
-  this->scriptsMutex_.lock();
-  for( SFG::Engine::Script* script : this->scripts_ ) {
+  for( SFG::Engine::Script* script : this->scripts_ ) {  // maybe this is a race condition with begin and end or something, we'll see
     script->network_update();
   }
-  this->scriptsMutex_.unlock();
 
   // this->logger_->trace( fmt::runtime( "network_update()~" ) );
 }

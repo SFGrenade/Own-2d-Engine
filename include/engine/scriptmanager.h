@@ -35,7 +35,6 @@ class ScriptManager {
   SFG::Engine::SdlWindow* sdlWindow_;
 
   std::vector< SFG::Engine::Script* > scripts_;
-  std::mutex scriptsMutex_;
 };
 
 }  // namespace Engine

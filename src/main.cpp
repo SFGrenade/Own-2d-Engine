@@ -38,7 +38,6 @@ int better_main( std::span< std::string_view const > args ) noexcept {
     myWindow1Flags = myWindow1->get_flags();
     spdlog::trace( fmt::runtime( "window 1 flags: 0b{:0>32b}" ), static_cast< uint32_t >( myWindow1Flags ) );
 
-    myWindow1->initialize_logic_controller();
     {
       SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
       wall->set_position( 0.0L, 0.0L );
@@ -95,6 +94,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
     player->set_size( 48.0L, 48.0L );
 
     myWindow1->get_script_manager()->add_script< SFG::Content::DebugInfo >();
+    myWindow1->initialize_logic_controller();
     // myWindow1->initialize_window_renderer( "direct3d", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
     myWindow1->initialize_window_renderer( "direct3d", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
 
@@ -111,7 +111,6 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   //   myWindow2Flags = myWindow2->get_flags();
   //   spdlog::trace( fmt::runtime( "window 2 flags: 0b{:0>32b}" ), static_cast< uint32_t >( myWindow2Flags ) );
   //
-  //   myWindow2->initialize_logic_controller();
   //   SFG::Content::Wall* firstWall = myWindow2->get_script_manager()->add_script< SFG::Content::Wall >();
   //   firstWall->set_position( 200.0L, 200.0L );
   //   firstWall->set_size( 50.0L, 50.0L );
@@ -125,6 +124,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   //   spdlog::debug( fmt::runtime( "player at {:p}" ), static_cast< void* >( player ) );
   //
   //   myWindow2->get_script_manager()->add_script< SFG::Content::DebugInfo >();
+  //   myWindow2->initialize_logic_controller();
   //   myWindow2->initialize_window_renderer( "direct3d11", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
   //
   //   myWindow2->set_flags( SDL_WindowFlags::SDL_WINDOW_SHOWN );
@@ -140,7 +140,6 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   //   myWindow3Flags = myWindow3->get_flags();
   //   spdlog::trace( fmt::runtime( "window 3 flags: 0b{:0>32b}" ), static_cast< uint32_t >( myWindow3Flags ) );
   //
-  //   myWindow3->initialize_logic_controller();
   //   SFG::Content::Wall* firstWall = myWindow3->get_script_manager()->add_script< SFG::Content::Wall >();
   //   firstWall->set_position( 200.0L, 200.0L );
   //   firstWall->set_size( 50.0L, 50.0L );
@@ -154,6 +153,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   //   spdlog::debug( fmt::runtime( "player at {:p}" ), static_cast< void* >( player ) );
   //
   //   myWindow3->get_script_manager()->add_script< SFG::Content::DebugInfo >();
+  //   myWindow3->initialize_logic_controller();
   //   myWindow3->initialize_window_renderer( "software", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
   //
   //   myWindow3->set_flags( SDL_WindowFlags::SDL_WINDOW_SHOWN );
@@ -169,7 +169,6 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   //   myWindow4Flags = myWindow4->get_flags();
   //   spdlog::trace( fmt::runtime( "window 4 flags: 0b{:0>32b}" ), static_cast< uint32_t >( myWindow4Flags ) );
   //
-  //   myWindow4->initialize_logic_controller();
   //   SFG::Content::Wall* firstWall = myWindow4->get_script_manager()->add_script< SFG::Content::Wall >();
   //   firstWall->set_position( 200.0L, 200.0L );
   //   firstWall->set_size( 50.0L, 50.0L );
@@ -183,6 +182,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   //   spdlog::debug( fmt::runtime( "player at {:p}" ), static_cast< void* >( player ) );
   //
   //   myWindow4->get_script_manager()->add_script< SFG::Content::DebugInfo >();
+  //   myWindow4->initialize_logic_controller();
   //   myWindow4->initialize_window_renderer( "software", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
   //
   //   myWindow4->set_flags( SDL_WindowFlags::SDL_WINDOW_SHOWN );

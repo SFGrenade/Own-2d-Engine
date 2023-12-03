@@ -17,8 +17,7 @@ SFG::Engine::ScriptCollider::~ScriptCollider() {
 
 void SFG::Engine::ScriptCollider::logic_update( std::chrono::secondsLongDouble const& deltaTime ) {
   // what is this degeneracy
-  for( int i = 0; i < this->scriptList_->size(); ++i ) {
-    SFG::Engine::Script* script = this->scriptList_->at( i );
+  for( SFG::Engine::Script* script : *( this->scriptList_ ) ) {  // maybe this is a race condition with begin and end or something, we'll see
     if( script == this ) {
       continue;
     }
