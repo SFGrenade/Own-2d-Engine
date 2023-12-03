@@ -36,15 +36,18 @@ void SFG::Engine::ScriptCollider::logic_update( std::chrono::secondsLongDouble c
 
   for( SFG::Engine::Script* script : *( this->scriptList_ ) ) {  // maybe this is a race condition with begin and end or something, we'll see
     if( script == this ) {
+      // don't check against ourselves
       continue;
     }
     SFG::Engine::ScriptCollider* other = dynamic_cast< SFG::Engine::ScriptCollider* >( script );
     if( other == nullptr ) {
+      // don't check against non-colliders
       continue;
     }
     horizontalOverlap = ( this->position_.x < ( other->position_.x + other->size_.x ) ) && ( ( this->position_.x + this->size_.x ) > other->position_.x );
     verticalOverlap = ( this->position_.y < ( other->position_.y + other->size_.y ) ) && ( ( this->position_.y + this->size_.y ) > other->position_.y );
     if( !horizontalOverlap && !verticalOverlap ) {
+      // no axis overlap at all
       continue;
     }
 
@@ -62,6 +65,7 @@ void SFG::Engine::ScriptCollider::logic_update( std::chrono::secondsLongDouble c
     thisTouchingOrCollidingOtherRight = ( this->velocity_.x <= 0.0L ) && ( distanceThisLeftToOtherRight <= 0.0L )
                                         && ( distanceThisLeftToOtherRight >= ( ( this->size_.x + other->size_.x ) / -2.0L ) );
     if( !thisTouchingOrCollidingOtherTop && !thisTouchingOrCollidingOtherBottom && !thisTouchingOrCollidingOtherLeft && !thisTouchingOrCollidingOtherRight ) {
+      // no touching or colliding
       continue;
     }
 
