@@ -54,35 +54,22 @@ int better_main( std::span< std::string_view const > args ) noexcept {
       wallRight->set_position( 750.0L, ( i + 1 ) * 50.0L );
       wallRight->set_size( 50.0L, 50.0L );
     }
-    for( int i = 0; i < ( 400 / 50 ); i++ ) {
-      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
-      wall->set_position( 150.0L, ( ( i + 1 ) * 50.0L ) );
-      wall->set_size( 50.0L, 50.0L );
-    }
-    {
-      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
-      wall->set_position( 100.0L, 50.0L );
-      wall->set_size( 50.0L, 50.0L );
-    }
-    {
-      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
-      wall->set_position( 50.0L, 150.0L );
-      wall->set_size( 50.0L, 50.0L );
-    }
-    {
-      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
-      wall->set_position( 100.0L, 250.0L );
-      wall->set_size( 50.0L, 50.0L );
-    }
-    {
-      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
-      wall->set_position( 50.0L, 350.0L );
-      wall->set_size( 50.0L, 50.0L );
-    }
-    {
-      SFG::Content::Wall* wall = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
-      wall->set_position( 100.0L, 450.0L );
-      wall->set_size( 50.0L, 50.0L );
+    for( int i = 0; i < ( ( 800 / 50 ) / 2 ); i++ ) {
+      SFG::Content::Wall* wall1 = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wall1->set_position( ( ( i + 1 ) * 100.0L ), 50.0L );
+      wall1->set_size( 50.0L, 50.0L );
+      SFG::Content::Wall* wall2 = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wall2->set_position( 50.0L + ( i * 100.0L ), 150.0L );
+      wall2->set_size( 50.0L, 50.0L );
+      SFG::Content::Wall* wall3 = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wall3->set_position( ( ( i + 1 ) * 100.0L ), 250.0L );
+      wall3->set_size( 50.0L, 50.0L );
+      SFG::Content::Wall* wall4 = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wall4->set_position( 50.0L + ( i * 100.0L ), 350.0L );
+      wall4->set_size( 50.0L, 50.0L );
+      SFG::Content::Wall* wall5 = myWindow1->get_script_manager()->add_script< SFG::Content::Wall >();
+      wall5->set_position( ( ( i + 1 ) * 100.0L ), 450.0L );
+      wall5->set_size( 50.0L, 50.0L );
     }
 
     SFG::Content::Player* player = myWindow1->get_script_manager()->add_script< SFG::Content::Player >();
