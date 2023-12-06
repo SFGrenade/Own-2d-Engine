@@ -4,16 +4,13 @@
 #include "_globals/moreChrono.h"
 #include "_globals/sdlInclude.h"
 #include "engine/script.h"
+#include "engine/vector2.h"
 
 
 namespace SFG {
 namespace Engine {
 
 class SdlWindow;
-
-struct Vector2 {
-  long double x, y;
-};
 
 class ScriptEntity : public Script {
   using _base_ = SFG::Engine::Script;
@@ -23,16 +20,22 @@ class ScriptEntity : public Script {
   ScriptEntity();
   virtual ~ScriptEntity();
 
-  virtual void logic_update( std::chrono::secondsLongDouble const& deltaTime );
+  virtual void logic_update( std::chrono::secondsLongDouble const& deltaTime ) override;
 
   void set_position( long double x, long double y );
   void set_size( long double w, long double h );
   void set_velocity( long double x, long double y );
 
+  long double get_top();
+  long double get_bottom();
+  long double get_left();
+  long double get_right();
+  SFG::Engine::Vector2 get_middle();
+
   protected:
-  Vector2 position_;
-  Vector2 size_;
-  Vector2 velocity_;
+  SFG::Engine::Vector2 position_;
+  SFG::Engine::Vector2 size_;
+  SFG::Engine::Vector2 velocity_;
 };
 
 }  // namespace Engine

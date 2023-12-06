@@ -2,13 +2,13 @@
 #define _GLOBALS_NUM_OPS_H_
 
 template < typename T >
-T max( T num, T max ) {
-  return ( num > max ) ? max : num;
+T max( T a, T b ) {
+  return ( a < b ) ? b : a;
 }
 
 template < typename T >
-T min( T num, T min ) {
-  return ( num < min ) ? min : num;
+T min( T a, T b ) {
+  return ( a < b ) ? a : b;
 }
 
 template < typename T >

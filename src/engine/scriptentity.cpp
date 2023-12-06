@@ -12,21 +12,40 @@ SFG::Engine::ScriptEntity::~ScriptEntity() {}
 void SFG::Engine::ScriptEntity::logic_update( std::chrono::secondsLongDouble const& deltaTime ) {
   _base_::logic_update( deltaTime );
 
-  this->position_.x += this->velocity_.x * deltaTime.count();
-  this->position_.y += this->velocity_.y * deltaTime.count();
+  this->position_ += this->velocity_ * deltaTime.count();
 }
 
 void SFG::Engine::ScriptEntity::set_position( long double x, long double y ) {
-  this->position_.x = x;
-  this->position_.y = y;
+  this->position_.set_x( x );
+  this->position_.set_y( y );
 }
 
 void SFG::Engine::ScriptEntity::set_size( long double w, long double h ) {
-  this->size_.x = w;
-  this->size_.y = h;
+  this->size_.set_x( w );
+  this->size_.set_y( h );
 }
 
 void SFG::Engine::ScriptEntity::set_velocity( long double x, long double y ) {
-  this->velocity_.x = x;
-  this->velocity_.y = y;
+  this->velocity_.set_x( x );
+  this->velocity_.set_y( y );
+}
+
+long double SFG::Engine::ScriptEntity::get_top() {
+  return this->position_.y();
+}
+
+long double SFG::Engine::ScriptEntity::get_bottom() {
+  return this->position_.y() + this->size_.y();
+}
+
+long double SFG::Engine::ScriptEntity::get_left() {
+  return this->position_.x();
+}
+
+long double SFG::Engine::ScriptEntity::get_right() {
+  return this->position_.x() + this->size_.x();
+}
+
+SFG::Engine::Vector2 SFG::Engine::ScriptEntity::get_middle() {
+  return SFG::Engine::Vector2( this->position_ + ( this->size_ / 2.0L ) );
 }

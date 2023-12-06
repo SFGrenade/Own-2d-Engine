@@ -14,28 +14,25 @@ void SFG::Engine::ScriptCollider::logic_update( std::chrono::secondsLongDouble c
   bool touchingAtLeastOne = false;
   bool collidingAtLeastOne = false;
 
-  bool horizontalOverlap;
-  bool verticalOverlap;
-  // ==0 means bottom border touching other top border; >0 means bottom border below other top border
-  long double distanceThisBottomToOtherTop;
-  // ==0 means top border touching other bottom border; <0 means top border below other bottom border
-  long double distanceThisTopToOtherBottom;
-  // ==0 means right border touching other left border; >0 means right border below other left border
-  long double distanceThisRightToOtherLeft;
-  // ==0 means left border touching other right border; <0 means left border below other right border
-  long double distanceThisLeftToOtherRight;
-  bool thisTouchingOrCollidingOtherTop;
-  bool thisTouchingOrCollidingOtherBottom;
-  bool thisTouchingOrCollidingOtherLeft;
-  bool thisTouchingOrCollidingOtherRight;
-  bool thisCollidingOtherTop;
-  bool thisCollidingOtherBottom;
-  bool thisCollidingOtherLeft;
-  bool thisCollidingOtherRight;
-  bool doThisYAdjustment;
-  bool doThisXAdjustment;
+  // true if aligning or intersecting, to set velocity
+  bool thisTopAligningOtherBottom;
+  bool thisLeftAligningOtherRight;
+  bool thisRightAligningOtherLeft;
+  bool thisBottomAligningOtherTop;
 
-  for( SFG::Engine::Script* script : *( this->scriptList_ ) ) {  // maybe this is a race condition with begin and end or something, we'll see
+  // true if intersecting, to maybe set position
+  bool thisTopIntersectingOtherBottom;
+  bool thisLeftIntersectingOtherRight;
+  bool thisRightIntersectingOtherLeft;
+  bool thisBottomIntersectingOtherTop;
+
+  SFG::Engine::Vector2 intersectionTopLeft( 0.0L, 0.0L );
+  SFG::Engine::Vector2 intersectionBottomRight( 0.0L, 0.0L );
+  SFG::Engine::Vector2 intersectionSize( 0.0L, 0.0L );
+  bool verticalCollision;
+
+  for( int i = 0; i < this->scriptList_->size(); i++ ) {  // maybe this is a race condition with begin and end or something, we'll see
+    SFG::Engine::Script* script = ( *( this->scriptList_ ) )[i];
     if( script == this ) {
       // don't check against ourselves
       continue;
@@ -45,110 +42,87 @@ void SFG::Engine::ScriptCollider::logic_update( std::chrono::secondsLongDouble c
       // don't check against non-colliders
       continue;
     }
-    horizontalOverlap = ( this->position_.x < ( other->position_.x + other->size_.x ) ) && ( ( this->position_.x + this->size_.x ) > other->position_.x );
-    verticalOverlap = ( this->position_.y < ( other->position_.y + other->size_.y ) ) && ( ( this->position_.y + this->size_.y ) > other->position_.y );
-    if( !horizontalOverlap && !verticalOverlap ) {
-      // no axis overlap at all
+
+    thisTopAligningOtherBottom = ( this->get_top() <= other->get_bottom() ) && ( this->get_middle().y() > other->get_middle().y() );
+    thisLeftAligningOtherRight = ( this->get_left() <= other->get_right() ) && ( this->get_middle().x() > other->get_middle().x() );
+    thisRightAligningOtherLeft = ( this->get_right() >= other->get_left() ) && ( this->get_middle().x() <= other->get_middle().x() );
+    thisBottomAligningOtherTop = ( this->get_bottom() >= other->get_top() ) && ( this->get_middle().y() <= other->get_middle().y() );
+    if( ( !thisTopAligningOtherBottom ) && ( !thisLeftAligningOtherRight ) && ( !thisRightAligningOtherLeft ) && ( !thisBottomAligningOtherTop ) ) {
+      // no collision or touch at all
       continue;
     }
 
-    distanceThisBottomToOtherTop = ( this->position_.y + this->size_.y ) - other->position_.y;
-    distanceThisTopToOtherBottom = this->position_.y - ( other->position_.y + other->size_.y );
-    distanceThisRightToOtherLeft = ( this->position_.x + this->size_.x ) - other->position_.x;
-    distanceThisLeftToOtherRight = this->position_.x - ( other->position_.x + other->size_.x );
-
-    thisTouchingOrCollidingOtherTop = ( this->velocity_.y >= 0.0L ) && ( distanceThisBottomToOtherTop >= 0.0L )
-                                      && ( distanceThisBottomToOtherTop <= ( ( this->size_.y + other->size_.y ) / 2.0L ) );
-    thisTouchingOrCollidingOtherBottom = ( this->velocity_.y <= 0.0L ) && ( distanceThisTopToOtherBottom <= 0.0L )
-                                         && ( distanceThisTopToOtherBottom >= ( ( this->size_.y + other->size_.y ) / -2.0L ) );
-    thisTouchingOrCollidingOtherLeft = ( this->velocity_.x >= 0.0L ) && ( distanceThisRightToOtherLeft >= 0.0L )
-                                       && ( distanceThisRightToOtherLeft <= ( ( this->size_.x + other->size_.x ) / 2.0L ) );
-    thisTouchingOrCollidingOtherRight = ( this->velocity_.x <= 0.0L ) && ( distanceThisLeftToOtherRight <= 0.0L )
-                                        && ( distanceThisLeftToOtherRight >= ( ( this->size_.x + other->size_.x ) / -2.0L ) );
-    if( !thisTouchingOrCollidingOtherTop && !thisTouchingOrCollidingOtherBottom && !thisTouchingOrCollidingOtherLeft && !thisTouchingOrCollidingOtherRight ) {
-      // no touching or colliding
+    intersectionTopLeft = SFG::Engine::Vector2( 0.0L, 0.0L );
+    intersectionBottomRight = SFG::Engine::Vector2( 0.0L, 0.0L );
+    if( thisTopAligningOtherBottom ) {
+      intersectionTopLeft.set_y( this->get_top() );
+      intersectionBottomRight.set_y( min( this->get_bottom(), other->get_bottom() ) );
+    }
+    if( thisLeftAligningOtherRight ) {
+      intersectionTopLeft.set_x( this->get_left() );
+      intersectionBottomRight.set_x( min( this->get_right(), other->get_right() ) );
+    }
+    if( thisRightAligningOtherLeft ) {
+      intersectionTopLeft.set_x( max( this->get_left(), other->get_left() ) );
+      intersectionBottomRight.set_x( this->get_right() );
+    }
+    if( thisBottomAligningOtherTop ) {
+      intersectionTopLeft.set_y( max( this->get_top(), other->get_top() ) );
+      intersectionBottomRight.set_y( this->get_bottom() );
+    }
+    intersectionSize = intersectionBottomRight - intersectionTopLeft;
+    if( ( intersectionSize.x() == 0.0L ) && ( intersectionSize.y() == 0.0L ) ) {
+      // single point collision doesn't count
       continue;
     }
+    verticalCollision = intersectionSize.x() >= intersectionSize.y();
 
-    thisCollidingOtherTop = thisTouchingOrCollidingOtherTop && ( this->velocity_.y > 0.0L ) && ( distanceThisBottomToOtherTop > 0.0L );
-    thisCollidingOtherBottom = thisTouchingOrCollidingOtherBottom && ( this->velocity_.y < 0.0L ) && ( distanceThisTopToOtherBottom < 0.0L );
-    thisCollidingOtherLeft = thisTouchingOrCollidingOtherLeft && ( this->velocity_.x > 0.0L ) && ( distanceThisRightToOtherLeft > 0.0L );
-    thisCollidingOtherRight = thisTouchingOrCollidingOtherRight && ( this->velocity_.x < 0.0L ) && ( distanceThisLeftToOtherRight < 0.0L );
+    thisTopIntersectingOtherBottom = ( this->get_top() < other->get_bottom() ) && ( this->get_middle().y() > other->get_middle().y() );
+    thisLeftIntersectingOtherRight = ( this->get_left() < other->get_right() ) && ( this->get_middle().x() > other->get_middle().x() );
+    thisRightIntersectingOtherLeft = ( this->get_right() > other->get_left() ) && ( this->get_middle().x() <= other->get_middle().x() );
+    thisBottomIntersectingOtherTop = ( this->get_bottom() > other->get_top() ) && ( this->get_middle().y() <= other->get_middle().y() );
 
-    doThisYAdjustment = false;
-    doThisXAdjustment = false;
-
-    if( thisCollidingOtherTop ) {
-      doThisYAdjustment = ( abs( distanceThisBottomToOtherTop ) < abs( distanceThisRightToOtherLeft ) )
-                          && ( abs( distanceThisBottomToOtherTop ) < abs( distanceThisLeftToOtherRight ) );
-      doThisXAdjustment = !doThisYAdjustment;
-    }
-    if( thisCollidingOtherBottom ) {
-      doThisYAdjustment = ( abs( distanceThisTopToOtherBottom ) < abs( distanceThisRightToOtherLeft ) )
-                          && ( abs( distanceThisTopToOtherBottom ) < abs( distanceThisLeftToOtherRight ) );
-      doThisXAdjustment = !doThisYAdjustment;
-    }
-    if( thisCollidingOtherLeft ) {
-      doThisXAdjustment = ( abs( distanceThisRightToOtherLeft ) < abs( distanceThisBottomToOtherTop ) )
-                          && ( abs( distanceThisRightToOtherLeft ) < abs( distanceThisTopToOtherBottom ) );
-      doThisYAdjustment = !doThisXAdjustment;
-    }
-    if( thisCollidingOtherRight ) {
-      doThisXAdjustment = ( abs( distanceThisLeftToOtherRight ) < abs( distanceThisBottomToOtherTop ) )
-                          && ( abs( distanceThisLeftToOtherRight ) < abs( distanceThisTopToOtherBottom ) );
-      doThisYAdjustment = !doThisXAdjustment;
-    }
-
-    if( horizontalOverlap ) {
-      // check for up and down touching
-      if( thisTouchingOrCollidingOtherTop ) {
-        // this is touching or colliding with other
+    if( verticalCollision ) {
+      if( thisTopAligningOtherBottom ) {
         touchingAtLeastOne = true;
-        this->velocity_.y = min( this->velocity_.y, 0.0L );
-        if( thisCollidingOtherTop ) {
-          // actual collision, not only touching
-          collidingAtLeastOne = true;
-          if( doThisYAdjustment ) {
-            this->position_.y = other->position_.y - this->size_.y;
+        if( this->velocity_.y() < 0.0L ) {
+          this->velocity_.set_y( 0.0L );
+          if( thisTopIntersectingOtherBottom ) {
+            collidingAtLeastOne = true;
+            // adjust position
+            this->position_.set_y( other->get_bottom() );
+          }
+        }
+      } else if( thisBottomAligningOtherTop ) {
+        touchingAtLeastOne = true;
+        if( this->velocity_.y() > 0.0L ) {
+          this->velocity_.set_y( 0.0L );
+          if( thisBottomIntersectingOtherTop ) {
+            collidingAtLeastOne = true;
+            // adjust position
+            this->position_.set_y( other->get_top() - this->size_.y() );
           }
         }
       }
-      if( thisTouchingOrCollidingOtherBottom ) {
-        // this is touching or colliding with other
+    } else {
+      if( thisLeftAligningOtherRight ) {
         touchingAtLeastOne = true;
-        this->velocity_.y = max( this->velocity_.y, 0.0L );
-        if( thisCollidingOtherBottom ) {
-          // actual collision, not only touching
-          collidingAtLeastOne = true;
-          if( doThisYAdjustment ) {
-            this->position_.y = other->position_.y + other->size_.y;
+        if( this->velocity_.x() < 0.0L ) {
+          this->velocity_.set_x( 0.0L );
+          if( thisLeftIntersectingOtherRight ) {
+            collidingAtLeastOne = true;
+            // adjust position
+            this->position_.set_x( other->get_right() );
           }
         }
-      }
-    }
-    if( verticalOverlap ) {
-      // check for left and right touching
-      if( thisTouchingOrCollidingOtherLeft ) {
-        // this is touching or colliding with other
+      } else if( thisRightAligningOtherLeft ) {
         touchingAtLeastOne = true;
-        this->velocity_.x = min( this->velocity_.x, 0.0L );
-        if( thisCollidingOtherLeft ) {
-          // actual collision, not only touching
-          collidingAtLeastOne = true;
-          if( doThisXAdjustment ) {
-            this->position_.x = other->position_.x - this->size_.x;
-          }
-        }
-      }
-      if( thisTouchingOrCollidingOtherRight ) {
-        // this is touching or colliding with other
-        touchingAtLeastOne = true;
-        this->velocity_.x = max( this->velocity_.x, 0.0L );
-        if( thisCollidingOtherRight ) {
-          // actual collision, not only touching
-          collidingAtLeastOne = true;
-          if( doThisXAdjustment ) {
-            this->position_.x = other->position_.x + other->size_.x;
+        if( this->velocity_.x() > 0.0L ) {
+          this->velocity_.set_x( 0.0L );
+          if( thisRightIntersectingOtherLeft ) {
+            collidingAtLeastOne = true;
+            // adjust position
+            this->position_.set_x( other->get_left() - this->size_.x() );
           }
         }
       }
@@ -156,6 +130,5 @@ void SFG::Engine::ScriptCollider::logic_update( std::chrono::secondsLongDouble c
   }
   this->isTouching_ = collidingAtLeastOne ? false : touchingAtLeastOne;
   this->isColliding_ = collidingAtLeastOne;
-
   _base_::logic_update( deltaTime );
 }

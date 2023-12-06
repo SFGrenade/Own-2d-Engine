@@ -16,14 +16,14 @@ class LogScript : public SFG::Engine::Script {
   LogScript();
   virtual ~LogScript();
 
-  virtual void start();
+  virtual void start() override;
 
-  virtual void frame_update( SDL_Renderer* renderer );
-  virtual void input_update( SDL_Event const& input );
-  virtual void logic_update( std::chrono::secondsLongDouble const& deltaTime );
-  virtual void network_update();  // todo
+  virtual void frame_update( SDL_Renderer* renderer ) override;
+  virtual void input_update( SDL_Event const& input ) override;
+  virtual void logic_update( std::chrono::secondsLongDouble const& deltaTime ) override;
+  virtual void network_update() override;  // todo
 
-  virtual void end();
+  virtual void end() override;
 
   private:
   spdlogger logger_;

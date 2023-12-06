@@ -95,8 +95,8 @@ void SFG::Content::Wall::frame_update( SDL_Renderer* renderer ) {
 void SFG::Content::Wall::logic_update( std::chrono::secondsLongDouble const& deltaTime ) {
   _base_::logic_update( deltaTime );
 
-  this->wallRect_.x = static_cast< int >( this->position_.x );
-  this->wallRect_.y = static_cast< int >( this->position_.y );
-  this->wallRect_.w = static_cast< int >( this->size_.x );
-  this->wallRect_.h = static_cast< int >( this->size_.y );
+  this->wallRect_.x = static_cast< int >( this->position_.x() );
+  this->wallRect_.y = static_cast< int >( this->position_.y() );
+  this->wallRect_.w = static_cast< int >( this->size_.x() );
+  this->wallRect_.h = static_cast< int >( this->size_.y() );
 }

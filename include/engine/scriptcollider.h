@@ -19,7 +19,7 @@ class ScriptCollider : public SFG::Engine::ScriptEntity {
   ScriptCollider();
   virtual ~ScriptCollider();
 
-  virtual void logic_update( std::chrono::secondsLongDouble const& deltaTime );
+  virtual void logic_update( std::chrono::secondsLongDouble const& deltaTime ) override;
 
   protected:
   bool isTrigger_;

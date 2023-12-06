@@ -124,24 +124,24 @@ void SFG::Content::Player::input_update( SDL_Event const& input ) {
 
 void SFG::Content::Player::logic_update( std::chrono::secondsLongDouble const& deltaTime ) {
   if( this->pressesUp_ ) {
-    this->velocity_.y = -500.0L;
+    this->velocity_.set_y( -500.0L );
   } else if( this->pressesDown_ ) {
-    this->velocity_.y = +500.0L;
+    this->velocity_.set_y( +500.0L );
   } else {
-    this->velocity_.y = 0.0L;
+    this->velocity_.set_y( 0.0L );
   }
   if( this->pressesLeft_ ) {
-    this->velocity_.x = -500.0L;
+    this->velocity_.set_x( -500.0L );
   } else if( this->pressesRight_ ) {
-    this->velocity_.x = +500.0L;
+    this->velocity_.set_x( +500.0L );
   } else {
-    this->velocity_.x = 0.0L;
+    this->velocity_.set_x( 0.0L );
   }
 
   _base_::logic_update( deltaTime );
 
-  this->playerRect_.x = static_cast< int >( this->position_.x );
-  this->playerRect_.y = static_cast< int >( this->position_.y );
-  this->playerRect_.w = static_cast< int >( this->size_.x );
-  this->playerRect_.h = static_cast< int >( this->size_.y );
+  this->playerRect_.x = static_cast< int >( this->position_.x() );
+  this->playerRect_.y = static_cast< int >( this->position_.y() );
+  this->playerRect_.w = static_cast< int >( this->size_.x() );
+  this->playerRect_.h = static_cast< int >( this->size_.y() );
 }

@@ -85,11 +85,13 @@ T* SFG::Engine::ScriptManager::add_script() {
 
 // ################################################################# Templated Stuff #################################################################
 
+#include <content/scripts/bouncer.h>
 #include <content/scripts/debuginfo.h>
 #include <content/scripts/logscript.h>
 #include <content/scripts/player.h>
 #include <content/scripts/wall.h>
 
+template SFG::Content::Bouncer* SFG::Engine::ScriptManager::add_script< SFG::Content::Bouncer >();
 template SFG::Content::DebugInfo* SFG::Engine::ScriptManager::add_script< SFG::Content::DebugInfo >();
 template SFG::Content::LogScript* SFG::Engine::ScriptManager::add_script< SFG::Content::LogScript >();
 template SFG::Content::Player* SFG::Engine::ScriptManager::add_script< SFG::Content::Player >();
