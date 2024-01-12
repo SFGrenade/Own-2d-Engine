@@ -30,9 +30,7 @@ class Player : public SFG::Engine::ScriptCollider {
   __declspec( align( 64 ) ) bool pressesLeft_;     // used for input and logic
   __declspec( align( 64 ) ) bool pressesRight_;    // used for input and logic
   __declspec( align( 64 ) ) SDL_Rect playerRect_;  // used for graphics and logic
-  SDL_Texture* playerTextureTouching_;
-  SDL_Texture* playerTextureColliding_;
-  SDL_Texture* playerTextureFree_;
+  SDL_Texture* playerTexture_;
 };
 
 }  // namespace Content
