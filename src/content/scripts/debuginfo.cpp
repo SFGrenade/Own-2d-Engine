@@ -10,7 +10,7 @@ SFG::Content::DebugInfo::DebugInfo()
     : _base_(),
       logger_( SFG::Engine::LoggerFactory::get_logger( "Content_DebugInfo" ) ),
       rendering_( true ),
-      updateInfoCountDown1s_( std::chrono::duration_cast< std::chrono::secondsLongDouble >( 1.0s ) ),
+      updateInfoCountDown1s_( std::chrono::duration_cast< std::chrono::secondsLongDouble >( 0.5s ) ),
       debugInfoTopLeft_( { "", false, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
       debugInfoTopRight_( { "", false, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
       debugInfoBottomLeft_( { "", false, nullptr, SDL_Rect( 0, 0, 0, 0 ) } ),
@@ -129,7 +129,7 @@ void SFG::Content::DebugInfo::logic_update( std::chrono::secondsLongDouble const
     this->set_debugInfo_bottomLeft( fmt::format( fmt::runtime( "{:.1F} ilps" ), this->sdlWindow_->get_performance_controller()->getInputLoops() ) );
     this->set_debugInfo_bottomRight( fmt::format( fmt::runtime( "{:.1F} nlps" ), this->sdlWindow_->get_performance_controller()->getNetworkLoops() ) );
 
-    this->updateInfoCountDown1s_ = std::chrono::duration_cast< std::chrono::secondsLongDouble >( 1.0s );
+    this->updateInfoCountDown1s_ = std::chrono::duration_cast< std::chrono::secondsLongDouble >( 0.5s );
   }
 
   if( this->renderBlendingUp_ || this->renderBlendingDown_ ) {
