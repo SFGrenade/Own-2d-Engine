@@ -6,6 +6,7 @@
 
 #include "_globals/moreChrono.h"
 #include "_globals/spdlogInclude.h"
+#include "content/scripts/audioregion.h"
 #include "content/scripts/bouncer.h"
 #include "content/scripts/debuginfo.h"
 #include "content/scripts/logscript.h"
@@ -13,6 +14,7 @@
 #include "content/scripts/wall.h"
 #include "engine/loggerfactory.h"
 #include "engine/scriptmanager.h"
+#include "engine/sdlaudio.h"
 #include "engine/sdlengine.h"
 #include "engine/sdlwindow.h"
 
@@ -67,12 +69,32 @@ int better_main( std::span< std::string_view const > args ) noexcept {
       wall3->set_size( 50.0L * 2, 50.0L * 2 );
     }
 
-    for( int i = 0; i < 4; i++ ) {
-      for( int k = 0; k < 4; k++ ) {
+    SFG::Content::AudioRegion* ar1 = myWindow1->get_script_manager()->add_script< SFG::Content::AudioRegion >();
+    ar1->set_position( 65.0L, 65.0L );
+    ar1->set_size( 20.0L, 20.0L );
+    ar1->set_audio_file_path( R"(./Resources/Audio/8Bit 01 w.wav)" );
+
+    SFG::Content::AudioRegion* ar2 = myWindow1->get_script_manager()->add_script< SFG::Content::AudioRegion >();
+    ar2->set_position( 715.0L, 65.0L );
+    ar2->set_size( 20.0L, 20.0L );
+    ar2->set_audio_file_path( R"(./Resources/Audio/8Bit 02 w.wav)" );
+
+    SFG::Content::AudioRegion* ar3 = myWindow1->get_script_manager()->add_script< SFG::Content::AudioRegion >();
+    ar3->set_position( 65.0L, 515.0L );
+    ar3->set_size( 20.0L, 20.0L );
+    ar3->set_audio_file_path( R"(./Resources/Audio/8Bit 03 w.wav)" );
+
+    SFG::Content::AudioRegion* ar4 = myWindow1->get_script_manager()->add_script< SFG::Content::AudioRegion >();
+    ar4->set_position( 715.0L, 515.0L );
+    ar4->set_size( 20.0L, 20.0L );
+    ar4->set_audio_file_path( R"(./Resources/Audio/8Bit 04 w.wav)" );
+
+    for( int i = 0; i < 2; i++ ) {
+      for( int k = 0; k < 2; k++ ) {
         SFG::Content::Bouncer* bouncer = myWindow1->get_script_manager()->add_script< SFG::Content::Bouncer >();
         bouncer->set_position( ( k * 30.0L ) + 65.0L, ( i * 30.0L ) + 65.0L );
         bouncer->set_size( 20.0L, 20.0L );
-        bouncer->set_speed( 200.0L, 200.0L );
+        bouncer->set_speed( 70.0L, 70.0L );
       }
     }
 

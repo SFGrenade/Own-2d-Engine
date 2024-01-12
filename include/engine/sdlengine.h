@@ -13,6 +13,7 @@
 namespace SFG {
 namespace Engine {
 
+class SdlAudio;
 class SdlWindow;
 
 class SdlEngine {
@@ -21,6 +22,8 @@ class SdlEngine {
              IMG_InitFlags imgInitFlags = IMG_InitFlags::IMG_INIT_PNG,
              MIX_InitFlags mixInitFlags = MIX_InitFlags::MIX_INIT_OGG );
   ~SdlEngine();
+
+  SFG::Engine::SdlAudio* get_audio() const;
 
   std::vector< std::string > get_renderer_names() const;
 
@@ -34,6 +37,11 @@ class SdlEngine {
   void destroy_window( uint32_t windowId );
   void run_input_loop();
 
+  static SFG::Engine::SdlEngine* get_instance();
+
+  private:
+  static SFG::Engine::SdlEngine* instance_;
+
   private:
   bool run_input_loop( SDL_Event const& e );
   bool has_window( uint32_t windowId );
@@ -41,6 +49,8 @@ class SdlEngine {
 
   private:
   spdlogger logger_;
+
+  SFG::Engine::SdlAudio* audio_;
 
   std::vector< SFG::Engine::SdlWindow* > windows_;
   std::mutex windowsMutex_;

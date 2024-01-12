@@ -6,10 +6,14 @@
 #include "_globals/moreChrono.h"
 #include "_globals/scopedmutex.h"
 #include "engine/loggerfactory.h"
+#include "engine/sdlaudio.h"
 #include "engine/sdlwindow.h"
+
+SFG::Engine::SdlEngine* SFG::Engine::SdlEngine::instance_ = nullptr;
 
 SFG::Engine::SdlEngine::SdlEngine( uint32_t sdlInitFlags, IMG_InitFlags imgInitFlags, MIX_InitFlags mixInitFlags )
     : logger_( SFG::Engine::LoggerFactory::get_logger( "Engine_SdlEngine" ) ),
+      audio_( new SFG::Engine::SdlAudio( this ) ),
       windows_(),
       windowsMutex_(),
       windowIdsToDestroy_(),
@@ -35,6 +39,10 @@ SFG::Engine::SdlEngine::SdlEngine( uint32_t sdlInitFlags, IMG_InitFlags imgInitF
   if( TTF_Init() != 0 ) {
     throw new std::runtime_error( std::string( "TTF_Init error: " ) + std::string( TTF_GetError() ) );
   }
+
+  audio_->initialize_sdl_audio();
+
+  SFG::Engine::SdlEngine::instance_ = this;
 }
 
 SFG::Engine::SdlEngine::~SdlEngine() {
@@ -53,6 +61,12 @@ SFG::Engine::SdlEngine::~SdlEngine() {
   Mix_Quit();
   IMG_Quit();
   SDL_Quit();
+}
+
+SFG::Engine::SdlAudio* SFG::Engine::SdlEngine::get_audio() const {
+  ScopedLog( this->logger_, fmt::format( fmt::runtime( "get_audio()" ) ), fmt::format( fmt::runtime( "get_audio()~" ) ) );
+
+  return this->audio_;
 }
 
 std::vector< std::string > SFG::Engine::SdlEngine::get_renderer_names() const {
@@ -328,4 +342,8 @@ SFG::Engine::SdlWindow* SFG::Engine::SdlEngine::get_window( uint32_t windowId ) 
     }
   }
   return nullptr;
+}
+
+SFG::Engine::SdlEngine* SFG::Engine::SdlEngine::get_instance() {
+  return SFG::Engine::SdlEngine::instance_;
 }
