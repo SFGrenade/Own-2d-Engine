@@ -11,6 +11,8 @@
 namespace SFG {
 namespace Engine {
 
+enum class InteractSide { Top, Left, Right, Bottom };
+
 class ScriptCollider : public SFG::Engine::ScriptEntity {
   using _base_ = SFG::Engine::ScriptEntity;
   using _base_::_base_;
@@ -20,6 +22,8 @@ class ScriptCollider : public SFG::Engine::ScriptEntity {
   virtual ~ScriptCollider();
 
   virtual void logic_update( std::chrono::secondsLongDouble const& deltaTime ) override;
+
+  virtual void interact( SFG::Engine::ScriptCollider const* contact, SFG::Engine::InteractSide interactionSide );
 
   protected:
   bool isTrigger_;

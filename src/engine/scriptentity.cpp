@@ -49,3 +49,23 @@ long double SFG::Engine::ScriptEntity::get_right() {
 SFG::Engine::Vector2 SFG::Engine::ScriptEntity::get_middle() {
   return SFG::Engine::Vector2( this->position_ + ( this->size_ / 2.0L ) );
 }
+
+long double SFG::Engine::ScriptEntity::get_moved_top( std::chrono::secondsLongDouble const& deltaTime ) {
+  return this->position_.y() + ( deltaTime.count() * this->velocity_.y() );
+}
+
+long double SFG::Engine::ScriptEntity::get_moved_bottom( std::chrono::secondsLongDouble const& deltaTime ) {
+  return this->position_.y() + this->size_.y() + ( deltaTime.count() * this->velocity_.y() );
+}
+
+long double SFG::Engine::ScriptEntity::get_moved_left( std::chrono::secondsLongDouble const& deltaTime ) {
+  return this->position_.x() + ( deltaTime.count() * this->velocity_.x() );
+}
+
+long double SFG::Engine::ScriptEntity::get_moved_right( std::chrono::secondsLongDouble const& deltaTime ) {
+  return this->position_.x() + this->size_.x() + ( deltaTime.count() * this->velocity_.x() );
+}
+
+SFG::Engine::Vector2 SFG::Engine::ScriptEntity::get_moved_middle( std::chrono::secondsLongDouble const& deltaTime ) {
+  return SFG::Engine::Vector2( this->position_ + ( this->size_ / 2.0L ) + ( this->velocity_ * deltaTime.count() ) );
+}

@@ -20,6 +20,8 @@ class Bouncer : public SFG::Engine::ScriptCollider {
   virtual void frame_update( SDL_Renderer* renderer ) override;
   virtual void logic_update( std::chrono::secondsLongDouble const& deltaTime ) override;
 
+  virtual void interact( SFG::Engine::ScriptCollider const* contact, SFG::Engine::InteractSide interactionSide ) override;
+
   void set_speed( long double x, long double y );
 
   private:
@@ -27,9 +29,7 @@ class Bouncer : public SFG::Engine::ScriptCollider {
 
   bool rendering_;
   __declspec( align( 64 ) ) SDL_Rect bouncerRect_;  // used for graphics and logic
-  SDL_Texture* bouncerTextureTouching_;
-  SDL_Texture* bouncerTextureColliding_;
-  SDL_Texture* bouncerTextureFree_;
+  SDL_Texture* bouncerTexture_;
 
   SFG::Engine::Vector2 moving_;
 };

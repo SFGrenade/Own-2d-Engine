@@ -31,6 +31,11 @@ class ScriptEntity : public Script {
   long double get_left();
   long double get_right();
   SFG::Engine::Vector2 get_middle();
+  long double get_moved_top( std::chrono::secondsLongDouble const& deltaTime );
+  long double get_moved_bottom( std::chrono::secondsLongDouble const& deltaTime );
+  long double get_moved_left( std::chrono::secondsLongDouble const& deltaTime );
+  long double get_moved_right( std::chrono::secondsLongDouble const& deltaTime );
+  SFG::Engine::Vector2 get_moved_middle( std::chrono::secondsLongDouble const& deltaTime );
 
   protected:
   SFG::Engine::Vector2 position_;
