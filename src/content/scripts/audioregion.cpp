@@ -14,6 +14,7 @@ SFG::Content::AudioRegion::AudioRegion()
       audioRegionRect_(),
       audioRegionTexture_( nullptr ),
       audioFilePath_( "" ) {
+  this->isStatic_ = true;
   this->isTrigger_ = true;
 }
 

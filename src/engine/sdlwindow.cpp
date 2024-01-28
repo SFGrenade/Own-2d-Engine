@@ -128,13 +128,13 @@ SFG::Engine::LogicController* SFG::Engine::SdlWindow::initialize_logic_controlle
 }
 
 void SFG::Engine::SdlWindow::add_input( SDL_Event const& e ) {
-  this->logger_->trace( fmt::runtime( "add_input( event type = {:s} )" ), SDL_EventType_to_string( static_cast< SDL_EventType >( e.type ) ) );
+  // this->logger_->trace( fmt::runtime( "add_input( event type = {:s} )" ), SDL_EventType_to_string( static_cast< SDL_EventType >( e.type ) ) );
 
   sdlInputQueueMutex_.lock();
   sdlInputQueue_.push( e );
   sdlInputQueueMutex_.unlock();
 
-  this->logger_->trace( fmt::runtime( "add_input()~" ) );
+  // this->logger_->trace( fmt::runtime( "add_input()~" ) );
 }
 
 void SFG::Engine::SdlWindow::run_input_loop() {
@@ -152,14 +152,14 @@ void SFG::Engine::SdlWindow::run_input_loop() {
       e = sdlInputQueue_.front();
       sdlInputQueue_.pop();
       sdlInputQueueMutex_.unlock();
-      this->logger_->trace( fmt::runtime( "run_input_loop - event type = {:s}" ), SDL_EventType_to_string( static_cast< SDL_EventType >( e.type ) ) );
+      // this->logger_->trace( fmt::runtime( "run_input_loop - event type = {:s}" ), SDL_EventType_to_string( static_cast< SDL_EventType >( e.type ) ) );
       switch( e.type ) {
         case SDL_EventType::SDL_QUIT:
           done = true;
           break;
         case SDL_EventType::SDL_WINDOWEVENT:
-          this->logger_->trace( fmt::runtime( "run_input_loop - e.window = {:s}" ),
-                                SDL_WindowEventID_to_string( static_cast< SDL_WindowEventID >( e.window.event ) ) );
+          // this->logger_->trace( fmt::runtime( "run_input_loop - e.window = {:s}" ),
+          //                       SDL_WindowEventID_to_string( static_cast< SDL_WindowEventID >( e.window.event ) ) );
           switch( e.window.event ) {
             case SDL_WindowEventID::SDL_WINDOWEVENT_CLOSE:
               SDL_HideWindow( this->sdlWindow_ );
@@ -271,114 +271,114 @@ SFG::Engine::LogicController* SFG::Engine::SdlWindow::get_logic_controller() con
 }
 
 std::string SFG::Engine::SdlWindow::get_title() const {
-  this->logger_->trace( fmt::runtime( "get_title()" ) );
+  // this->logger_->trace( fmt::runtime( "get_title()" ) );
 
-  this->logger_->trace( fmt::runtime( "get_title()~" ) );
+  // this->logger_->trace( fmt::runtime( "get_title()~" ) );
   return this->title_;
 }
 
 void SFG::Engine::SdlWindow::set_title( std::string const& new_title ) {
-  this->logger_->trace( fmt::runtime( "set_title( new_title = \"{:s}\" )" ), new_title );
+  // this->logger_->trace( fmt::runtime( "set_title( new_title = \"{:s}\" )" ), new_title );
 
   this->title_ = new_title;
   if( this->sdlWindow_ ) {
     SDL_SetWindowTitle( this->sdlWindow_, this->title_.c_str() );
   }
 
-  this->logger_->trace( fmt::runtime( "set_title()~" ) );
+  // this->logger_->trace( fmt::runtime( "set_title()~" ) );
 }
 
 uint32_t SFG::Engine::SdlWindow::get_x() const {
-  this->logger_->trace( fmt::runtime( "get_x()" ) );
+  // this->logger_->trace( fmt::runtime( "get_x()" ) );
 
-  this->logger_->trace( fmt::runtime( "get_x()~" ) );
+  // this->logger_->trace( fmt::runtime( "get_x()~" ) );
   return this->x_;
 }
 
 void SFG::Engine::SdlWindow::set_x( uint32_t new_x ) {
-  this->logger_->trace( fmt::runtime( "set_x( new_x = {:d} )" ), new_x );
+  // this->logger_->trace( fmt::runtime( "set_x( new_x = {:d} )" ), new_x );
 
   this->x_ = new_x;
   if( this->sdlWindow_ ) {
     SDL_SetWindowPosition( this->sdlWindow_, this->x_, this->y_ );
   }
 
-  this->logger_->trace( fmt::runtime( "set_x()~" ) );
+  // this->logger_->trace( fmt::runtime( "set_x()~" ) );
 }
 
 uint32_t SFG::Engine::SdlWindow::get_y() const {
-  this->logger_->trace( fmt::runtime( "get_y()" ) );
+  // this->logger_->trace( fmt::runtime( "get_y()" ) );
 
-  this->logger_->trace( fmt::runtime( "get_y()~" ) );
+  // this->logger_->trace( fmt::runtime( "get_y()~" ) );
   return this->y_;
 }
 
 void SFG::Engine::SdlWindow::set_y( uint32_t new_y ) {
-  this->logger_->trace( fmt::runtime( "set_y( new_y = {:d} )" ), new_y );
+  // this->logger_->trace( fmt::runtime( "set_y( new_y = {:d} )" ), new_y );
 
   this->y_ = new_y;
   if( this->sdlWindow_ ) {
     SDL_SetWindowPosition( this->sdlWindow_, this->x_, this->y_ );
   }
 
-  this->logger_->trace( fmt::runtime( "set_y()~" ) );
+  // this->logger_->trace( fmt::runtime( "set_y()~" ) );
 }
 
 uint32_t SFG::Engine::SdlWindow::get_width() const {
-  this->logger_->trace( fmt::runtime( "get_width()" ) );
+  // this->logger_->trace( fmt::runtime( "get_width()" ) );
 
-  this->logger_->trace( fmt::runtime( "get_width()~" ) );
+  // this->logger_->trace( fmt::runtime( "get_width()~" ) );
   return this->width_;
 }
 
 void SFG::Engine::SdlWindow::set_width( uint32_t new_width ) {
-  this->logger_->trace( fmt::runtime( "set_width( new_width = {:d} )" ), new_width );
+  // this->logger_->trace( fmt::runtime( "set_width( new_width = {:d} )" ), new_width );
 
   this->width_ = new_width;
   if( this->sdlWindow_ ) {
     SDL_SetWindowSize( this->sdlWindow_, this->width_, this->height_ );
   }
 
-  this->logger_->trace( fmt::runtime( "set_width()~" ) );
+  // this->logger_->trace( fmt::runtime( "set_width()~" ) );
 }
 
 uint32_t SFG::Engine::SdlWindow::get_height() const {
-  this->logger_->trace( fmt::runtime( "get_height()" ) );
+  // this->logger_->trace( fmt::runtime( "get_height()" ) );
 
-  this->logger_->trace( fmt::runtime( "get_height()~" ) );
+  // this->logger_->trace( fmt::runtime( "get_height()~" ) );
   return this->height_;
 }
 
 void SFG::Engine::SdlWindow::set_height( uint32_t new_height ) {
-  this->logger_->trace( fmt::runtime( "set_height( new_height = {:d} )" ), new_height );
+  // this->logger_->trace( fmt::runtime( "set_height( new_height = {:d} )" ), new_height );
 
   this->height_ = new_height;
   if( this->sdlWindow_ ) {
     SDL_SetWindowSize( this->sdlWindow_, this->width_, this->height_ );
   }
 
-  this->logger_->trace( fmt::runtime( "set_height()~" ) );
+  // this->logger_->trace( fmt::runtime( "set_height()~" ) );
 }
 
 SDL_WindowFlags SFG::Engine::SdlWindow::get_flags() {
-  this->logger_->trace( fmt::runtime( "get_flags()" ) );
+  // this->logger_->trace( fmt::runtime( "get_flags()" ) );
 
   if( this->sdlWindow_ ) {
     this->flags_ = static_cast< SDL_WindowFlags >( SDL_GetWindowFlags( this->sdlWindow_ ) );
   }
 
-  this->logger_->trace( fmt::runtime( "get_flags()~" ) );
+  // this->logger_->trace( fmt::runtime( "get_flags()~" ) );
   return this->flags_;
 }
 
 void SFG::Engine::SdlWindow::set_flags( SDL_WindowFlags new_flags ) {
-  this->logger_->trace( fmt::runtime( "set_flags( new_flags = 0b{:0>32b} )" ), static_cast< uint32_t >( new_flags ) );
+  // this->logger_->trace( fmt::runtime( "set_flags( new_flags = 0b{:0>32b} )" ), static_cast< uint32_t >( new_flags ) );
 
   if( this->sdlWindow_ ) {
     this->flags_ = static_cast< SDL_WindowFlags >( SDL_GetWindowFlags( this->sdlWindow_ ) );
 
     SDL_WindowFlags changedFlags = static_cast< SDL_WindowFlags >( this->flags_ ^ new_flags );
-    this->logger_->trace( fmt::runtime( "set_flags - changedFlags = 0b{:0>32b}" ), static_cast< uint32_t >( changedFlags ) );
+    // this->logger_->trace( fmt::runtime( "set_flags - changedFlags = 0b{:0>32b}" ), static_cast< uint32_t >( changedFlags ) );
 
     if( ( changedFlags & SDL_WindowFlags::SDL_WINDOW_FULLSCREEN ) == SDL_WindowFlags::SDL_WINDOW_FULLSCREEN ) {
       if( new_flags & SDL_WindowFlags::SDL_WINDOW_FULLSCREEN ) {
@@ -532,5 +532,5 @@ void SFG::Engine::SdlWindow::set_flags( SDL_WindowFlags new_flags ) {
     this->flags_ = new_flags;
   }
 
-  this->logger_->trace( fmt::runtime( "set_flags()~" ) );
+  // this->logger_->trace( fmt::runtime( "set_flags()~" ) );
 }

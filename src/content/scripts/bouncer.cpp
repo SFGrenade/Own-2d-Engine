@@ -1,5 +1,7 @@
 #include "content/scripts/bouncer.h"
 
+#include "content/scripts/player.h"
+#include "content/scripts/wall.h"
 #include "engine/loggerfactory.h"
 #include "engine/sdlwindow.h"
 
@@ -10,11 +12,14 @@ SFG::Content::Bouncer::Bouncer()
       rendering_( true ),
       bouncerRect_(),
       bouncerTexture_( nullptr ),
-      moving_( SFG::Engine::Vector2( 0.0L, 0.0L ) ) {}
+      moving_( SFG::Engine::Vector2( 0.0L, 0.0L ) ) {
+  this->isStatic_ = false;
+  this->isTrigger_ = false;
+}
 
 SFG::Content::Bouncer::~Bouncer() {
   if( this->bouncerTexture_ ) {
-    this->logger_->trace( fmt::runtime( "~Bouncer - destroying bouncerTextureFree" ) );
+    this->logger_->trace( fmt::runtime( "~Bouncer - destroying bouncerTexture" ) );
     SDL_DestroyTexture( this->bouncerTexture_ );
     this->bouncerTexture_ = nullptr;
   }
@@ -58,6 +63,13 @@ void SFG::Content::Bouncer::logic_update( std::chrono::secondsLongDouble const& 
 }
 
 void SFG::Content::Bouncer::interact( SFG::Engine::ScriptCollider const* contact, SFG::Engine::InteractSide interactionSide ) {
+  if( dynamic_cast< SFG::Content::Bouncer const* >( contact ) == nullptr && dynamic_cast< SFG::Content::Player const* >( contact ) == nullptr
+      && dynamic_cast< SFG::Content::Wall const* >( contact ) == nullptr )
+    return;
+  this->logger_->trace( fmt::runtime( "[this = {:p}] interact( contact = {:p}, interactionSide = {:d} )" ),
+                        static_cast< void* >( this ),
+                        static_cast< void const* >( contact ),
+                        static_cast< uint32_t >( interactionSide ) );
   switch( interactionSide ) {
     case SFG::Engine::InteractSide::Top:
     case SFG::Engine::InteractSide::Bottom:

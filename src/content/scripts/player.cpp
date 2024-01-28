@@ -13,7 +13,10 @@ SFG::Content::Player::Player()
       pressesLeft_( false ),
       pressesRight_( false ),
       playerRect_(),
-      playerTexture_( nullptr ) {}
+      playerTexture_( nullptr ) {
+  this->isStatic_ = false;
+  this->isTrigger_ = false;
+}
 
 SFG::Content::Player::~Player() {
   if( this->playerTexture_ ) {

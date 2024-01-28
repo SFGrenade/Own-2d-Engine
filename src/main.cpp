@@ -75,19 +75,39 @@ int better_main( std::span< std::string_view const > args ) noexcept {
     ar1->set_audio_file_path( R"(./Resources/Audio/8Bit 01 w.wav)" );
 
     SFG::Content::AudioRegion* ar2 = myWindow1->get_script_manager()->add_script< SFG::Content::AudioRegion >();
-    ar2->set_position( 715.0L, 65.0L );
+    ar2->set_position( 315.0L, 65.0L );
     ar2->set_size( 20.0L, 20.0L );
     ar2->set_audio_file_path( R"(./Resources/Audio/8Bit 02 w.wav)" );
 
     SFG::Content::AudioRegion* ar3 = myWindow1->get_script_manager()->add_script< SFG::Content::AudioRegion >();
-    ar3->set_position( 65.0L, 515.0L );
+    ar3->set_position( 515.0L, 65.0L );
     ar3->set_size( 20.0L, 20.0L );
     ar3->set_audio_file_path( R"(./Resources/Audio/8Bit 03 w.wav)" );
 
     SFG::Content::AudioRegion* ar4 = myWindow1->get_script_manager()->add_script< SFG::Content::AudioRegion >();
-    ar4->set_position( 715.0L, 515.0L );
+    ar4->set_position( 715.0L, 65.0L );
     ar4->set_size( 20.0L, 20.0L );
     ar4->set_audio_file_path( R"(./Resources/Audio/8Bit 04 w.wav)" );
+
+    SFG::Content::AudioRegion* ar5 = myWindow1->get_script_manager()->add_script< SFG::Content::AudioRegion >();
+    ar5->set_position( 65.0L, 315.0L );
+    ar5->set_size( 20.0L, 20.0L );
+    ar5->set_audio_file_path( R"(./Resources/Audio/8Bit 05 w.wav)" );
+
+    SFG::Content::AudioRegion* ar6 = myWindow1->get_script_manager()->add_script< SFG::Content::AudioRegion >();
+    ar6->set_position( 715.0L, 315.0L );
+    ar6->set_size( 20.0L, 20.0L );
+    ar6->set_audio_file_path( R"(./Resources/Audio/8Bit 06 w.wav)" );
+
+    SFG::Content::AudioRegion* ar7 = myWindow1->get_script_manager()->add_script< SFG::Content::AudioRegion >();
+    ar7->set_position( 65.0L, 515.0L );
+    ar7->set_size( 20.0L, 20.0L );
+    ar7->set_audio_file_path( R"(./Resources/Audio/8Bit 07 w.wav)" );
+
+    SFG::Content::AudioRegion* ar8 = myWindow1->get_script_manager()->add_script< SFG::Content::AudioRegion >();
+    ar8->set_position( 715.0L, 515.0L );
+    ar8->set_size( 20.0L, 20.0L );
+    ar8->set_audio_file_path( R"(./Resources/Audio/8Bit 08 w.wav)" );
 
     for( int i = 0; i < 2; i++ ) {
       for( int k = 0; k < 2; k++ ) {

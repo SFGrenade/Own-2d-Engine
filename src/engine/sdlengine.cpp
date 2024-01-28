@@ -64,7 +64,7 @@ SFG::Engine::SdlEngine::~SdlEngine() {
 }
 
 SFG::Engine::SdlAudio* SFG::Engine::SdlEngine::get_audio() const {
-  ScopedLog( this->logger_, fmt::format( fmt::runtime( "get_audio()" ) ), fmt::format( fmt::runtime( "get_audio()~" ) ) );
+  // ScopedLog( this->logger_, fmt::format( fmt::runtime( "get_audio()" ) ), fmt::format( fmt::runtime( "get_audio()~" ) ) );
 
   return this->audio_;
 }
@@ -181,9 +181,9 @@ void SFG::Engine::SdlEngine::run_input_loop() {
 }
 
 bool SFG::Engine::SdlEngine::run_input_loop( SDL_Event const& e ) {
-  ScopedLog( this->logger_,
-             fmt::format( fmt::runtime( "run_input_loop( e = {:s} )" ), SDL_EventType_to_string( static_cast< SDL_EventType >( e.type ) ) ),
-             fmt::format( fmt::runtime( "run_input_loop()~" ) ) );
+  // ScopedLog( this->logger_,
+  //            fmt::format( fmt::runtime( "run_input_loop( e = {:s} )" ), SDL_EventType_to_string( static_cast< SDL_EventType >( e.type ) ) ),
+  //            fmt::format( fmt::runtime( "run_input_loop()~" ) ) );
 
   switch( e.type ) {
     case SDL_EventType::SDL_QUIT:
@@ -194,9 +194,9 @@ bool SFG::Engine::SdlEngine::run_input_loop( SDL_Event const& e ) {
       this->windowsMutex_.unlock();
       return true;
     case SDL_EventType::SDL_WINDOWEVENT:
-      this->logger_->trace( fmt::runtime( "run_input_loop - e.window {:s} window id = {:d}" ),
-                            SDL_WindowEventID_to_string( static_cast< SDL_WindowEventID >( e.window.event ) ),
-                            e.window.windowID );
+      // this->logger_->trace( fmt::runtime( "run_input_loop - e.window {:s} window id = {:d}" ),
+      //                       SDL_WindowEventID_to_string( static_cast< SDL_WindowEventID >( e.window.event ) ),
+      //                       e.window.windowID );
       if( this->has_window( e.window.windowID ) ) {
         this->get_window( e.window.windowID )->add_input( e );
         return true;
@@ -207,7 +207,7 @@ bool SFG::Engine::SdlEngine::run_input_loop( SDL_Event const& e ) {
       }
     case SDL_EventType::SDL_KEYDOWN:
     case SDL_EventType::SDL_KEYUP:
-      this->logger_->trace( fmt::runtime( "run_input_loop - e.key {:d} window id = {:d}" ), e.key.type, e.key.windowID );
+      // this->logger_->trace( fmt::runtime( "run_input_loop - e.key {:d} window id = {:d}" ), e.key.type, e.key.windowID );
       if( this->has_window( e.key.windowID ) ) {
         this->get_window( e.key.windowID )->add_input( e );
         return true;
@@ -217,7 +217,7 @@ bool SFG::Engine::SdlEngine::run_input_loop( SDL_Event const& e ) {
         return false;
       }
     case SDL_EventType::SDL_TEXTEDITING:
-      this->logger_->trace( fmt::runtime( "run_input_loop - e.edit {:d} window id = {:d}" ), e.edit.type, e.edit.windowID );
+      // this->logger_->trace( fmt::runtime( "run_input_loop - e.edit {:d} window id = {:d}" ), e.edit.type, e.edit.windowID );
       if( this->has_window( e.edit.windowID ) ) {
         this->get_window( e.edit.windowID )->add_input( e );
         return true;
@@ -227,7 +227,7 @@ bool SFG::Engine::SdlEngine::run_input_loop( SDL_Event const& e ) {
         return false;
       }
     case SDL_EventType::SDL_TEXTEDITING_EXT:
-      this->logger_->trace( fmt::runtime( "run_input_loop - e.editExt {:d} window id = {:d}" ), e.editExt.type, e.editExt.windowID );
+      // this->logger_->trace( fmt::runtime( "run_input_loop - e.editExt {:d} window id = {:d}" ), e.editExt.type, e.editExt.windowID );
       if( this->has_window( e.editExt.windowID ) ) {
         this->get_window( e.editExt.windowID )->add_input( e );
         return true;
@@ -237,7 +237,7 @@ bool SFG::Engine::SdlEngine::run_input_loop( SDL_Event const& e ) {
         return false;
       }
     case SDL_EventType::SDL_TEXTINPUT:
-      this->logger_->trace( fmt::runtime( "run_input_loop - e.text {:d} window id = {:d}" ), e.text.type, e.text.windowID );
+      // this->logger_->trace( fmt::runtime( "run_input_loop - e.text {:d} window id = {:d}" ), e.text.type, e.text.windowID );
       if( this->has_window( e.text.windowID ) ) {
         this->get_window( e.text.windowID )->add_input( e );
         return true;
@@ -247,7 +247,7 @@ bool SFG::Engine::SdlEngine::run_input_loop( SDL_Event const& e ) {
         return false;
       }
     case SDL_EventType::SDL_MOUSEMOTION:
-      this->logger_->trace( fmt::runtime( "run_input_loop - e.motion {:d} window id = {:d}" ), e.motion.type, e.motion.windowID );
+      // this->logger_->trace( fmt::runtime( "run_input_loop - e.motion {:d} window id = {:d}" ), e.motion.type, e.motion.windowID );
       if( this->has_window( e.motion.windowID ) ) {
         this->get_window( e.motion.windowID )->add_input( e );
         return true;
@@ -258,7 +258,7 @@ bool SFG::Engine::SdlEngine::run_input_loop( SDL_Event const& e ) {
       }
     case SDL_EventType::SDL_MOUSEBUTTONDOWN:
     case SDL_EventType::SDL_MOUSEBUTTONUP:
-      this->logger_->trace( fmt::runtime( "run_input_loop - e.button {:d} window id = {:d}" ), e.button.type, e.button.windowID );
+      // this->logger_->trace( fmt::runtime( "run_input_loop - e.button {:d} window id = {:d}" ), e.button.type, e.button.windowID );
       if( this->has_window( e.button.windowID ) ) {
         this->get_window( e.button.windowID )->add_input( e );
         return true;
@@ -268,7 +268,7 @@ bool SFG::Engine::SdlEngine::run_input_loop( SDL_Event const& e ) {
         return false;
       }
     case SDL_EventType::SDL_MOUSEWHEEL:
-      this->logger_->trace( fmt::runtime( "run_input_loop - e.wheel {:d} window id = {:d}" ), e.wheel.type, e.wheel.windowID );
+      // this->logger_->trace( fmt::runtime( "run_input_loop - e.wheel {:d} window id = {:d}" ), e.wheel.type, e.wheel.windowID );
       if( this->has_window( e.wheel.windowID ) ) {
         this->get_window( e.wheel.windowID )->add_input( e );
         return true;
@@ -280,7 +280,7 @@ bool SFG::Engine::SdlEngine::run_input_loop( SDL_Event const& e ) {
     case SDL_EventType::SDL_FINGERMOTION:
     case SDL_EventType::SDL_FINGERDOWN:
     case SDL_EventType::SDL_FINGERUP:
-      this->logger_->trace( fmt::runtime( "run_input_loop - e.tfinger {:d} window id = {:d}" ), e.tfinger.type, e.tfinger.windowID );
+      // this->logger_->trace( fmt::runtime( "run_input_loop - e.tfinger {:d} window id = {:d}" ), e.tfinger.type, e.tfinger.windowID );
       if( this->has_window( e.tfinger.windowID ) ) {
         this->get_window( e.tfinger.windowID )->add_input( e );
         return true;
@@ -293,7 +293,7 @@ bool SFG::Engine::SdlEngine::run_input_loop( SDL_Event const& e ) {
     case SDL_EventType::SDL_DROPFILE:
     case SDL_EventType::SDL_DROPTEXT:
     case SDL_EventType::SDL_DROPCOMPLETE:
-      this->logger_->trace( fmt::runtime( "run_input_loop - e.drop {:d} window id = {:d}" ), e.drop.type, e.drop.windowID );
+      // this->logger_->trace( fmt::runtime( "run_input_loop - e.drop {:d} window id = {:d}" ), e.drop.type, e.drop.windowID );
       if( this->has_window( e.drop.windowID ) ) {
         this->get_window( e.drop.windowID )->add_input( e );
         return true;
@@ -304,7 +304,7 @@ bool SFG::Engine::SdlEngine::run_input_loop( SDL_Event const& e ) {
       }
     default:
       if( e.type >= SDL_EventType::SDL_USEREVENT && e.type < SDL_EventType::SDL_LASTEVENT ) {
-        this->logger_->trace( fmt::runtime( "run_input_loop - e.user {:d} window id = {:d}" ), e.user.type, e.user.windowID );
+        // this->logger_->trace( fmt::runtime( "run_input_loop - e.user {:d} window id = {:d}" ), e.user.type, e.user.windowID );
         if( this->has_window( e.user.windowID ) ) {
           this->get_window( e.user.windowID )->add_input( e );
           return true;
@@ -321,7 +321,7 @@ bool SFG::Engine::SdlEngine::run_input_loop( SDL_Event const& e ) {
 }
 
 bool SFG::Engine::SdlEngine::has_window( uint32_t windowId ) {
-  ScopedLog( this->logger_, fmt::format( fmt::runtime( "has_window( windowId = {:d} )" ), windowId ), fmt::format( fmt::runtime( "has_window()~" ) ) );
+  // ScopedLog( this->logger_, fmt::format( fmt::runtime( "has_window( windowId = {:d} )" ), windowId ), fmt::format( fmt::runtime( "has_window()~" ) ) );
   ScopedMutex( &( this->windowsMutex_ ) );
 
   for( SFG::Engine::SdlWindow* window : this->windows_ ) {
@@ -333,7 +333,7 @@ bool SFG::Engine::SdlEngine::has_window( uint32_t windowId ) {
 }
 
 SFG::Engine::SdlWindow* SFG::Engine::SdlEngine::get_window( uint32_t windowId ) {
-  ScopedLog( this->logger_, fmt::format( fmt::runtime( "get_window( windowId = {:d} )" ), windowId ), fmt::format( fmt::runtime( "get_window()~" ) ) );
+  // ScopedLog( this->logger_, fmt::format( fmt::runtime( "get_window( windowId = {:d} )" ), windowId ), fmt::format( fmt::runtime( "get_window()~" ) ) );
   ScopedMutex( &( this->windowsMutex_ ) );
 
   for( SFG::Engine::SdlWindow* window : this->windows_ ) {

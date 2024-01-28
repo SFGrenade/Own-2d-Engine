@@ -82,7 +82,7 @@ void SFG::Engine::SdlAudio::initialize_sdl_audio() {
 }
 
 void SFG::Engine::SdlAudio::play_background_music( std::string const& path ) {
-  this->logger_->trace( fmt::runtime( "play_background_music( path = \"{:s}\" )" ), path );
+  // this->logger_->trace( fmt::runtime( "play_background_music( path = \"{:s}\" )" ), path );
   if( this->lastPlayedAudio_ == path ) {
     return;
   }
@@ -101,5 +101,5 @@ void SFG::Engine::SdlAudio::play_background_music( std::string const& path ) {
     this->logger_->error( fmt::runtime( "play_background_music - error when Mix_PlayChannel: {:s}" ), SDL_GetError() );
   }
 
-  this->logger_->trace( fmt::runtime( "play_background_music()~" ) );
+  // this->logger_->trace( fmt::runtime( "play_background_music()~" ) );
 }

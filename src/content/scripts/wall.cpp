@@ -5,7 +5,10 @@
 
 
 SFG::Content::Wall::Wall()
-    : _base_(), logger_( SFG::Engine::LoggerFactory::get_logger( "Content_Wall" ) ), rendering_( true ), wallRect_(), wallTexture_( nullptr ) {}
+    : _base_(), logger_( SFG::Engine::LoggerFactory::get_logger( "Content_Wall" ) ), rendering_( true ), wallRect_(), wallTexture_( nullptr ) {
+  this->isStatic_ = true;
+  this->isTrigger_ = false;
+}
 
 SFG::Content::Wall::~Wall() {
   if( this->wallTexture_ ) {

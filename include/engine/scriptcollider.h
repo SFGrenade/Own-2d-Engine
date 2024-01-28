@@ -26,6 +26,7 @@ class ScriptCollider : public SFG::Engine::ScriptEntity {
   virtual void interact( SFG::Engine::ScriptCollider const* contact, SFG::Engine::InteractSide interactionSide );
 
   protected:
+  bool isStatic_;
   bool isTrigger_;
   bool isTouching_;
   bool isColliding_;
