@@ -13,6 +13,7 @@ if is_plat("windows") then
     add_cxflags("/Zc:preprocessor")
 
     add_cxflags("/permissive-")
+    add_ldflags("/subsystem:windows")
 else
     set_languages("cxx20")
 end
@@ -38,6 +39,17 @@ if is_mode("debug") then
 end
 if is_mode("release") then
     add_defines("NDEBUG")
+
+    if is_plat("windows") then
+        --add_cxflags("/favor:AMD64")
+        --add_cxflags("/O2")
+        --add_cxflags("/arch:AVX2")
+        --add_cxflags("/fp:fast")
+        --add_cxflags("/GL")
+        --add_cxflags("/Qfast_transcendentals")
+        --add_cxflags("/Qpar")
+    else
+    end
 end
 
 target("Own-2d-Engine")
