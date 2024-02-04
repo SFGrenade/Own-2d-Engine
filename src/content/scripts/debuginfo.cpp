@@ -178,8 +178,8 @@ void SFG::Content::DebugInfo::set_debugInfo_bottomRight( std::string const& debu
 void SFG::Content::DebugInfo::renderDebugInfo( DebugInfoStruct& debugInfo, SDL_Renderer* renderer ) {
   SDL_Surface* txtsfc = TTF_RenderUTF8_Shaded_Wrapped( this->sdlFont_,
                                                        debugInfo.message_.c_str(),
-                                                       SDL_Color( 255, 255, 255, 255 ),
-                                                       SDL_Color( 0, 0, 0, 128 ),
+                                                       SDL_Color{ 255, 255, 255, 255 },
+                                                       SDL_Color{ 0, 0, 0, 128 },
                                                        this->sdlWindow_->get_width() );
   if( txtsfc == nullptr ) {
     this->logger_->error( fmt::runtime( "renderDebugInfo - Error when TTF_RenderUTF8_Shaded_Wrapped: {:s}" ), TTF_GetError() );
