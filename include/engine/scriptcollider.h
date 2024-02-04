@@ -1,8 +1,6 @@
 #ifndef _ENGINE_SCRIPTCOLLIDER_H_
 #define _ENGINE_SCRIPTCOLLIDER_H_
 
-#include <list>
-
 #include "_globals/moreChrono.h"
 #include "_globals/sdlInclude.h"
 #include "engine/scriptentity.h"

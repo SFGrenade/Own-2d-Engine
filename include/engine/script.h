@@ -1,6 +1,8 @@
 #ifndef _ENGINE_SCRIPT_H_
 #define _ENGINE_SCRIPT_H_
 
+#include <vector>
+
 #include "_globals/moreChrono.h"
 #include "_globals/sdlInclude.h"
 

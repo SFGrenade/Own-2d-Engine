@@ -2,6 +2,7 @@
 #define _ENGINE_SDLAUDIO_H_
 
 #include <list>
+#include <string>
 
 #include "_globals/sdlInclude.h"
 #include "_globals/spdlogInclude.h"

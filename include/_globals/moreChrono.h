@@ -1,7 +1,6 @@
 #ifndef _GLOBALS_MORECHRONO_H_
 #define _GLOBALS_MORECHRONO_H_
 
-// library headers
 #include <chrono>
 
 using namespace std::chrono_literals;

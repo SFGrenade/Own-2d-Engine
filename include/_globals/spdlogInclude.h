@@ -1,6 +1,9 @@
 #ifndef _GLOBALS_SPDLOGINCLUDE_H_
 #define _GLOBALS_SPDLOGINCLUDE_H_
 
+#include <memory>
+#include <string>
+
 // Including FMT headers
 #include <fmt/chrono.h>
 #include <fmt/core.h>

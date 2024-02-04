@@ -1,7 +1,6 @@
 #ifndef _GLOBALS_STR_SPLIT_H_
 #define _GLOBALS_STR_SPLIT_H_
 
-// library headers
 #include <string>
 #include <vector>
 

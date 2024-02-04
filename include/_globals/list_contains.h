@@ -1,7 +1,6 @@
 #ifndef _GLOBALS_LIST_CONTAINS_H_
 #define _GLOBALS_LIST_CONTAINS_H_
 
-// library headers
 #include <list>
 #include <vector>
 

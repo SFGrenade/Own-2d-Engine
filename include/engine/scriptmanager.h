@@ -1,7 +1,6 @@
 #ifndef _ENGINE_SCRIPTMANAGER_H_
 #define _ENGINE_SCRIPTMANAGER_H_
 
-#include <mutex>
 #include <vector>
 
 #include "_globals/moreChrono.h"
