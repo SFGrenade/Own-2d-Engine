@@ -1,0 +1,709 @@
+<?xml version="1.0"?>
+<Level width="30" height="22" bgm="8Bit 02 w.wav">
+ <Entities>
+ </Entities>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <TransitionTile xTo="16" yTo="21" levelIndexTo="3" tileType="1" tileColor="4294902015" tileTerrainType="1" />
+  <TransitionTile xTo="16" yTo="21" levelIndexTo="3" tileType="1" tileColor="4294902015" tileTerrainType="1" />
+  <TransitionTile xTo="16" yTo="21" levelIndexTo="3" tileType="1" tileColor="4294902015" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <TransitionTile xTo="28" yTo="15" levelIndexTo="0" tileType="1" tileColor="0xFFFF00FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <TransitionTile xTo="28" yTo="16" levelIndexTo="0" tileType="1" tileColor="0xFFFF00FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <TransitionTile xTo="28" yTo="17" levelIndexTo="0" tileType="1" tileColor="0xFFFF00FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WaterTile tileType="0" tileColor="0x8000FFFF" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <EmptyTile />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+ <Row>
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+  <WallTile tileType="1" tileColor="0x00FF80FF" tileTerrainType="1" />
+ </Row>
+</Level>

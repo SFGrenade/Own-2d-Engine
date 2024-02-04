@@ -1,0 +1,679 @@
+<?xml version="1.0"?>
+<Level width="25" height="25" bgm="8bit 04 w.wav">
+<Entities />
+<Row>
+<WallTile tileType="1" tileColor="1313754879" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1179010815" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1381126911" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1313754879" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1330597887" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1532713983" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1465341951" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1667458047" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1600086015" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1515870975" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1667458047" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1549556991" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1515870975" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1397969919" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1296911871" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1246382847" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1364283903" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1482184959" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1499027967" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1616929023" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1532713983" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1313754879" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1532713983" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1515870975" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1532713983" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1650615039" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1448498943" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1482184959" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1381126911" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1347440895" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1515870975" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1397969919" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1684301055" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1650615039" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1465341951" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1280068863" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1229539839" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="993737727" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="993737727" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1482184959" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1701144063" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1751673087" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1583243007" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1600086015" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1600086015" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1768516095" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1701144063" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1515870975" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1717987071" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1583243007" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1482184959" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1633772031" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1515870975" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1330597887" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1246382847" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1128481791" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="909522687" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1128481791" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1532713983" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1532713983" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1549556991" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1633772031" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1701144063" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1802202111" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1633772031" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1667458047" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1515870975" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1566399999" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1583243007" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1549556991" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1212696831" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1128481791" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1162167807" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1448498943" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1330597887" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1313754879" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1532713983" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1650615039" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1633772031" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1802202111" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1852731135" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1768516095" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1650615039" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1684301055" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1616929023" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1364283903" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1448498943" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1263225855" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1296911871" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1313754879" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1296911871" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1246382847" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1330597887" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1583243007" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1532713983" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1616929023" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1650615039" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1869574143" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1751673087" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1717987071" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1819045119" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1751673087" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1633772031" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1549556991" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1313754879" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1330597887" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1347440895" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1364283903" tileTerrainType="1" />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1330597887" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1313754879" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1246382847" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1431655935" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1532713983" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1734830079" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1869574143" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1852731135" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1869574143" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1936946175" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1684301055" tileTerrainType="1" />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1734830079" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1600086015" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1532713983" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1532713983" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1499027967" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1414812927" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1515870975" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1229539839" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1111638783" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1061109759" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1381126911" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1785359103" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1835888127" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1936946175" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1920103167" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1953789183" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1650615039" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1616929023" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1549556991" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1566399999" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1667458047" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1313754879" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1195853823" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1162167807" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1364283903" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1499027967" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1650615039" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="2038004223" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1802202111" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1886417151" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1903260159" tileTerrainType="1" />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1667458047" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1684301055" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1499027967" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1667458047" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1684301055" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1212696831" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1246382847" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1313754879" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1195853823" tileTerrainType="1" />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1246382847" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1364283903" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1886417151" tileTerrainType="1" />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1852731135" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1903260159" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1482184959" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1549556991" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1448498943" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1616929023" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1583243007" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1819045119" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1835888127" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1280068863" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1313754879" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1280068863" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1229539839" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1381126911" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1330597887" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1212696831" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1987475199" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1600086015" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1465341951" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1650615039" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1717987071" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1717987071" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1852731135" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1785359103" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1347440895" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1364283903" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1515870975" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1465341951" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1515870975" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1414812927" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1263225855" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1145324799" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1936946175" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1886417151" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1482184959" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1397969919" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1667458047" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1499027967" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1515870975" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1583243007" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1465341951" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1499027967" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1465341951" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1448498943" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1448498943" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1903260159" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1835888127" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1717987071" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1701144063" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1532713983" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1330597887" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1431655935" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1448498943" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1448498943" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1650615039" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1532713983" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1667458047" tileTerrainType="1" />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1701144063" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1785359103" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1566399999" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1566399999" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1616929023" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1633772031" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1633772031" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1633772031" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1717987071" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1835888127" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1549556991" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1381126911" tileTerrainType="1" />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1431655935" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1465341951" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1532713983" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1532713983" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1583243007" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1633772031" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1734830079" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1431655935" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1414812927" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1667458047" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1667458047" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1566399999" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1263225855" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1583243007" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1448498943" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1583243007" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1549556991" tileTerrainType="1" />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1768516095" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1633772031" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1717987071" tileTerrainType="1" />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1482184959" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1364283903" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1330597887" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1414812927" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1465341951" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1566399999" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1566399999" tileTerrainType="1" />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1364283903" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1616929023" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1583243007" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1499027967" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1600086015" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1431655935" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1616929023" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1499027967" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1381126911" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1414812927" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1684301055" tileTerrainType="1" />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1549556991" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1566399999" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1566399999" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1768516095" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1381126911" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1616929023" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1448498943" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1633772031" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1835888127" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1549556991" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1499027967" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1431655935" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1549556991" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1701144063" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1768516095" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1819045119" tileTerrainType="1" />
+</Row>
+<Row>
+<TransitionTile xTo="48" yTo="23" levelIndexTo="4" tileType="1" tileColor="4294902015" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1835888127" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1684301055" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1734830079" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1751673087" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1633772031" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1886417151" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1785359103" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1734830079" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1751673087" tileTerrainType="1" />
+</Row>
+<Row>
+<TransitionTile xTo="48" yTo="24" levelIndexTo="4" tileType="1" tileColor="4294902015" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1650615039" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1717987071" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1802202111" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1717987071" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1802202111" tileTerrainType="1" />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1768516095" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1920103167" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="2004318207" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1920103167" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1684301055" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1785359103" tileTerrainType="1" />
+</Row>
+<Row>
+<TransitionTile xTo="48" yTo="25" levelIndexTo="4" tileType="1" tileColor="4294902015" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1532713983" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1633772031" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1717987071" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1583243007" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1667458047" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1616929023" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1768516095" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1751673087" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1835888127" tileTerrainType="1" />
+<EmptyTile />
+<EmptyTile />
+<EmptyTile />
+<WallTile tileType="1" tileColor="1684301055" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1953789183" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1987475199" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1936946175" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1920103167" tileTerrainType="1" />
+</Row>
+<Row>
+<WallTile tileType="1" tileColor="1448498943" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1448498943" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1431655935" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1296911871" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1313754879" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1246382847" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1465341951" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1414812927" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1532713983" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1684301055" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1650615039" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1616929023" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1583243007" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1802202111" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1869574143" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1717987071" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1701144063" tileTerrainType="1" />
+<TransitionTile xTo="24" yTo="3" levelIndexTo="1" tileType="1" tileColor="4294902015" tileTerrainType="1" />
+<TransitionTile xTo="24" yTo="3" levelIndexTo="1" tileType="1" tileColor="4294902015" tileTerrainType="1" />
+<TransitionTile xTo="24" yTo="3" levelIndexTo="1" tileType="1" tileColor="4294902015" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1667458047" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="2004318207" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1886417151" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1835888127" tileTerrainType="1" />
+<WallTile tileType="1" tileColor="1987475199" tileTerrainType="1" />
+</Row>
+</Level>
