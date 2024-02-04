@@ -19,7 +19,7 @@
 #include "engine/sdlwindow.h"
 
 
-int main( int const argc, char const* const* argv ) {
+int main( int argc, char** argv ) {
   int better_main( std::span< std::string_view const > ) noexcept;
   std::vector< std::string_view > args( argv, std::next( argv, static_cast< std::ptrdiff_t >( argc ) ) );
   return better_main( args );
@@ -183,7 +183,7 @@ int better_main( std::span< std::string_view const > args ) noexcept {
   //
   //   myWindow3->get_script_manager()->add_script< SFG::Content::DebugInfo >();
   //   myWindow3->initialize_logic_controller();
-  //   myWindow3->initialize_window_renderer( "software", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
+  //   myWindow3->initialize_window_renderer( "direct3d12", SDL_RendererFlags::SDL_RENDERER_ACCELERATED );
   //
   //   myWindow3->set_flags( SDL_WindowFlags::SDL_WINDOW_SHOWN );
   //   myWindow3Flags = myWindow3->get_flags();
