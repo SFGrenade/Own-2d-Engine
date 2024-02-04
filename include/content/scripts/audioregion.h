@@ -1,6 +1,7 @@
 #ifndef _CONTENT_AUDIOREGION_H_
 #define _CONTENT_AUDIOREGION_H_
 
+#include "_globals/align.h"
 #include "_globals/sdlInclude.h"
 #include "_globals/spdlogInclude.h"
 #include "engine/scriptcollider.h"
@@ -28,7 +29,7 @@ class AudioRegion : public SFG::Engine::ScriptCollider {
   spdlogger logger_;
 
   bool rendering_;
-  __declspec( align( 64 ) ) SDL_Rect audioRegionRect_;  // used for graphics and logic
+  SFG_ENGINE_ALIGN( 64 ) SDL_Rect audioRegionRect_;  // used for graphics and logic
   SDL_Texture* audioRegionTexture_;
 
   std::string audioFilePath_;

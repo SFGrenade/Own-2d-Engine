@@ -1,6 +1,7 @@
 #ifndef _CONTENT_WALL_H_
 #define _CONTENT_WALL_H_
 
+#include "_globals/align.h"
 #include "_globals/sdlInclude.h"
 #include "_globals/spdlogInclude.h"
 #include "engine/scriptcollider.h"
@@ -24,7 +25,7 @@ class Wall : public SFG::Engine::ScriptCollider {
   spdlogger logger_;
 
   bool rendering_;
-  __declspec( align( 64 ) ) SDL_Rect wallRect_;  // used for graphics and logic
+  SFG_ENGINE_ALIGN( 64 ) SDL_Rect wallRect_;  // used for graphics and logic
   SDL_Texture* wallTexture_;
 };
 

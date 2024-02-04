@@ -1,6 +1,7 @@
 #ifndef _CONTENT_BOUNCER_H_
 #define _CONTENT_BOUNCER_H_
 
+#include "_globals/align.h"
 #include "_globals/sdlInclude.h"
 #include "_globals/spdlogInclude.h"
 #include "engine/scriptcollider.h"
@@ -28,7 +29,7 @@ class Bouncer : public SFG::Engine::ScriptCollider {
   spdlogger logger_;
 
   bool rendering_;
-  __declspec( align( 64 ) ) SDL_Rect bouncerRect_;  // used for graphics and logic
+  SFG_ENGINE_ALIGN( 64 ) SDL_Rect bouncerRect_;  // used for graphics and logic
   SDL_Texture* bouncerTexture_;
 
   SFG::Engine::Vector2 moving_;

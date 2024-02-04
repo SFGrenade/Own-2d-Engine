@@ -1,6 +1,7 @@
 #ifndef _ENGINE_PERFORMANCECONTROLLER_H_
 #define _ENGINE_PERFORMANCECONTROLLER_H_
 
+#include "_globals/align.h"
 #include "_globals/moreChrono.h"
 #include "_globals/spdlogInclude.h"
 
@@ -27,14 +28,14 @@ class PerformanceController {
   private:
   spdlogger logger_;
 
-  __declspec( align( 64 ) ) uint64_t counterInputLoops_;
-  __declspec( align( 64 ) ) std::chrono::high_resolution_clock::time_point counterInputLoopsTimePoint_;
-  __declspec( align( 64 ) ) uint64_t counterLogicLoops_;
-  __declspec( align( 64 ) ) std::chrono::high_resolution_clock::time_point counterLogicLoopsTimePoint_;
-  __declspec( align( 64 ) ) uint64_t counterNetworkLoops_;
-  __declspec( align( 64 ) ) std::chrono::high_resolution_clock::time_point counterNetworkLoopsTimePoint_;
-  __declspec( align( 64 ) ) uint64_t counterRenderLoops_;
-  __declspec( align( 64 ) ) std::chrono::high_resolution_clock::time_point counterRenderLoopsTimePoint_;
+  SFG_ENGINE_ALIGN( 64 ) uint64_t counterInputLoops_;
+  SFG_ENGINE_ALIGN( 64 ) std::chrono::high_resolution_clock::time_point counterInputLoopsTimePoint_;
+  SFG_ENGINE_ALIGN( 64 ) uint64_t counterLogicLoops_;
+  SFG_ENGINE_ALIGN( 64 ) std::chrono::high_resolution_clock::time_point counterLogicLoopsTimePoint_;
+  SFG_ENGINE_ALIGN( 64 ) uint64_t counterNetworkLoops_;
+  SFG_ENGINE_ALIGN( 64 ) std::chrono::high_resolution_clock::time_point counterNetworkLoopsTimePoint_;
+  SFG_ENGINE_ALIGN( 64 ) uint64_t counterRenderLoops_;
+  SFG_ENGINE_ALIGN( 64 ) std::chrono::high_resolution_clock::time_point counterRenderLoopsTimePoint_;
 
   SFG::Engine::SdlWindow* sdlWindow_;
 };
