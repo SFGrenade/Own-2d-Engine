@@ -44,3 +44,6 @@
 build/
 # MacOS Cache
 .DS_Store
+
+# my build logs
+_build_logs/
