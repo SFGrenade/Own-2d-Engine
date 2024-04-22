@@ -15,14 +15,14 @@ on:
 jobs:
   build:
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         platform:
         - { runner: windows-latest, os: windows, arch: x64,    archive_ext: .zip }
         - { runner: ubuntu-latest,  os: linux,   arch: x86_64, archive_ext: .tar.gz }
         - { runner: macos-latest,   os: macos,   arch: x86_64, archive_ext: .tar.gz }
-        #- { runner: macos-latest,   os: macos,   arch: arm64,  archive_ext: .tar.gz }
-        mode: [debug, releasedbg]
+        mode: [debug, release]
+        libkind: [shared, static]
 
     runs-on: ${{ matrix.platform.runner }}
 
@@ -32,8 +32,32 @@ jobs:
       run: echo "key=$(date +'%W')" >> $GITHUB_OUTPUT
       shell: bash
 
-    - name: "Set OUTPUT_FILE variable"
-      run: echo "OUTPUT_FILE=${{ matrix.platform.os }}_${{ matrix.platform.arch }}_${{ matrix.mode }}${{ matrix.platform.archive_ext }}" >> $GITHUB_ENV
+    # Edit to not use -d runtimes, protobuf doesn't like it?
+    - name: Set vs_runtime string (windows)
+      if: ${{ matrix.platform.os == 'windows' }}
+      run: |
+        if [ "${{ matrix.mode }}" == "debug" ]; then
+          if [ "${{ matrix.libkind }}" == "shared" ]; then
+            echo "VS_RUNTIME_STRING=MDd" >> $GITHUB_ENV
+          else
+            echo "VS_RUNTIME_STRING=MTd" >> $GITHUB_ENV
+          fi
+        else
+          if [ "${{ matrix.libkind }}" == "shared" ]; then
+            echo "VS_RUNTIME_STRING=MD" >> $GITHUB_ENV
+          else
+            echo "VS_RUNTIME_STRING=MT" >> $GITHUB_ENV
+          fi
+        fi
+      shell: bash
+
+    - name: Set OUTPUT_FILE variable
+      run: |
+        if [ "$RUNNER_OS" == "Windows" ]; then
+          echo "OUTPUT_FILE=${{ matrix.platform.os }}_${{ matrix.platform.arch }}_${{ matrix.mode }}_${{ matrix.libkind }}_${{ env.VS_RUNTIME_STRING }}${{ matrix.platform.archive_ext }}" >> $GITHUB_ENV
+        else
+          echo "OUTPUT_FILE=${{ matrix.platform.os }}_${{ matrix.platform.arch }}_${{ matrix.mode }}_${{ matrix.libkind }}${{ matrix.platform.archive_ext }}" >> $GITHUB_ENV
+        fi
       shell: bash
 
     # Force xmake to a specific folder (for cache)
@@ -48,14 +72,14 @@ jobs:
 
     # Install xmake
     - name: Setup xmake
-      uses: xmake-io/github-action-setup-xmake@v1
+      uses: xmake-io/github-action-setup-xmake@v1.2.2
       with:
         xmake-version: latest
         actions-cache-folder: .xmake-cache-W${{ steps.cache_key.outputs.key }}
 
     # Update xmake repository (in order to have the file that will be cached)
     - name: Update xmake repository
-      run: xmake repo --update
+      run: xmake repo --update -vD
 
     # Fetch xmake dephash
     - name: Retrieve dependencies hash
@@ -69,10 +93,15 @@ jobs:
       uses: actions/cache/restore@v4
       with:
         path: ${{ env.XMAKE_GLOBALDIR }}/.xmake/packages
-        key: ${{ matrix.platform.os }}-${{ matrix.platform.arch }}-${{ matrix.mode }}-${{ steps.dep_hash.outputs.hash }}-W${{ steps.cache_key.outputs.key }}
+        key: ${{ matrix.platform.os }}-${{ matrix.platform.arch }}-${{ matrix.mode }}-${{ matrix.libkind }}-${{ env.VS_RUNTIME_STRING }}-${{ steps.dep_hash.outputs.hash }}-W${{ steps.cache_key.outputs.key }}
 
-    - name: Configure xmake and install dependencies
-      run: xmake config --arch=${{ matrix.platform.arch }} --mode=${{ matrix.mode }} --yes --policies=package.precompiled:n
+    - name: Configure xmake and install dependencies (Unix)
+      if: ${{ matrix.platform.os != 'windows' }}
+      run: xmake config -vD --arch=${{ matrix.platform.arch }} --mode=${{ matrix.mode }} --kind=${{ matrix.libkind }} --yes --policies=package.precompiled:n
+
+    - name: Configure xmake and install dependencies (Windows)
+      if: ${{ matrix.platform.os == 'windows' }}
+      run: xmake config -vD --arch=${{ matrix.platform.arch }} --mode=${{ matrix.mode }} --kind=${{ matrix.libkind }} --vs_runtime=${{ env.VS_RUNTIME_STRING }} --yes --policies=package.precompiled:n
 
     # Save dependencies
     - name: Save cached xmake dependencies
@@ -82,21 +111,15 @@ jobs:
         path: ${{ env.XMAKE_GLOBALDIR }}/.xmake/packages
         key: ${{ steps.restore-depcache.outputs.cache-primary-key }}
 
-    - name: Build
-      run: xmake
+    - name: Build all targets
+      run: xmake build -vD -a
+
+    - name: Run tests
+      run: xmake run -vD --group=TESTS
 
     - name: Install
-      run: |
-        xmake install -vo dest/
-        if [ "$RUNNER_OS" == "Linux" ]; then
-          mv ./dest/lib/*.so ./dest/bin/ || true
-        elif [ "$RUNNER_OS" == "macOS" ]; then
-          mv ./dest/lib/*.dylib ./dest/bin/ || true
-        fi
-        rm -rf dest/include/
-        rm -rf dest/lib/
-      shell: bash
-    
+      run: xmake install -vDo dest/ --group=EXES
+
     - name: Archive result
       uses: ihiroky/archive-action@v1
       with:
@@ -116,7 +139,7 @@ jobs:
     # Release tags (for tags)
     - name: Upload binaries to release (Tag)
       uses: svenstaro/upload-release-action@v2
-      if: ${{ startsWith(github.event.ref, 'refs/tags/') && matrix.mode == 'releasedbg' }}
+      if: ${{ startsWith(github.event.ref, 'refs/tags/') }}
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: ${{ env.OUTPUT_FILE }}
@@ -126,7 +149,7 @@ jobs:
 
     - name: Upload checksum to release (Tag)
       uses: svenstaro/upload-release-action@v2
-      if: ${{ startsWith(github.event.ref, 'refs/tags/') && matrix.mode == 'releasedbg' }}
+      if: ${{ startsWith(github.event.ref, 'refs/tags/') }}
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: ${{ env.OUTPUT_FILE }}.sha256
