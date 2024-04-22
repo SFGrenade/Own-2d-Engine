@@ -15,7 +15,7 @@ on:
 jobs:
   build:
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         platform:
         - { runner: windows-latest, os: windows, arch: x64,    archive_ext: .zip }
@@ -118,7 +118,7 @@ jobs:
       run: xmake run -vD --group=TESTS
 
     - name: Install
-      run: xmake install -vDo dest/ --group=EXES
+      run: xmake install -vDo dest/ Own-2d-Engine
 
     - name: Archive result
       uses: ihiroky/archive-action@v1
