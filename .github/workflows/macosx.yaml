@@ -19,7 +19,7 @@ jobs:
       matrix:
         os:
         - { image: macos-13, arch: x86_64 }
-        #- { image: macos-14, arch: arm64 } # arm64 not supported by aqtinstall for 5.12.2
+        - { image: macos-14, arch: arm64 }
         kind: [static, shared]
         mode: [debug, release, releasedbg, minsizerel]
 
@@ -70,14 +70,7 @@ jobs:
 
     # We can't do --group=TESTS because every test has its own output
     - name: Run tests
-      run: |
-        xmake run -vD Audio-Interface-Test
-        xmake run -vD Configuration-Test
-        xmake run -vD Logger-Test
-        xmake run -vD Login-Server-Test
-        xmake run -vD Network-Messages-Test
-        xmake run -vD Recording-Server-Test
-        xmake run -vD Settings-Interface-Test
+      run: xmake run -vD --group=TESTS
 
     - name: Install
       run: xmake install -vDo dest/ --group=EXES
