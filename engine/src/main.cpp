@@ -18,7 +18,6 @@
 #include "engine/sdlengine.h"
 #include "engine/sdlwindow.h"
 
-
 int main( int argc, char** argv ) {
   int better_main( std::span< std::string_view const > ) noexcept;
   std::vector< std::string_view > args( argv, std::next( argv, static_cast< std::ptrdiff_t >( argc ) ) );

@@ -8,6 +8,7 @@ add_requires( "spdlog" )
 add_requires( "simpleini" )
 
 add_requireconfs( "spdlog", { configs = { header_only = true, std_format = false, fmt_external = false, fmt_external_ho = true, noexcept = false } } )
+add_requireconfs( "libsdl", { configs = { sdlmain = false } } )
 
 target( "Own-2d-Engine" )
     set_kind( "binary" )
@@ -17,6 +18,7 @@ target( "Own-2d-Engine" )
 
     if is_plat( "windows" ) then
         add_ldflags( "/subsystem:windows" )
+        add_ldflags( "/entry:mainCRTStartup", { force = true } )
     else
     end
 
