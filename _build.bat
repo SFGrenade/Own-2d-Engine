@@ -37,6 +37,7 @@ CALL :doCommand "03_xmake_build" "xmake build -a -vD" && cd>NUL || Goto :END
 CALL :doCommand "05_xmake_test_Configuration-Test" "xmake run -vD Configuration-Test" && cd>NUL || Goto :END
 CALL :doCommand "05_xmake_test_Logger-Test" "xmake run -vD Logger-Test" && cd>NUL || Goto :END
 CALL :doCommand "05_xmake_test_Network-Messages-Test" "xmake run -vD Network-Messages-Test" && cd>NUL || Goto :END
+CALL :doCommand "05_xmake_test_Utils-Test" "xmake run -vD Utils-Test" && cd>NUL || Goto :END
 
 :END
 cd %ORIGINAL_DIR%
