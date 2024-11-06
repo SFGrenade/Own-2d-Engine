@@ -9,7 +9,7 @@ TEST( NetworkMessages, NetworkingTest ) {
   SFG::Own2dEngine::Logger::spdlogger logger = SFG::Own2dEngine::Logger::LoggerFactory::get_logger( "NetworkingTest" );
   zmq::context_t context( 1 );
 
-  std::string endPoint = "tcp://127.254.254.1:50001";
+  std::string endPoint = "inproc://NetworkMessages_NetworkingTest";
 
   ZmqPb::Pair pairPart1( endPoint, true, &context );
   zmq_sleep( 1 );
