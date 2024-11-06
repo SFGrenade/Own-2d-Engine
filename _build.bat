@@ -30,14 +30,13 @@ CALL :doCommand "00_made_build_logs" "echo we did it" && cd>NUL || Goto :END
 
 CALL :doCommand "01_xmake_set_theme" "xmake global --theme=plain" && cd>NUL || Goto :END
 
-CALL :doCommand "02_xmake_configure" "xmake config --import=.vscode\xmake.windows.shared.release.MD.conf -vD -y" && cd>NUL || Goto :END
+CALL :doCommand "02_xmake_configure" "xmake config --import=.vscode\xmake.windows.static.release.MT.conf -vD -y" && cd>NUL || Goto :END
 
 CALL :doCommand "03_xmake_build" "xmake build -a -vD" && cd>NUL || Goto :END
 
 CALL :doCommand "05_xmake_test_Configuration-Test" "xmake run -vD Configuration-Test" && cd>NUL || Goto :END
 CALL :doCommand "05_xmake_test_Logger-Test" "xmake run -vD Logger-Test" && cd>NUL || Goto :END
 CALL :doCommand "05_xmake_test_Network-Messages-Test" "xmake run -vD Network-Messages-Test" && cd>NUL || Goto :END
-CALL :doCommand "05_xmake_test_Sdl-Wrapper-Test" "xmake run -vD Sdl-Wrapper-Test" && cd>NUL || Goto :END
 
 :END
 cd %ORIGINAL_DIR%

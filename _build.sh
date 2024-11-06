@@ -37,6 +37,5 @@ doCommand "03_xmake_build" "xmake build -a -vD"
 #doCommand "05_xmake_test_Configuration-Test" "xmake run -vD Configuration-Test"
 #doCommand "05_xmake_test_Logger-Test" "xmake run -vD Logger-Test"
 #doCommand "05_xmake_test_Network-Messages-Test" "xmake run -vD Network-Messages-Test"
-#doCommand "05_xmake_test_Sdl-Wrapper-Test" "xmake run -vD Sdl-Wrapper-Test"
 
 cd "$ORIGINAL_DIR"
