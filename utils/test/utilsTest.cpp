@@ -1,8 +1,5 @@
-#include <SFG/Own2dEngine/Utils/align.h>
-#include <SFG/Own2dEngine/Utils/contains.h>
-#include <SFG/Own2dEngine/Utils/moreChrono.h>
-#include <SFG/Own2dEngine/Utils/numOps.h>
-#include <SFG/Own2dEngine/Utils/strSplit.h>
+#include <SFG/Own2dEngine/Logger/_include.h>
+#include <SFG/Own2dEngine/Utils/_include.h>
 #include <gtest/gtest.h>
 
 TEST( Utils, Example ) {

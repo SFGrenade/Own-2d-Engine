@@ -1,5 +1,5 @@
-#include <SFG/Own2dEngine/Configuration/configuration.h>
-#include <SFG/Own2dEngine/Logger/loggerFactory.h>
+#include <SFG/Own2dEngine/Configuration/_include.h>
+#include <SFG/Own2dEngine/Logger/_include.h>
 #include <gtest/gtest.h>
 #include <string>
 

@@ -1,5 +1,4 @@
-#include <SFG/Own2dEngine/Logger/loggerFactory.h>
-#include <SFG/Own2dEngine/Logger/scopedLogger.h>
+#include <SFG/Own2dEngine/Logger/_include.h>
 #include <gtest/gtest.h>
 
 TEST( Logger, ScopedLogger ) {
