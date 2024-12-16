@@ -2,15 +2,38 @@ add_requires( "libsdl" )
 add_requires( "libsdl_image" )
 add_requires( "libsdl_mixer" )
 add_requires( "libsdl_ttf" )
-add_requires( "networkinghelper" )
 add_requires( "pugixml" )
-add_requires( "spdlog" )
-add_requires( "simpleini" )
 
-add_requireconfs( "spdlog", { configs = { header_only = true, std_format = false, fmt_external = false, fmt_external_ho = true, noexcept = false } } )
 add_requireconfs( "libsdl", { configs = { sdlmain = false } } )
+--add_requireconfs( "libsdl_image", { configs = {} } )
+--add_requireconfs( "libsdl_mixer", { configs = {} } )
+--add_requireconfs( "libsdl_ttf", { configs = {} } )
 
-target( "Own-2d-Engine" )
+target( "Engine" )
+    set_kind( "static" )
+
+    set_default( false )
+    set_group( "LIBS" )
+
+    add_deps( "Configuration", { public = true } )
+    add_deps( "Logger", { public = true } )
+    add_deps( "Network-Messages", { public = true } )
+    add_deps( "Utils", { public = true } )
+
+    add_packages( "libsdl", { public = true } )
+    add_packages( "libsdl_image", { public = true } )
+    add_packages( "libsdl_mixer", { public = true } )
+    add_packages( "libsdl_ttf", { public = true } )
+    add_packages( "pugixml", { public = true } )
+
+    add_includedirs( "include", { public = true } )
+
+    add_headerfiles( "include/(SFG/Own2dEngine/Engine/*.h)" )
+
+    add_files( "src/*.cpp" )
+    remove_files( "src/main.cpp" )
+
+target( "Engine-Exe" )
     set_kind( "binary" )
 
     set_default( true )
@@ -22,27 +45,11 @@ target( "Own-2d-Engine" )
     else
     end
 
-    add_packages( "libsdl", { public = true } )
-    add_packages( "libsdl_image", { public = true } )
-    add_packages( "libsdl_mixer", { public = true } )
-    add_packages( "libsdl_ttf", { public = true } )
-    add_packages( "networkinghelper", { public = true } )
-    add_packages( "pugixml", { public = true } )
-    add_packages( "spdlog", { public = true } )
-    add_packages( "simpleini", { public = true } )
+    add_deps( "Engine", { public = true } )
 
     add_includedirs( "include", { public = true } )
 
-    add_headerfiles( "include/(_globals/*.h)" )
-    add_headerfiles( "include/(engine/*.h)" )
-    add_headerfiles( "include/(content/scripts/*.h)" )
-    add_headerfiles( "include/(messages/*.h)" )
-
-    add_files( "src/*.cpp" )
-    add_files( "src/_globals/*.cpp" )
-    add_files( "src/engine/*.cpp" )
-    add_files( "src/content/scripts/*.cpp" )
-    add_files( "src/messages/*.cpp" )
+    add_files( "src/main.cpp" )
 
     after_build( function ( target )
         import( "core.project.config" )
@@ -59,3 +66,15 @@ target( "Own-2d-Engine" )
         os.cp( path.join( "$(scriptdir)", "config" ), target.installdir( target ) )
         os.cp( path.join( "$(scriptdir)", "Resources" ), target.installdir( target ) )
     end )
+
+target( "Engine-Test" )
+    set_kind( "binary" )
+
+    set_default( false )
+    set_group( "TESTS" )
+
+    add_deps( "Engine", { public = true } )
+    add_deps( "Logger", { public = true } )
+    add_packages( "gtest", { public = true } )
+
+    add_files( "test/*.cpp" )
