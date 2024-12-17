@@ -9,6 +9,10 @@ namespace Engine {
 SFG::Own2dEngine::Logger::spdlogger RendererManager::logger_ = nullptr;
 std::map< SDL_Window*, SDL_Renderer* > RendererManager::renderers_;
 
+void RendererManager::init() {
+  RendererManager::logger_ = SFG::Own2dEngine::Logger::LoggerFactory::get_logger( "RendererManager" );
+}
+
 std::string sdlEnum2String( SDL_RendererFlags flags ) {
   std::string ret = "";
 
@@ -146,10 +150,6 @@ std::string sdlEnum2String( SDL_PixelFormatEnum flags ) {
 }
 
 void RendererManager::GetRendererInfos( SDL_Renderer* renderer ) {
-  if( RendererManager::logger_ == nullptr ) {
-    RendererManager::logger_ = SFG::Own2dEngine::Logger::LoggerFactory::get_logger( "RendererManager" );
-  }
-
   RendererManager::logger_->trace( "GetRendererInfos( renderer: {:p} )", static_cast< void* >( renderer ) );
 
   SDL_RendererInfo rendererInfo;
@@ -193,10 +193,6 @@ void RendererManager::GetRendererInfos( SDL_Renderer* renderer ) {
 }
 
 SDL_Renderer* RendererManager::CreateRenderer( SDL_Window* window, SDL_RendererFlags flags, std::string const& wantedRenderer ) {
-  if( RendererManager::logger_ == nullptr ) {
-    RendererManager::logger_ = SFG::Own2dEngine::Logger::LoggerFactory::get_logger( "RendererManager" );
-  }
-
   RendererManager::logger_->trace( "CreateRenderer( window: {:p}, flags: {:s}, renderer: {:?} )",
                                    static_cast< void* >( window ),
                                    sdlEnum2String( flags ),
@@ -242,9 +238,6 @@ SDL_Renderer* RendererManager::CreateRenderer( SDL_Window* window, SDL_RendererF
 }
 
 void RendererManager::DoRender( SDL_Renderer* renderer, std::function< void( SDL_Renderer* ) > callback ) {
-  if( RendererManager::logger_ == nullptr ) {
-    RendererManager::logger_ = SFG::Own2dEngine::Logger::LoggerFactory::get_logger( "RendererManager" );
-  }
   std::string rendererCategory = fmt::format( "Rendering {:p}", static_cast< void* >( renderer ) );
 
   Performance::startTiming( rendererCategory );
@@ -260,10 +253,6 @@ void RendererManager::DoRender( SDL_Renderer* renderer, std::function< void( SDL
 }
 
 void RendererManager::DestroyRendererForWindow( SDL_Window* window ) {
-  if( RendererManager::logger_ == nullptr ) {
-    RendererManager::logger_ = SFG::Own2dEngine::Logger::LoggerFactory::get_logger( "RendererManager" );
-  }
-
   RendererManager::logger_->trace( "DestroyRendererForWindow( window: {:p} )", static_cast< void* >( window ) );
 
   if( !RendererManager::renderers_.contains( window ) ) {
@@ -275,10 +264,6 @@ void RendererManager::DestroyRendererForWindow( SDL_Window* window ) {
 }
 
 void RendererManager::Shutdown() {
-  if( RendererManager::logger_ == nullptr ) {
-    RendererManager::logger_ = SFG::Own2dEngine::Logger::LoggerFactory::get_logger( "RendererManager" );
-  }
-
   RendererManager::logger_->trace( "Shutdown()" );
 
   for( std::pair< SDL_Window*, SDL_Renderer* > const& pair : RendererManager::renderers_ ) {

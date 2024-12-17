@@ -26,6 +26,10 @@ int better_main( std::vector< std::string > const& args ) noexcept {
 
   SFGO2DL::LoggerFactory::get_logger( "Performance" )->set_level( spdlog::level::level_enum::warn );
 
+  SFGO2DE::Performance::init();
+  SFGO2DE::RendererManager::init();
+  SFGO2DE::WindowManager::init();
+
   SFGO2DE::Performance::startProgram();
 
   int sdlErrorCode;

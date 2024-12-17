@@ -7,8 +7,8 @@ namespace Logger {
 std::shared_ptr< spdlog::sinks::stdout_color_sink_mt > LoggerFactory::consoleSink_ = nullptr;
 std::shared_ptr< spdlog::sinks::basic_file_sink_mt > LoggerFactory::fileSink_ = nullptr;
 std::string LoggerFactory::loggerPattern_ = "[%Y-%m-%d %H:%M:%S.%e] [thread %t] [%n] [%l] %v";
-std::map< std::string, spdlogger > LoggerFactory::loggers_ = std::map< std::string, spdlogger >();
-std::mutex LoggerFactory::loggersMutex_ = std::mutex();
+std::map< std::string, spdlogger > LoggerFactory::loggers_;
+std::mutex LoggerFactory::loggersMutex_;
 
 void LoggerFactory::init( std::string const& logFileName, bool printOnStdOut ) {
   LoggerFactory::loggersMutex_.lock();

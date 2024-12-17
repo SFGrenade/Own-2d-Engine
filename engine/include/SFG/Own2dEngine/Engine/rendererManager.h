@@ -13,6 +13,8 @@ namespace Engine {
 
 class RendererManager {
   public:
+  static void init();
+
   static void GetRendererInfos( SDL_Renderer* renderer = nullptr );
   static SDL_Renderer* CreateRenderer( SDL_Window* window,
                                        SDL_RendererFlags flags = static_cast< SDL_RendererFlags >( SDL_RENDERER_ACCELERATED ),

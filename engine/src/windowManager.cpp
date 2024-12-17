@@ -9,11 +9,11 @@ namespace Engine {
 SFG::Own2dEngine::Logger::spdlogger WindowManager::logger_ = nullptr;
 std::map< uint32_t, SDL_Window* > WindowManager::windows_;
 
-SDL_Window* WindowManager::AddWindow( std::string const& title, int x, int y, int w, int h, SDL_WindowFlags flags ) {
-  if( WindowManager::logger_ == nullptr ) {
-    WindowManager::logger_ = SFG::Own2dEngine::Logger::LoggerFactory::get_logger( "WindowManager" );
-  }
+void WindowManager::init() {
+  WindowManager::logger_ = SFG::Own2dEngine::Logger::LoggerFactory::get_logger( "WindowManager" );
+}
 
+SDL_Window* WindowManager::AddWindow( std::string const& title, int x, int y, int w, int h, SDL_WindowFlags flags ) {
   WindowManager::logger_
       ->trace( "AddWindow( title: {:?}, x: {:d}, y: {:d}, w: {:d}, h: {:d}, flags: 0x{:0>8x} )", title, x, y, w, h, static_cast< int >( flags ) );
 
@@ -34,10 +34,6 @@ SDL_Window* WindowManager::AddWindow( std::string const& title, int x, int y, in
 }
 
 void WindowManager::RunEvent( SDL_WindowEvent const& event ) {
-  if( WindowManager::logger_ == nullptr ) {
-    WindowManager::logger_ = SFG::Own2dEngine::Logger::LoggerFactory::get_logger( "WindowManager" );
-  }
-
   uint32_t windowId = event.windowID;
   if( !WindowManager::windows_.contains( windowId ) ) {
     WindowManager::logger_->warn( "RunEvent - window id {:d} not found in active windows, ignoring", windowId );
@@ -58,10 +54,6 @@ void WindowManager::RunEvent( SDL_WindowEvent const& event ) {
 }
 
 void WindowManager::Shutdown() {
-  if( WindowManager::logger_ == nullptr ) {
-    WindowManager::logger_ = SFG::Own2dEngine::Logger::LoggerFactory::get_logger( "WindowManager" );
-  }
-
   WindowManager::logger_->trace( "Shutdown()" );
 
   for( std::pair< uint32_t, SDL_Window* > const& pair : WindowManager::windows_ ) {

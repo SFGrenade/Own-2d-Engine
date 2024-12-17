@@ -12,6 +12,8 @@ namespace Engine {
 
 class WindowManager {
   public:
+  static void init();
+
   static SDL_Window* AddWindow( std::string const& title, int x, int y, int w, int h, SDL_WindowFlags flags = static_cast< SDL_WindowFlags >( 0 ) );
   static void RunEvent( SDL_WindowEvent const& event );
   static void Shutdown();

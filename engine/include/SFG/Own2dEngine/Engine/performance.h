@@ -13,6 +13,8 @@ namespace Engine {
 
 class Performance {
   public:
+  static void init();
+
   static void startProgram();
   static std::chrono::secondsLongDouble endProgram();
 
