@@ -11,6 +11,9 @@ std::map< uint32_t, SDL_Window* > WindowManager::windows_;
 
 void WindowManager::init() {
   WindowManager::logger_ = SFG::Own2dEngine::Logger::LoggerFactory::get_logger( "WindowManager" );
+  WindowManager::logger_->trace( "init()" );
+
+  WindowManager::logger_->trace( "init()~" );
 }
 
 SDL_Window* WindowManager::AddWindow( std::string const& title, int x, int y, int w, int h, SDL_WindowFlags flags ) {
@@ -30,10 +33,13 @@ SDL_Window* WindowManager::AddWindow( std::string const& title, int x, int y, in
   }
   WindowManager::windows_.emplace( SDL_GetWindowID( window ), window );
 
+  WindowManager::logger_->trace( "AddWindow()~" );
   return window;
 }
 
 void WindowManager::RunEvent( SDL_WindowEvent const& event ) {
+  WindowManager::logger_->trace( "RunEvent( event )" );
+
   uint32_t windowId = event.windowID;
   if( !WindowManager::windows_.contains( windowId ) ) {
     WindowManager::logger_->warn( "RunEvent - window id {:d} not found in active windows, ignoring", windowId );
@@ -51,6 +57,8 @@ void WindowManager::RunEvent( SDL_WindowEvent const& event ) {
   } else if( event.event == SDL_WINDOWEVENT_SHOWN ) {
     SDL_ShowWindow( window );
   }
+
+  WindowManager::logger_->trace( "RunEvent()~" );
 }
 
 void WindowManager::Shutdown() {
@@ -62,6 +70,8 @@ void WindowManager::Shutdown() {
     SDL_DestroyWindow( pair.second );
   }
   WindowManager::windows_.clear();
+
+  WindowManager::logger_->trace( "Shutdown()~" );
 }
 
 }  // namespace Engine
