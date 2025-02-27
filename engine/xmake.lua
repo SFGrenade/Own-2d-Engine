@@ -1,13 +1,14 @@
-add_requires( "libsdl" )
-add_requires( "libsdl_image" )
-add_requires( "libsdl_mixer" )
-add_requires( "libsdl_ttf" )
-add_requires( "pugixml" )
+add_requires( "libsdl2" )
+add_requires( "libsdl2_image" )
+add_requires( "libsdl2_mixer" )
+add_requires( "libsdl2_ttf" )
+add_requires( "portaudio" )
 
-add_requireconfs( "libsdl", { configs = { sdlmain = false } } )
---add_requireconfs( "libsdl_image", { configs = {} } )
---add_requireconfs( "libsdl_mixer", { configs = {} } )
---add_requireconfs( "libsdl_ttf", { configs = {} } )
+add_requireconfs( "libsdl2", { configs = { sdlmain = false } } )
+--add_requireconfs( "libsdl2_image", { configs = {} } )
+--add_requireconfs( "libsdl2_mixer", { configs = {} } )
+--add_requireconfs( "libsdl2_ttf", { configs = {} } )
+--add_requireconfs( "portaudio", { configs = {} } )
 
 target( "Engine" )
     set_kind( "static" )
@@ -20,14 +21,15 @@ target( "Engine" )
     add_deps( "Network-Messages", { public = true } )
     add_deps( "Utils", { public = true } )
 
-    add_packages( "libsdl", { public = true } )
-    add_packages( "libsdl_image", { public = true } )
-    add_packages( "libsdl_mixer", { public = true } )
-    add_packages( "libsdl_ttf", { public = true } )
-    add_packages( "pugixml", { public = true } )
+    add_packages( "libsdl2", { public = true } )
+    add_packages( "libsdl2_image", { public = true } )
+    add_packages( "libsdl2_mixer", { public = true } )
+    add_packages( "libsdl2_ttf", { public = true } )
+    add_packages( "portaudio", { public = true } )
 
     add_includedirs( "include", { public = true } )
 
+    add_headerfiles( "include/(SFG/Own2dEngine/Engine/resample/*.h)" )
     add_headerfiles( "include/(SFG/Own2dEngine/Engine/*.h)" )
 
     add_files( "src/*.cpp" )
@@ -40,7 +42,7 @@ target( "Engine-Exe" )
     set_group( "EXES" )
 
     if is_plat( "windows" ) then
-        add_ldflags( "/subsystem:windows" )
+        --add_ldflags( "/subsystem:windows" )
         add_ldflags( "/entry:mainCRTStartup", { force = true } )
     else
     end
