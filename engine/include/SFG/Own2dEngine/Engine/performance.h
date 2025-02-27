@@ -12,6 +12,12 @@ namespace Own2dEngine {
 namespace Engine {
 
 class Performance {
+  private:
+  struct PerformanceData {
+    std::chrono::high_resolution_clock::time_point timingPoint;
+    bool initialized;
+  };
+
   public:
   static void init();
 
@@ -23,7 +29,7 @@ class Performance {
 
   private:
   static SFG::Own2dEngine::Logger::spdlogger logger_;
-  static std::map< std::string, std::chrono::high_resolution_clock::time_point > timingPoints_;
+  static std::map< std::string, PerformanceData > timingPoints_;
 };
 
 }  // namespace Engine
