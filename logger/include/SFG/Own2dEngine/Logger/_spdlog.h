@@ -4,6 +4,8 @@
 #include <memory>
 #include <string>
 
+#define FMT_USE_LOCALE 1
+
 // Including FMT headers
 #include <fmt/base.h>
 #include <fmt/chrono.h>

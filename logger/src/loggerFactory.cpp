@@ -11,7 +11,8 @@ std::map< std::string, spdlogger > LoggerFactory::loggers_;
 std::mutex LoggerFactory::loggersMutex_;
 
 void LoggerFactory::init( std::string const& logFileName, bool printOnStdOut ) {
-  LoggerFactory::loggersMutex_.lock();
+  std::scoped_lock lock( LoggerFactory::loggersMutex_ );
+
   LoggerFactory::loggers_.clear();
 
   LoggerFactory::consoleSink_ = std::make_shared< spdlog::sinks::stdout_color_sink_mt >();
@@ -28,21 +29,19 @@ void LoggerFactory::init( std::string const& logFileName, bool printOnStdOut ) {
   spdlog::set_default_logger( mainLogger );
 
   LoggerFactory::loggers_.insert_or_assign( "main", mainLogger );
-
-  LoggerFactory::loggersMutex_.unlock();
 }
 
 void LoggerFactory::deinit() {
-  LoggerFactory::loggersMutex_.lock();
+  std::scoped_lock lock( LoggerFactory::loggersMutex_ );
+
   LoggerFactory::loggers_.clear();
-  LoggerFactory::loggersMutex_.unlock();
   spdlog::shutdown();
 }
 
 spdlogger LoggerFactory::get_logger( std::string const& name ) {
   spdlogger ret = nullptr;
 
-  LoggerFactory::loggersMutex_.lock();
+  std::scoped_lock lock( LoggerFactory::loggersMutex_ );
 
   if( LoggerFactory::loggers_.find( name ) != LoggerFactory::loggers_.end() ) {
     ret = LoggerFactory::loggers_.at( name );
@@ -57,7 +56,6 @@ spdlogger LoggerFactory::get_logger( std::string const& name ) {
     LoggerFactory::loggers_.insert_or_assign( name, ret );
   }
 
-  LoggerFactory::loggersMutex_.unlock();
   return ret;
 }
 
