@@ -7,10 +7,13 @@ namespace Own2dEngine {
 namespace Engine {
 
 SFG::Own2dEngine::Logger::spdlogger RendererManager::logger_ = nullptr;
-std::map< SDL_Window*, SDL_Renderer* > RendererManager::renderers_;
+std::map< SDL_Window*, RendererManager::RendererData* > RendererManager::renderers_;
 
 void RendererManager::init() {
   RendererManager::logger_ = SFG::Own2dEngine::Logger::LoggerFactory::get_logger( "RendererManager" );
+  RendererManager::logger_->trace( "init()" );
+
+  RendererManager::logger_->trace( "init()~" );
 }
 
 std::string sdlEnum2String( SDL_RendererFlags flags ) {
@@ -190,10 +193,14 @@ void RendererManager::GetRendererInfos( SDL_Renderer* renderer ) {
     RendererManager::logger_->info( "GetRendererInfos - max_texture_width: {:d}", rendererInfo.max_texture_width );
     RendererManager::logger_->info( "GetRendererInfos - max_texture_height: {:d}", rendererInfo.max_texture_height );
   }
+  RendererManager::logger_->trace( "GetRendererInfos()~" );
 }
 
-SDL_Renderer* RendererManager::CreateRenderer( SDL_Window* window, SDL_RendererFlags flags, std::string const& wantedRenderer ) {
-  RendererManager::logger_->trace( "CreateRenderer( window: {:p}, flags: {:s}, renderer: {:?} )",
+SDL_Renderer* RendererManager::CreateRenderer( SDL_Window* window,
+                                               std::function< void( SDL_Renderer* ) > callback,
+                                               SDL_RendererFlags flags,
+                                               std::string const& wantedRenderer ) {
+  RendererManager::logger_->trace( "CreateRenderer( window: {:p}, callback, flags: {:s}, renderer: {:?} )",
                                    static_cast< void* >( window ),
                                    sdlEnum2String( flags ),
                                    wantedRenderer );
@@ -232,24 +239,15 @@ SDL_Renderer* RendererManager::CreateRenderer( SDL_Window* window, SDL_RendererF
     RendererManager::logger_->error( "CreateRenderer - error calling SDL_CreateRenderer: {:s}", SDL_GetError() );
     return nullptr;
   }
-  RendererManager::renderers_.emplace( window, renderer );
+  RendererManager::RendererData* data = new RendererManager::RendererData();
+  data->done = false;
+  data->renderer = renderer;
+  data->callback = callback;
+  data->thread = std::thread( RendererManager::ThreadRun, data );
+  RendererManager::renderers_.emplace( window, data );
 
+  RendererManager::logger_->trace( "CreateRenderer()~" );
   return renderer;
-}
-
-void RendererManager::DoRender( SDL_Renderer* renderer, std::function< void( SDL_Renderer* ) > callback ) {
-  std::string rendererCategory = fmt::format( "Rendering {:p}", static_cast< void* >( renderer ) );
-
-  Performance::startTiming( rendererCategory );
-  SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0x00, 0xff );
-  SDL_RenderClear( renderer );
-
-  if( callback != nullptr ) {
-    callback( renderer );
-  }
-
-  SDL_RenderPresent( renderer );
-  Performance::endTiming( rendererCategory );
 }
 
 void RendererManager::DestroyRendererForWindow( SDL_Window* window ) {
@@ -259,17 +257,49 @@ void RendererManager::DestroyRendererForWindow( SDL_Window* window ) {
     RendererManager::logger_->warn( "DestroyRendererForWindow - window {:p} not found in map, ignoring", static_cast< void* >( window ) );
     return;
   }
-  SDL_DestroyRenderer( RendererManager::renderers_.at( window ) );
+  RendererManager::RendererData* data = RendererManager::renderers_.at( window );
+  data->done = true;
+  data->thread.join();
+  SDL_DestroyRenderer( data->renderer );
+  delete data;
   RendererManager::renderers_.erase( window );
+
+  RendererManager::logger_->trace( "DestroyRendererForWindow()~" );
 }
 
 void RendererManager::Shutdown() {
   RendererManager::logger_->trace( "Shutdown()" );
 
-  for( std::pair< SDL_Window*, SDL_Renderer* > const& pair : RendererManager::renderers_ ) {
-    SDL_DestroyRenderer( pair.second );
+  for( std::pair< SDL_Window*, RendererManager::RendererData* > const& pair : RendererManager::renderers_ ) {
+    pair.second->done = true;
+    pair.second->thread.join();
+    SDL_DestroyRenderer( pair.second->renderer );
+    delete pair.second;
   }
   RendererManager::renderers_.clear();
+
+  RendererManager::logger_->trace( "Shutdown()~" );
+}
+
+void RendererManager::ThreadRun( RendererData* data ) {
+  RendererManager::logger_->trace( "ThreadRun( data: {:p} )", static_cast< void* >( data ) );
+
+  std::string rendererCategory = fmt::format( "Rendering Window {:s}", SDL_GetWindowTitle( SDL_RenderGetWindow( data->renderer ) ) );
+
+  while( !data->done ) {
+    Performance::startTiming( rendererCategory );
+    SDL_SetRenderDrawColor( data->renderer, 0x00, 0x00, 0x00, 0xff );
+    SDL_RenderClear( data->renderer );
+
+    if( data->callback != nullptr ) {
+      data->callback( data->renderer );
+    }
+
+    SDL_RenderPresent( data->renderer );
+    Performance::endTiming( rendererCategory );
+  }
+
+  RendererManager::logger_->trace( "ThreadRun()~" );
 }
 
 }  // namespace Engine
