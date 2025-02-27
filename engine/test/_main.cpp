@@ -1,3 +1,4 @@
+#include <SFG/Own2dEngine/Engine/audioManager.h>
 #include <SFG/Own2dEngine/Logger/loggerFactory.h>
 #include <gtest/gtest.h>
 #include <hedley/hedley.h>
@@ -13,8 +14,12 @@ int main( int argc, char** argv ) {
   }
   spdlog::trace( fmt::runtime( "main( argc: {:d}, argv: '{:s}' )" ), argc, fmt::join( args, "', '" ) );
 
+  SFG::Own2dEngine::Engine::AudioManager::init();
+
   testing::InitGoogleTest( &argc, argv );
   int retVal = RUN_ALL_TESTS();
+
+  SFG::Own2dEngine::Engine::AudioManager::Shutdown();
 
   spdlog::trace( fmt::runtime( "~main" ) );
   SFG::Own2dEngine::Logger::LoggerFactory::deinit();

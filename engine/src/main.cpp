@@ -2,12 +2,14 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
+#include <SFG/Own2dEngine/Engine/audioManager.h>
 #include <SFG/Own2dEngine/Engine/performance.h>
 #include <SFG/Own2dEngine/Engine/rendererManager.h>
 #include <SFG/Own2dEngine/Engine/windowManager.h>
 #include <SFG/Own2dEngine/Logger/_include.h>
 #include <SFG/Own2dEngine/Utils/_include.h>
 #include <hedley/hedley.h>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -21,16 +23,18 @@ int main( int argc, char** argv ) noexcept {
 }
 
 int better_main( std::vector< std::string > const& args ) noexcept {
+  std::locale::global( std::locale( "" ) );
   SFGO2DL::LoggerFactory::init( "engine.log", false );
   spdlog::trace( "better_main( args = {:c}\"{:s}\"{:c} )", '{', fmt::join( args, "\", \"" ), '}' );
 
-  SFGO2DL::LoggerFactory::get_logger( "Performance" )->set_level( spdlog::level::level_enum::warn );
-
   SFGO2DE::Performance::init();
-  SFGO2DE::RendererManager::init();
-  SFGO2DE::WindowManager::init();
-
   SFGO2DE::Performance::startProgram();
+
+  // SFGO2DL::LoggerFactory::get_logger( "Performance" )->set_level( spdlog::level::level_enum::debug );
+
+  SFGO2DE::AudioManager::init();
+  SFGO2DE::AudioManager::GetAudioInfos();
+  SFGO2DE::AudioManager::Start();
 
   int sdlErrorCode;
   spdlog::trace( "better_main - initializing sdl" );
@@ -48,6 +52,9 @@ int better_main( std::vector< std::string > const& args ) noexcept {
   }
   spdlog::trace( "better_main - initialized sdl" );
 
+  SFGO2DE::RendererManager::init();
+  SFGO2DE::WindowManager::init();
+
   SFGO2DE::RendererManager::GetRendererInfos();
 
   int x = SDL_WINDOWPOS_CENTERED;
@@ -59,8 +66,11 @@ int better_main( std::vector< std::string > const& args ) noexcept {
   // has to be in main thread
   SDL_Window* mainWindow = SFGO2DE::WindowManager::AddWindow( "REGULAR", x, y, w, h, flags );
 
+  uint64_t frameCounter = 0;
+
   // has to be in thread that does drawing
-  SDL_Renderer* mainWindowRenderer = SFGO2DE::RendererManager::CreateRenderer( mainWindow, SDL_RENDERER_ACCELERATED, "default" );
+  SDL_Renderer* mainWindowRenderer = SFGO2DE::RendererManager::CreateRenderer(
+      mainWindow, [&frameCounter]( SDL_Renderer* renderer ) { frameCounter++; }, SDL_RENDERER_ACCELERATED, "default" );
   if( mainWindowRenderer == nullptr ) {
     spdlog::error( "better_main - error calling SDL_CreateRenderer: {:s}", SDL_GetError() );
   }
@@ -85,17 +95,19 @@ int better_main( std::vector< std::string > const& args ) noexcept {
       // you know, we don't need to go through rendering if all windows are closed anyway
       break;
     }
-
-    SFGO2DE::RendererManager::DoRender( mainWindowRenderer );
   }
 
   SFGO2DE::RendererManager::Shutdown();
   SFGO2DE::WindowManager::Shutdown();
 
+  spdlog::trace( "better_main - frameCounter: {:d}", frameCounter );
+
   TTF_Quit();
   Mix_Quit();
   IMG_Quit();
   SDL_Quit();
+
+  SFGO2DE::AudioManager::Shutdown();
 
   SFGO2DE::Performance::endProgram();
 
