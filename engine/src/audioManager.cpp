@@ -129,13 +129,60 @@ void AudioManager::Start( PaDeviceIndex inputDeviceIndex, PaDeviceIndex outputDe
   AudioManager::logger_->trace( "Start()~" );
 }
 
-void AudioManager::CreateAudio( std::vector< int16_t > audioSamples, std::function< void( AudioManager::AudioData& ) > callback ) {
-  AudioManager::logger_->trace( "CreateAudio( audioSamples: [{:d} items], callback )", audioSamples.size() );
+void AudioManager::CreateAudio( std::string const& tag,
+                                AudioManager::AudioType type,
+                                uint16_t numChannels,
+                                std::vector< AudioStreamType > audioSamples,
+                                double origSampleRate ) {
+  AudioManager::logger_->trace( "CreateAudio( tag: {:?}, type: {:d}, numChannels: {:d}, audioSamples: [{:n}], origSampleRate: {:f} )",
+                                tag,
+                                static_cast< uint16_t >( type ),
+                                numChannels,
+                                audioSamples,
+                                origSampleRate );
 
+  std::vector< AudioStreamType > newSamples;
+  {
+    PaStreamInfo const* streamInfo = Pa_GetStreamInfo( AudioManager::portAudioStream_ );
+    Resample( audioSamples, origSampleRate, streamInfo->sampleRate, newSamples );
+  }
   // todo: fixme: fix this
-  AudioManager::audios_.emplace_back( audioSamples, 0, callback );
+  AudioManager::audios_.emplace_back( tag, type, numChannels, newSamples, 0, []( AudioManager::AudioData& data ) {
+    std::vector< AudioStreamType > ret;
+    ret.reserve( data.numChannels );
+
+    if( data.sampleIndex < data.audioSamples.size() ) {
+      for( int i = 0; i < data.numChannels; i++ ) {
+        ret.push_back( data.audioSamples[i + data.sampleIndex] );
+      }
+      data.sampleIndex = data.sampleIndex + data.numChannels;
+
+      if( data.type == AudioManager::AudioType::BGM ) {
+        data.sampleIndex = data.sampleIndex % data.audioSamples.size();
+      }
+    }
+    return ret;
+  } );
 
   AudioManager::logger_->trace( "CreateAudio()~" );
+}
+
+void AudioManager::StopAudio( std::string const& tag ) {
+  AudioManager::logger_->trace( "StopAudio()" );
+
+  for( int i = 0; i < AudioManager::audios_.size(); i++ ) {
+    auto& item = AudioManager::audios_[i];
+
+    // check if audio is done playing
+    if( item.tag == tag ) {
+      AudioManager::logger_->trace( "StopAudio - erasing AudioData index {:d}", i );
+      AudioManager::audios_.erase( AudioManager::audios_.begin() + i );
+      i--;
+      continue;
+    }
+  }
+
+  AudioManager::logger_->trace( "StopAudio()~" );
 }
 
 void AudioManager::Stop() {
@@ -161,6 +208,7 @@ void AudioManager::Shutdown() {
 
   AudioManager::Stop();
 
+  AudioManager::logger_->trace( "Shutdown - clearing {:d} AudioDatas", AudioManager::audios_.size() );
   AudioManager::audios_.clear();
 
   AudioManager::logger_->trace( "Shutdown - terminating PortAudio" );
@@ -186,14 +234,44 @@ int AudioManager::ThreadRun( void const* input,
                                 statusFlags,
                                 static_cast< void* >( userData ) );
   */
+  Performance::startTiming( "Audio" );
 
+  auto customClamp = []( HigherAudioStreamType a, HigherAudioStreamType b ) {
+    HigherAudioStreamType num = a + b;
+    HigherAudioStreamType upperBound = std::numeric_limits< AudioStreamType >::max();
+    HigherAudioStreamType lowerBound = std::numeric_limits< AudioStreamType >::min();
+    return static_cast< AudioStreamType >( std::min( upperBound, std::max( lowerBound, a + b ) ) );
+  };
   AudioStreamType* out = static_cast< AudioStreamType* >( output );
   for( uint64_t i = 0; i < frameCount; i++ ) {
     // stereo
-    out[i * 2] = 0;
-    out[i * 2 + 1] = 0;
+    AudioStreamType outL = 0;
+    AudioStreamType outR = 0;
+    for( int i = 0; i < AudioManager::audios_.size(); i++ ) {
+      auto& item = AudioManager::audios_[i];
+
+      // check if audio is done playing
+      if( item.sampleIndex >= item.audioSamples.size() ) {
+        AudioManager::logger_->trace( "ThreadRun - erasing AudioData index {:d}", i );
+        AudioManager::audios_.erase( AudioManager::audios_.begin() + i );
+        i--;
+        continue;
+      }
+
+      std::vector< AudioStreamType > samples = item.callback( item );
+      if( samples.size() == 2 ) {
+        outL = customClamp( outL, samples[0] );
+        outR = customClamp( outR, samples[1] );
+      } else if( samples.size() == 1 ) {
+        outL = customClamp( outL, samples[0] );
+        outR = customClamp( outR, samples[0] );
+      }
+    }
+    out[i * 2] = outL;
+    out[i * 2 + 1] = outR;
   }
 
+  Performance::endTiming( "Audio" );
   /*
   AudioManager::logger_->trace( "ThreadRun()~" );
   */

@@ -14,13 +14,20 @@ namespace Own2dEngine {
 namespace Engine {
 
 typedef int16_t AudioStreamType;
+typedef int64_t HigherAudioStreamType;
 
 class AudioManager {
+  public:
+  enum class AudioType : uint16_t { BGM, SFX };
+
   private:
   struct AudioData {
-    std::vector< int16_t > audioSamples;
+    std::string tag;
+    AudioType type;
+    uint16_t numChannels;
+    std::vector< AudioStreamType > audioSamples;
     uint64_t sampleIndex;
-    std::function< void( AudioManager::AudioData& ) > callback;
+    std::function< std::vector< AudioStreamType >( AudioManager::AudioData& ) > callback;
   };
 
   public:
@@ -28,7 +35,12 @@ class AudioManager {
 
   static void GetAudioInfos();
   static void Start( PaDeviceIndex inputDeviceIndex = paNoDevice, PaDeviceIndex outputDeviceIndex = paNoDevice );
-  static void CreateAudio( std::vector< int16_t > audioSamples, std::function< void( AudioManager::AudioData& ) > callback );
+  static void CreateAudio( std::string const& tag,
+                           AudioManager::AudioType type,
+                           uint16_t numChannels,
+                           std::vector< AudioStreamType > audioSamples,
+                           double origSampleRate );
+  static void StopAudio( std::string const& tag );
   static void Stop();
   static void Shutdown();
 
