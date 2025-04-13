@@ -4,7 +4,7 @@ package SFG.Own2dEngine.NetworkMessages;
 
 message MsgContent {
   string username = 1;
-  string msgText = 2;
+  string msg_text = 2;
 }
 
 message SendMessageRequest {
@@ -13,13 +13,17 @@ message SendMessageRequest {
 
 message SendMessageResponse {
   bool success = 1;
-  string errorMsg = 2;
+  string error_msg = 2;
 }
 
-message GetAllMessagesRequest {}
+message GetAllMessagesRequest {
+  // string dont_care = 1;
+}
 
 message AllMessages {
-  repeated MsgContent msgList = 1;
+  repeated MsgContent msg_list = 1;
 }
 
-message ReqRepErrorMessage {}
+message ReqRepErrorMessage {
+  // string dont_care = 1;
+}

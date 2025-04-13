@@ -1,17 +1,17 @@
-add_requires( "protobuf-cpp" )
 add_requires( "zmqpb" )
 
-add_requireconfs( "protobuf-cpp", { configs = { shared = false } } )
-add_requireconfs( "zmqpb", { debug = true, configs = { shared = false } } )
+--add_requireconfs( "zmqpb", { configs = { shared = false } } )
 
 target( "Network-Messages" )
-    set_kind( "static" )
+    set_kind( "$(kind)" )
+
+    -- because protobuf needs 17??? fuck do i know tbh
+    set_languages( "c++17" )
 
     set_default( false )
     set_group( "LIBS" )
 
     add_packages( "hedley", { public = true } )
-    add_packages( "protobuf-cpp", { public = true } )
     add_packages( "zmqpb", { public = true } )
 
     add_rules( "protobuf.cpp" )

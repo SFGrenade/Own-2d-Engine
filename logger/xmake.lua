@@ -3,7 +3,7 @@ add_requires( "spdlog" )
 add_requireconfs( "spdlog", { configs = { header_only = true, std_format = false, fmt_external = false, fmt_external_ho = true, noexcept = false } } )
 
 target( "Logger" )
-    set_kind( "static" )
+    set_kind( "$(kind)" )
 
     set_default( false )
     set_group( "LIBS" )

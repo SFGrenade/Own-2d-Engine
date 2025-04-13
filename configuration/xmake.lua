@@ -1,7 +1,7 @@
 add_requires( "inifile-cpp" )
 
 target( "Configuration" )
-    set_kind( "static" )
+    set_kind( "$(kind)" )
 
     set_default( false )
     set_group( "LIBS" )

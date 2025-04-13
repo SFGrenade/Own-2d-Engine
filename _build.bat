@@ -22,6 +22,9 @@ EXIT /B %ERRORLEVEL%
 
 :main
 
+REM RMDIR /S /Q .\.xmake
+REM RMDIR /S /Q .\build
+
 RMDIR /S /Q %logFolder%
 
 MKDIR %logFolder%
@@ -46,6 +49,8 @@ CALL :doCommand "05_xmake_test_Engine-Test" "xmake run -vD Engine-Test" && cd>NU
 CALL :doCommand "05_xmake_test_Logger-Test" "xmake run -vD Logger-Test" && cd>NUL || Goto :END
 CALL :doCommand "05_xmake_test_Network-Messages-Test" "xmake run -vD Network-Messages-Test" && cd>NUL || Goto :END
 CALL :doCommand "05_xmake_test_Utils-Test" "xmake run -vD Utils-Test" && cd>NUL || Goto :END
+
+ECHO done
 
 :END
 cd %ORIGINAL_DIR%

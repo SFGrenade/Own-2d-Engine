@@ -31,6 +31,10 @@ TEST( Utils, NumOps ) {
   EXPECT_EQ( 1, std::min( 1, 5 ) );
   EXPECT_EQ( 5, std::clamp( 10, 1, 5 ) );
   EXPECT_EQ( 5.0, std::lerp( 0.0, 10.0, 0.5 ) );
+  EXPECT_EQ( 0, SFG::Own2dEngine::Utils::mod< int32_t >( -5, 5 ) );
+  EXPECT_EQ( 0, SFG::Own2dEngine::Utils::mod< int32_t >( 5, 5 ) );
+  EXPECT_EQ( 0, SFG::Own2dEngine::Utils::mod< int32_t >( -15, 5 ) );
+  EXPECT_EQ( 0, SFG::Own2dEngine::Utils::mod< int32_t >( 15, 5 ) );
 }
 
 TEST( Utils, StrSplit ) {
