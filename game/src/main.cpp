@@ -4,6 +4,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <SFG/Own2dEngine/Game/audioManager.h>
 #include <SFG/Own2dEngine/Game/inputManager.h>
+#include <SFG/Own2dEngine/Game/options.h>
 #include <SFG/Own2dEngine/Game/performance.h>
 #include <SFG/Own2dEngine/Game/ui/button.h>
 #include <SFG/Own2dEngine/Game/ui/label.h>
@@ -18,82 +19,6 @@
 namespace SFGO2DL = SFG::Own2dEngine::Logger;
 namespace SFGO2DG = SFG::Own2dEngine::Game;
 namespace SFGO2DU = SFG::Own2dEngine::Utils;
-
-struct TempAudioStruct {
-  SFGO2DG::UI::Label* audioInputLabel = nullptr;
-  SFGO2DG::UI::Label* audioOutputLabel = nullptr;
-  PaDeviceIndex inputDeviceIndex = paNoDevice;
-  PaDeviceIndex outputDeviceIndex = paNoDevice;
-  std::pair< std::vector< PaDeviceIndex >, std::vector< PaDeviceIndex > > devices;
-
-  void SetAudioDeviceIndexes( int32_t inputIndex, int32_t outputIndex ) {
-    spdlog::trace( "[TempAudioStruct] SetAudioDeviceIndexes( inputIndex: {}, outputIndex: {} )", inputIndex, outputIndex );
-    inputIndex = SFGO2DU::mod< int32_t >( inputIndex + 1, this->devices.first.size() + 1 ) - 1;
-    outputIndex = SFGO2DU::mod< int32_t >( outputIndex + 1, this->devices.second.size() + 1 ) - 1;
-
-    PaDeviceIndex tmpInput;
-    PaDeviceIndex tmpOutput;
-    if( inputIndex < 0 ) {
-      tmpInput = Pa_GetDefaultInputDevice();
-    } else {
-      tmpInput = this->devices.first[inputIndex];
-    }
-    if( outputIndex < 0 ) {
-      tmpOutput = Pa_GetDefaultOutputDevice();
-    } else {
-      tmpOutput = this->devices.second[outputIndex];
-    }
-
-    {
-      PaDeviceInfo const* deviceInfo = nullptr;
-      PaHostApiInfo const* hostApiInfo = nullptr;
-      std::string deviceName = "__UNKNOWN__";
-      std::string apiName = "__UNKNOWN__";
-
-      deviceInfo = Pa_GetDeviceInfo( tmpInput );
-      if( deviceInfo ) {
-        deviceName = deviceInfo->name;
-        hostApiInfo = Pa_GetHostApiInfo( deviceInfo->hostApi );
-        if( hostApiInfo ) {
-          apiName = hostApiInfo->name;
-        }
-      }
-      if( this->audioInputLabel ) {
-        this->audioInputLabel->SetText( fmt::format( "Audio Input: ({}) {}", apiName, deviceName ) );
-      }
-
-      deviceInfo = nullptr;
-      hostApiInfo = nullptr;
-      deviceName = "__UNKNOWN__";
-      apiName = "__UNKNOWN__";
-
-      deviceInfo = Pa_GetDeviceInfo( tmpOutput );
-      if( deviceInfo ) {
-        deviceName = deviceInfo->name;
-        hostApiInfo = Pa_GetHostApiInfo( deviceInfo->hostApi );
-        if( hostApiInfo ) {
-          apiName = hostApiInfo->name;
-        }
-      }
-      if( this->audioOutputLabel ) {
-        this->audioOutputLabel->SetText( fmt::format( "Audio Output: ({}) {}", apiName, deviceName ) );
-      }
-    }
-
-    this->inputDeviceIndex = inputIndex;
-    this->outputDeviceIndex = outputIndex;
-
-    SFGO2DG::AudioManager::StopAudio( "Background Music" );
-
-    SFGO2DG::AudioManager::Start( tmpInput, tmpOutput );
-
-    SFGO2DG::AudioManager::LoadAudioFile( "Background Music", SFGO2DG::AudioManager::AudioType::BGM, "Resources/Audio/8Bit 01 w.wav" );
-  }
-  void PrevInput() { this->SetAudioDeviceIndexes( this->inputDeviceIndex - 1, this->outputDeviceIndex ); }
-  void NextInput() { this->SetAudioDeviceIndexes( this->inputDeviceIndex + 1, this->outputDeviceIndex ); }
-  void PrevOutput() { this->SetAudioDeviceIndexes( this->inputDeviceIndex, this->outputDeviceIndex - 1 ); }
-  void NextOutput() { this->SetAudioDeviceIndexes( this->inputDeviceIndex, this->outputDeviceIndex + 1 ); }
-};
 
 int main( int argc, char** argv ) noexcept {
   int better_main( std::vector< std::string > const& ) noexcept;
@@ -114,14 +39,14 @@ int better_main( std::vector< std::string > const& args ) noexcept {
 #pragma region Initialize Audio
   SFGO2DG::AudioManager::init();
   SFGO2DG::AudioManager::GetAudioInfos();
-
-  TempAudioStruct* audioStruct = new TempAudioStruct();
-  audioStruct->inputDeviceIndex = paNoDevice;
-  audioStruct->outputDeviceIndex = paNoDevice;
-  audioStruct->devices = SFGO2DG::AudioManager::TestABunchOfShit();
-
-  audioStruct->SetAudioDeviceIndexes( -1, -1 );
 #pragma endregion Initialize Audio
+
+#pragma region Initialize Options
+  SFGO2DG::Options* options = new SFGO2DG::Options();
+  options->SetAudioDevices( SFGO2DG::AudioManager::TestABunchOfShit() );
+// having this later would be funny
+// options->SetAudioIndexes( -1, -1 );
+#pragma endregion Initialize Options
 
 #pragma region Initialize SDL
   int sdlErrorCode;
@@ -197,39 +122,39 @@ int better_main( std::vector< std::string > const& args ) noexcept {
 #pragma region Options UI
     float optionsMenuButtonHeight = 0.0625f;
     float optionsMenuYOffset = 0.5f;
+    SFGO2DG::UI::Label* audioInputLabel;
+    SFGO2DG::UI::Label* audioOutputLabel;
     {
-      std::function< void() > func = [audioStruct]() { audioStruct->PrevInput(); };
+      std::function< void() > func = [options]() { options->AudioSelectPrevInput(); };
       SFGO2DG::UI::Button* tmp = new SFGO2DG::UI::Button( func, "<", optionsPage, SDL_FRect{ 0.25f, optionsMenuYOffset, 0.0625f, optionsMenuButtonHeight } );
       tmp->SetHorizontalAlignment( SFGO2DG::UI::Label::HorizontalAlignment::Centered );
       tmp->SetVerticalAlignment( SFGO2DG::UI::Label::VerticalAlignment::Centered );
     }
     {
-      audioStruct->audioInputLabel
-          = new SFGO2DG::UI::Label( "Input Device Name", optionsPage, SDL_FRect{ 0.3125f, optionsMenuYOffset, 0.375f, optionsMenuButtonHeight } );
-      audioStruct->audioInputLabel->SetHorizontalAlignment( SFGO2DG::UI::Label::HorizontalAlignment::Centered );
-      audioStruct->audioInputLabel->SetVerticalAlignment( SFGO2DG::UI::Label::VerticalAlignment::Centered );
+      audioInputLabel = new SFGO2DG::UI::Label( "Input Device Name", optionsPage, SDL_FRect{ 0.3125f, optionsMenuYOffset, 0.375f, optionsMenuButtonHeight } );
+      audioInputLabel->SetHorizontalAlignment( SFGO2DG::UI::Label::HorizontalAlignment::Centered );
+      audioInputLabel->SetVerticalAlignment( SFGO2DG::UI::Label::VerticalAlignment::Centered );
     }
     {
-      std::function< void() > func = [audioStruct]() { audioStruct->NextInput(); };
+      std::function< void() > func = [options]() { options->AudioSelectNextInput(); };
       SFGO2DG::UI::Button* tmp = new SFGO2DG::UI::Button( func, ">", optionsPage, SDL_FRect{ 0.6875f, optionsMenuYOffset, 0.0625f, optionsMenuButtonHeight } );
       tmp->SetHorizontalAlignment( SFGO2DG::UI::Label::HorizontalAlignment::Centered );
       tmp->SetVerticalAlignment( SFGO2DG::UI::Label::VerticalAlignment::Centered );
     }
     optionsMenuYOffset += optionsMenuButtonHeight;
     {
-      std::function< void() > func = [audioStruct]() { audioStruct->PrevOutput(); };
+      std::function< void() > func = [options]() { options->AudioSelectPrevOutput(); };
       SFGO2DG::UI::Button* tmp = new SFGO2DG::UI::Button( func, "<", optionsPage, SDL_FRect{ 0.25f, optionsMenuYOffset, 0.0625f, optionsMenuButtonHeight } );
       tmp->SetHorizontalAlignment( SFGO2DG::UI::Label::HorizontalAlignment::Centered );
       tmp->SetVerticalAlignment( SFGO2DG::UI::Label::VerticalAlignment::Centered );
     }
     {
-      audioStruct->audioOutputLabel
-          = new SFGO2DG::UI::Label( "Output Device Name", optionsPage, SDL_FRect{ 0.3125f, optionsMenuYOffset, 0.375f, optionsMenuButtonHeight } );
-      audioStruct->audioOutputLabel->SetHorizontalAlignment( SFGO2DG::UI::Label::HorizontalAlignment::Centered );
-      audioStruct->audioOutputLabel->SetVerticalAlignment( SFGO2DG::UI::Label::VerticalAlignment::Centered );
+      audioOutputLabel = new SFGO2DG::UI::Label( "Output Device Name", optionsPage, SDL_FRect{ 0.3125f, optionsMenuYOffset, 0.375f, optionsMenuButtonHeight } );
+      audioOutputLabel->SetHorizontalAlignment( SFGO2DG::UI::Label::HorizontalAlignment::Centered );
+      audioOutputLabel->SetVerticalAlignment( SFGO2DG::UI::Label::VerticalAlignment::Centered );
     }
     {
-      std::function< void() > func = [audioStruct]() { audioStruct->NextOutput(); };
+      std::function< void() > func = [options]() { options->AudioSelectNextOutput(); };
       SFGO2DG::UI::Button* tmp = new SFGO2DG::UI::Button( func, ">", optionsPage, SDL_FRect{ 0.6875f, optionsMenuYOffset, 0.0625f, optionsMenuButtonHeight } );
       tmp->SetHorizontalAlignment( SFGO2DG::UI::Label::HorizontalAlignment::Centered );
       tmp->SetVerticalAlignment( SFGO2DG::UI::Label::VerticalAlignment::Centered );
@@ -244,6 +169,7 @@ int better_main( std::vector< std::string > const& args ) noexcept {
       tmp->SetHorizontalAlignment( SFGO2DG::UI::Label::HorizontalAlignment::Centered );
       tmp->SetVerticalAlignment( SFGO2DG::UI::Label::VerticalAlignment::Centered );
     }
+    options->SetAudioDisplayLabels( audioInputLabel, audioOutputLabel );
 #pragma endregion Options UI
 
     for( int i = 0; i < widgetsToCycle.size(); i++ ) {
@@ -271,6 +197,11 @@ int better_main( std::vector< std::string > const& args ) noexcept {
     spdlog::error( "better_main - error calling SDL_CreateWindow: {:s}", SDL_GetError() );
   }
   SDL_SetRenderDrawBlendMode( mainWindowRenderer, SDL_BlendMode::SDL_BLENDMODE_BLEND );
+
+#pragma region Rest of options
+  // rest of options?
+  options->SetAudioIndexes( -1, -1 );
+#pragma endregion Rest of options
 
   SDL_ShowWindow( mainWindow );
 
@@ -360,7 +291,7 @@ int better_main( std::vector< std::string > const& args ) noexcept {
 #pragma endregion Quit SDL
 
   SFGO2DG::AudioManager::Shutdown();
-  delete audioStruct;
+  delete options;
 
   SFGO2DG::Performance::endProgram();
 
