@@ -9,10 +9,10 @@ add_rules( "mode.debug", "mode.release", "mode.releasedbg", "mode.minsizerel" )
 set_languages( "c++20" )
 
 if is_plat( "windows" ) then
-    add_cxflags( "/Zc:__cplusplus" )
-    add_cxflags( "/Zc:preprocessor" )
+  add_cxflags( "/Zc:__cplusplus" )
+  add_cxflags( "/Zc:preprocessor" )
 
-    add_cxflags( "/permissive-" )
+  add_cxflags( "/permissive-" )
 else
 end
 
@@ -29,4 +29,5 @@ includes( "engine" )
 includes( "game" )
 includes( "logger" )
 includes( "network_messages" )
+includes( "resources" )
 includes( "utils" )

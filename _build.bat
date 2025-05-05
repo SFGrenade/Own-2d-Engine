@@ -22,8 +22,8 @@ EXIT /B %ERRORLEVEL%
 
 :main
 
-REM RMDIR /S /Q .\.xmake
-REM RMDIR /S /Q .\build
+:: RMDIR /S /Q .\.xmake
+:: RMDIR /S /Q .\build
 
 RMDIR /S /Q %logFolder%
 
@@ -33,13 +33,13 @@ CALL :doCommand "00_made_build_logs" "echo we did it" && cd>NUL || Goto :END
 
 CALL :doCommand "01_xmake_set_theme" "xmake global --theme=plain" && cd>NUL || Goto :END
 
-REM CALL :doCommand "02_xmake_configure" "xmake config --plat=windows --arch=x64 --kind=shared --mode=debug --runtimes=MD --policies=package.precompiled:n -vD -y" && cd>NUL || Goto :END
-REM CALL :doCommand "02_xmake_configure" "xmake config --plat=windows --arch=x64 --kind=shared --mode=debug --runtimes=MT --policies=package.precompiled:n -vD -y" && cd>NUL || Goto :END
-REM CALL :doCommand "02_xmake_configure" "xmake config --plat=windows --arch=x64 --kind=shared --mode=release --runtimes=MD --policies=package.precompiled:n -vD -y" && cd>NUL || Goto :END
-REM CALL :doCommand "02_xmake_configure" "xmake config --plat=windows --arch=x64 --kind=shared --mode=release --runtimes=MT --policies=package.precompiled:n -vD -y" && cd>NUL || Goto :END
-REM CALL :doCommand "02_xmake_configure" "xmake config --plat=windows --arch=x64 --kind=static --mode=debug --runtimes=MD --policies=package.precompiled:n -vD -y" && cd>NUL || Goto :END
-REM CALL :doCommand "02_xmake_configure" "xmake config --plat=windows --arch=x64 --kind=static --mode=debug --runtimes=MT --policies=package.precompiled:n -vD -y" && cd>NUL || Goto :END
-REM CALL :doCommand "02_xmake_configure" "xmake config --plat=windows --arch=x64 --kind=static --mode=release --runtimes=MD --policies=package.precompiled:n -vD -y" && cd>NUL || Goto :END
+:: CALL :doCommand "02_xmake_configure" "xmake config --plat=windows --arch=x64 --kind=shared --mode=debug --runtimes=MD --policies=package.precompiled:n -vD -y" && cd>NUL || Goto :END
+:: CALL :doCommand "02_xmake_configure" "xmake config --plat=windows --arch=x64 --kind=shared --mode=debug --runtimes=MT --policies=package.precompiled:n -vD -y" && cd>NUL || Goto :END
+:: CALL :doCommand "02_xmake_configure" "xmake config --plat=windows --arch=x64 --kind=shared --mode=release --runtimes=MD --policies=package.precompiled:n -vD -y" && cd>NUL || Goto :END
+:: CALL :doCommand "02_xmake_configure" "xmake config --plat=windows --arch=x64 --kind=shared --mode=release --runtimes=MT --policies=package.precompiled:n -vD -y" && cd>NUL || Goto :END
+:: CALL :doCommand "02_xmake_configure" "xmake config --plat=windows --arch=x64 --kind=static --mode=debug --runtimes=MD --policies=package.precompiled:n -vD -y" && cd>NUL || Goto :END
+:: CALL :doCommand "02_xmake_configure" "xmake config --plat=windows --arch=x64 --kind=static --mode=debug --runtimes=MT --policies=package.precompiled:n -vD -y" && cd>NUL || Goto :END
+:: CALL :doCommand "02_xmake_configure" "xmake config --plat=windows --arch=x64 --kind=static --mode=release --runtimes=MD --policies=package.precompiled:n -vD -y" && cd>NUL || Goto :END
 CALL :doCommand "02_xmake_configure" "xmake config --plat=windows --arch=x64 --kind=static --mode=release --runtimes=MT --policies=package.precompiled:n -vD -y" && cd>NUL || Goto :END
 
 CALL :doCommand "03_xmake_build" "xmake build -a -vD" && cd>NUL || Goto :END

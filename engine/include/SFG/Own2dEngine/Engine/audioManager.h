@@ -3,18 +3,14 @@
 
 #include <SFG/Own2dEngine/Logger/_include.h>
 #include <functional>
-#include <list>
 #include <portaudio.h>
+#include <samplerate.h>
 #include <string>
-
-#include "SFG/Own2dEngine/Engine/resample/resample.h"
+#include <vector>
 
 namespace SFG {
 namespace Own2dEngine {
 namespace Engine {
-
-typedef int16_t AudioStreamType;
-typedef int64_t HigherAudioStreamType;
 
 class AudioManager {
   public:
@@ -25,9 +21,9 @@ class AudioManager {
     std::string tag;
     AudioType type;
     uint16_t numChannels;
-    std::vector< AudioStreamType > audioSamples;
+    std::vector< float > audioSamples;
     uint64_t sampleIndex;
-    std::function< std::vector< AudioStreamType >( AudioManager::AudioData& ) > callback;
+    std::function< std::vector< float >( AudioManager::AudioData& ) > callback;
   };
 
   public:
@@ -38,7 +34,7 @@ class AudioManager {
   static void CreateAudio( std::string const& tag,
                            AudioManager::AudioType type,
                            uint16_t numChannels,
-                           std::vector< AudioStreamType > audioSamples,
+                           std::vector< float > audioSamples,
                            double origSampleRate );
   static void StopAudio( std::string const& tag );
   static void Stop();
@@ -46,7 +42,7 @@ class AudioManager {
 
   public:
   template < typename T >
-  static void Resample( std::vector< T >& from, uint32_t fromSr, uint32_t toSr, std::vector< T >& to );
+  static void Resample( std::vector< T >& from, uint32_t fromSr, uint16_t fromChannelCount, uint32_t toSr, std::vector< T >& to );
 
   private:
   static int ThreadRun( void const* input,
@@ -74,44 +70,28 @@ class AudioManager {
 };
 
 template < typename T >
-void AudioManager::Resample( std::vector< T >& from, uint32_t fromSr, uint32_t toSr, std::vector< T >& to ) {
+void AudioManager::Resample( std::vector< T >& from, uint32_t fromSr, uint16_t fromChannelCount, uint32_t toSr, std::vector< T >& to ) {
   AudioManager::logger_->trace( "Resample( from: [{:d} samples], fromSr: {:d}, toSr: {:d} )", from.size(), fromSr, toSr );
 
   AudioManager::logger_->trace( "Resample - from: {}", fmt::join( from, ", " ) );
 
-  std::vector< double > fromDouble;
-  std::vector< double > toDouble;
-
-  fromDouble.reserve( from.size() );
-  for( uint64_t i = 0; i < from.size(); i++ ) {
-    double val = static_cast< double >( from[i] );
-    if( val > 0 ) {
-      fromDouble.push_back( val / static_cast< double >( std::numeric_limits< T >::max() ) );
-    } else if( val < 0 ) {
-      fromDouble.push_back( ( -val ) / static_cast< double >( std::numeric_limits< T >::min() ) );
-    } else {
-      fromDouble.push_back( 0.0 );
-    }
-  }
-
-  AudioManager::logger_->trace( "Resample - fromDouble: {}", fmt::join( fromDouble, ", " ) );
-
-  AudioManager::logger_->trace( "Resample - calling resample" );
-  Resample::resample< double >( toSr, fromSr, fromDouble, toDouble );
-
-  AudioManager::logger_->trace( "Resample - toDouble: {}", fmt::join( toDouble, ", " ) );
+  SRC_DATA conversionData;
+  conversionData.src_ratio = static_cast< double >( toSr ) / static_cast< double >( fromSr );
 
   to.clear();
-  to.reserve( toDouble.size() );
-  for( uint64_t i = 0; i < toDouble.size(); i++ ) {
-    if( toDouble[i] > 0 ) {
-      to.push_back( static_cast< T >( toDouble[i] * static_cast< double >( std::numeric_limits< T >::max() ) ) );
-    } else if( toDouble[i] < 0 ) {
-      to.push_back( static_cast< T >( ( -toDouble[i] ) * static_cast< double >( std::numeric_limits< T >::min() ) ) );
-    } else {
-      to.push_back( 0 );
-    }
-  }
+  to.resize( std::ceil( from.size() * conversionData.src_ratio ) );
+
+  conversionData.input_frames = from.size() / fromChannelCount;
+  conversionData.output_frames = to.size() / fromChannelCount;
+  conversionData.data_in = from.data();
+  conversionData.data_out = to.data();
+
+  AudioManager::logger_->trace( "Resample - calling resample" );
+  int resampleResult = src_simple( &conversionData, SRC_SINC_BEST_QUALITY, fromChannelCount );
+
+  AudioManager::logger_->trace( "Resample - resampleResult: {:d}", resampleResult );
+  AudioManager::logger_->trace( "Resample - input_frames_used: {:d}", conversionData.input_frames_used );
+  AudioManager::logger_->trace( "Resample - output_frames_gen: {:d}", conversionData.output_frames_gen );
 
   AudioManager::logger_->trace( "Resample - to: {}", fmt::join( to, ", " ) );
 

@@ -6,11 +6,16 @@ permissions:
 on:
   pull_request:
   push:
-      paths-ignore:
-        - '.clang-format'
-        - '.gitignore'
-        - 'License.md'
-        - 'README.md'
+    paths-ignore:
+      - '.vscode/*'
+      - '_build.bat'
+      - '_build.sh'
+      - '.clang-format'
+      - '.clang-tidy'
+      - '.editorconfig'
+      - '.gitignore'
+      - 'License.md'
+      - 'README.md'
 
 jobs:
   build:

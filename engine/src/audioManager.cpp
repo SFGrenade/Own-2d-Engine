@@ -12,7 +12,7 @@ PaStream* AudioManager::portAudioStream_ = nullptr;
 
 int AudioManager::_numInputChannels_ = 0;
 int AudioManager::_numOutputChannels_ = 2;
-PaSampleFormat AudioManager::_sampleFormat_ = paInt16;
+PaSampleFormat AudioManager::_sampleFormat_ = paFloat32;
 
 PaStreamParameters AudioManager::_inputParameters_{ paNoDevice, AudioManager::_numInputChannels_, AudioManager::_sampleFormat_ };
 PaStreamParameters AudioManager::_outputParameters_{ paNoDevice, AudioManager::_numOutputChannels_, AudioManager::_sampleFormat_ };
@@ -132,7 +132,7 @@ void AudioManager::Start( PaDeviceIndex inputDeviceIndex, PaDeviceIndex outputDe
 void AudioManager::CreateAudio( std::string const& tag,
                                 AudioManager::AudioType type,
                                 uint16_t numChannels,
-                                std::vector< AudioStreamType > audioSamples,
+                                std::vector< float > audioSamples,
                                 double origSampleRate ) {
   AudioManager::logger_->trace( "CreateAudio( tag: {:?}, type: {:d}, numChannels: {:d}, audioSamples: [{:n}], origSampleRate: {:f} )",
                                 tag,
@@ -141,14 +141,14 @@ void AudioManager::CreateAudio( std::string const& tag,
                                 audioSamples,
                                 origSampleRate );
 
-  std::vector< AudioStreamType > newSamples;
+  std::vector< float > newSamples;
   {
     PaStreamInfo const* streamInfo = Pa_GetStreamInfo( AudioManager::portAudioStream_ );
-    Resample( audioSamples, origSampleRate, streamInfo->sampleRate, newSamples );
+    Resample( audioSamples, origSampleRate, numChannels, streamInfo->sampleRate, newSamples );
   }
   // todo: fixme: fix this
   AudioManager::audios_.emplace_back( tag, type, numChannels, newSamples, 0, []( AudioManager::AudioData& data ) {
-    std::vector< AudioStreamType > ret;
+    std::vector< float > ret;
     ret.reserve( data.numChannels );
 
     if( data.sampleIndex < data.audioSamples.size() ) {
@@ -236,17 +236,17 @@ int AudioManager::ThreadRun( void const* input,
   */
   Performance::startTiming( "Audio" );
 
-  auto customClamp = []( HigherAudioStreamType a, HigherAudioStreamType b ) {
-    HigherAudioStreamType num = a + b;
-    HigherAudioStreamType upperBound = std::numeric_limits< AudioStreamType >::max();
-    HigherAudioStreamType lowerBound = std::numeric_limits< AudioStreamType >::min();
-    return static_cast< AudioStreamType >( std::min( upperBound, std::max( lowerBound, a + b ) ) );
+  auto customClamp = []( float a, float b ) {
+    float num = a + b;
+    float upperBound = 1.0f;
+    float lowerBound = -1.0f;
+    return static_cast< float >( std::min( upperBound, std::max( lowerBound, a + b ) ) );
   };
-  AudioStreamType* out = static_cast< AudioStreamType* >( output );
+  float* out = static_cast< float* >( output );
   for( uint64_t i = 0; i < frameCount; i++ ) {
     // stereo
-    AudioStreamType outL = 0;
-    AudioStreamType outR = 0;
+    float outL = 0;
+    float outR = 0;
     for( int i = 0; i < AudioManager::audios_.size(); i++ ) {
       auto& item = AudioManager::audios_[i];
 
@@ -258,7 +258,7 @@ int AudioManager::ThreadRun( void const* input,
         continue;
       }
 
-      std::vector< AudioStreamType > samples = item.callback( item );
+      std::vector< float > samples = item.callback( item );
       if( samples.size() == 2 ) {
         outL = customClamp( outL, samples[0] );
         outR = customClamp( outR, samples[1] );
