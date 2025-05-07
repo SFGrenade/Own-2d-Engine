@@ -68,7 +68,7 @@ jobs:
       run: xmake repo --update -vD
 
     - name: Configure xmake and install dependencies
-      run: xmake config -vD --platform=macosx --arch=${{ matrix.os.arch }} --mode=${{ matrix.mode }} --kind=${{ matrix.kind }} --yes --policies=package.precompiled:n
+      run: xmake config -vD --plat=macosx --arch=${{ matrix.os.arch }} --mode=${{ matrix.mode }} --kind=${{ matrix.kind }} --yes --policies=package.precompiled:n
 
     - name: Build all targets
       run: xmake build -vD -a
