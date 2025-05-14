@@ -147,7 +147,7 @@ void AudioManager::CreateAudio( std::string const& tag,
     Resample( audioSamples, origSampleRate, numChannels, streamInfo->sampleRate, newSamples );
   }
   // todo: fixme: fix this
-  AudioManager::audios_.emplace_back( tag, type, numChannels, newSamples, 0, []( AudioManager::AudioData& data ) {
+  std::function< std::vector< float >( AudioManager::AudioData& ) > callback = []( AudioManager::AudioData& data ) {
     std::vector< float > ret;
     ret.reserve( data.numChannels );
 
@@ -162,7 +162,8 @@ void AudioManager::CreateAudio( std::string const& tag,
       }
     }
     return ret;
-  } );
+  };
+  AudioManager::audios_.emplace_back( tag, type, numChannels, newSamples, 0, callback );
 
   AudioManager::logger_->trace( "CreateAudio()~" );
 }
