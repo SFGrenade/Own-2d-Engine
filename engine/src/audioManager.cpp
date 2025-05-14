@@ -163,7 +163,7 @@ void AudioManager::CreateAudio( std::string const& tag,
     }
     return ret;
   };
-  AudioManager::audios_.emplace_back( tag, type, numChannels, newSamples, 0, callback );
+  AudioManager::audios_.emplace_back( std::string( tag ), AudioManager::AudioType( type ), numChannels, std::vector< float >( newSamples ), 0, callback );
 
   AudioManager::logger_->trace( "CreateAudio()~" );
 }

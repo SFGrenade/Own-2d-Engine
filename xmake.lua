@@ -16,6 +16,9 @@ if is_plat( "windows" ) then
 else
 end
 
+-- maybe this helps for the ci?
+set_policy( "build.across_targets_in_parallel", false )
+
 -- preprocessor shortcuts
 add_requires( "hedley" )
 -- test framework, gonna be added to each test
