@@ -1,11 +1,10 @@
 add_requires( "zmqpb" )
 
---add_requireconfs( "zmqpb", { configs = { shared = false } } )
+add_requireconfs( "zmqpb", { configs = { shared = false } } )
 
 target( "Network-Messages" )
-  set_kind( "$(kind)" )
+  set_kind( "static" )
 
-  -- because protobuf needs 17??? fuck do i know tbh
   set_languages( "c++17" )
 
   set_default( false )

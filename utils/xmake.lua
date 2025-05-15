@@ -1,5 +1,5 @@
 target( "Utils" )
-  set_kind( "$(kind)" )
+  set_kind( "static" )
 
   set_default( false )
   set_group( "LIBS" )

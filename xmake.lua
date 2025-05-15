@@ -24,8 +24,9 @@ add_requires( "hedley" )
 -- test framework, gonna be added to each test
 add_requires( "gtest" )
 
-add_requireconfs( "**", "*.**", "**.**", { system = false } )
-add_requireconfs( "**", "*.**", "**.**", { configs = { shared = get_config( "kind" ) == "shared" } } )
+--add_requireconfs( "*", "**", "*.**", "**.*", "**.**", { system = false } )
+--add_requireconfs( "*", "**", "*.**", "**.*", "**.**", { configs = { shared = get_config( "kind" ) == "shared" } } )
+add_requireconfs( "*", { configs = { shared = get_config( "kind" ) == "shared" } } )
 
 includes( "configuration" )
 includes( "engine" )

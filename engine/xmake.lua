@@ -12,7 +12,7 @@ add_requireconfs( "libsdl2", { configs = { sdlmain = false } } )
 --add_requireconfs( "portaudio", { configs = {} } )
 
 target( "Engine" )
-  set_kind( "$(kind)" )
+  set_kind( "static" )
 
   set_default( false )
   set_group( "LIBS" )
